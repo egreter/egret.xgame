@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<e:Skin class="skins.LoadingPageSkin"
+	 width="640"
+	height="1136" xmlns:e="http://ns.egret.com/eui">
+	<e:Image source="bg_jpg" left="0" right="0" top="0" bottom="0"/>
+	<e:Image source="egret_icon_png" left="30" top="30"/>
+	<e:ProgressBar id="com_progress" height="20" bottom="50" left="50" right="50"/>
+	<e:Label id="lab_tips" text="正在加载游戏资源..." stroke="2" strokeColor="0x3b3b3b" size="22" horizontalCenter="0" bottom="75"/>
+</e:Skin>

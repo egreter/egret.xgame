@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<e:Skin class="skins.PopupMenuSkin"
+	 width="200"
+	height="200" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image source="border_png" left="11.5" top="11.5" right="11.5" bottom="11.5" scale9Grid="59,16,59,15"/>
+	<e:Image id="arrow_down" source="pop_arrow_png" horizontalCenter="0" top="0" visible="false" locked="true"/>
+	<e:Image source="pop_arrow_png" id="arrow_up" horizontalCenter="0" x="101" bottom="0" scaleY="-1" visible="false"/>
+	<e:Image source="pop_arrow_png" id="arrow_right" left="0" verticalCenter="0" rotation="-90" visible="false" locked="true"/>
+	<e:Image source="pop_arrow_png" id="arrow_left" verticalCenter="0" right="0" rotation="90" visible="false" locked="true"/>
+	<e:List id="list_item" top="20" bottom="20" left="20" right="20" itemRendererSkinName="skins.PopupMenuItemSkin">
+		<e:layout>
+			<e:VerticalLayout gap="2" horizontalAlign="justify"/>
+		</e:layout>
+    </e:List>
+</e:Skin>

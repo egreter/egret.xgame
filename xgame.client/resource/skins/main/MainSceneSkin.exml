@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<e:Skin class="skins.MainSceneSkin"
+	 width="640"
+	height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ro="ro.*" xmlns:egretx="egretx.*">
+	<e:Group left="0" right="0" top="0" bottom="0">
+		<e:Image left="0" source="map_jpg" x="0" scaleX="2" scaleY="2" top="0"/>
+	</e:Group>
+    <egretx:DropdownListGroup id="com_options" height="51" left="50" bottom="20" width="540">
+		<egretx:layout>
+			<e:HorizontalLayout gap="10" horizontalAlign="justify"/>
+		</egretx:layout>
+	</egretx:DropdownListGroup>
+</e:Skin>

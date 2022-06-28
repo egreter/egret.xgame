@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<e:Skin class="skins.AlertPageSkin"
+	 width="640"
+	height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Group width="540" height="240" horizontalCenter="0" verticalCenter="0">
+		<e:Image left="0" right="0" bottom="0" top="0" source="border_png" scale9Grid="2,2,12,12" x="-50" y="-298" scaleX="1" scaleY="1" locked="true"/>
+		<e:Group left="0" right="0" top="0" height="45" locked="true">
+			<e:Image left="0" right="0" bottom="0" top="0" source="header_png"/>
+			<e:Label id="lab_title" size="25" fontFamily="Tahoma" textColor="0xFFFFFF" wordWrap="false" left="15" right="5" verticalCenter="0" text="提示" textAlign="center"/>
+		</e:Group>
+		<e:Button id="btn_close" label="X" scaleX="1" scaleY="1" width="40" height="40" right="5" top="5" locked="true"/>
+		<e:Group id="g_buttons" horizontalCenter="0" bottom="20">
+			<e:Button label="确定" x="122" y="10" id="btn_0"/>
+			<e:Button id="btn_1" label="取消" x="112" y="0"/>
+			<e:Button id="btn_2" label="帮助" x="0" y="6"/>
+			<e:layout>
+				<e:HorizontalLayout gap="30"/>
+			</e:layout>
+		</e:Group>
+        <e:Group id="g_content" top="60" left="50" right="50" bottom="85" locked="true">
+            <e:Label id="lab_content" text="Label" size="22" textColor="0x3b3b3b" left="0" right="0" verticalCenter="0" textAlign="center"/>
+        </e:Group>
+	</e:Group>
+</e:Skin>

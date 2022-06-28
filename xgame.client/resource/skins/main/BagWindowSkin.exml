@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<e:Skin class="skins.BagWindowSkin"
+	 width="640"
+	height="1136" xmlns:e="http://ns.egret.com/eui">
+	<e:Group width="540" height="480" horizontalCenter="0" verticalCenter="0">
+		<e:Image left="0" right="0" bottom="0" top="0" source="border_png" scale9Grid="2,2,12,12" x="-50" y="-298" scaleX="1" scaleY="1" locked="true"/>
+		<e:Group left="0" right="0" top="0" height="45">
+		<e:Image left="0" right="0" bottom="0" top="0" source="header_png"/>
+		<e:Label size="25" fontFamily="Tahoma" textColor="0xFFFFFF" wordWrap="false" left="15" right="5" verticalCenter="0" text="背包" textAlign="center"/>
+		</e:Group>
+		<e:Scroller top="65" bottom="20" left="20" right="20">
+			<e:DataGroup itemRendererSkinName="skins.ItemSkin">
+                <e:ArrayCollection>
+                    <e:Array>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                        <e:Object/>
+                    </e:Array>
+                </e:ArrayCollection>
+				<e:layout>
+					<e:TileLayout horizontalGap="10" verticalGap="10"/>
+				</e:layout>
+            </e:DataGroup>
+		</e:Scroller>
+	</e:Group>
+</e:Skin>

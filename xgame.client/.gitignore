@@ -1,0 +1,6 @@
+.DS_Store
+.vscode
+.wing
+manifest.json
+bin-debug
+bin-release

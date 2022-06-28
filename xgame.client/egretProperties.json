@@ -1,0 +1,52 @@
+{
+    "engineVersion": "5.2.33",
+    "compilerVersion": "5.2.33",
+    "template": {},
+    "target": {
+        "current": "web"
+    },
+    "modules": [
+        {
+            "name": "egret"
+        },
+        {
+            "name": "eui"
+        },
+        {
+            "name": "assetsmanager"
+        },
+        {
+            "name": "dragonBones"
+        },
+        {
+            "name": "game"
+        },
+        {
+            "name": "tween"
+        },
+        {
+            "name": "promise"
+        },
+        {
+            "name": "socket"
+        },
+        {
+            "name": "xgame.reflect",
+            "path": "libs/xgame.reflect"
+        },
+        {
+            "name": "xgame.core",
+            "path": "libs/xgame.core"
+        },
+        {
+            "name": "xgame.egret",
+            "path": "libs/xgame.egret"
+        }
+    ],
+    "eui": {
+        "exmlRoot": [
+            "resource/eui_skins",
+            "resource/skins"
+        ]
+    }
+}

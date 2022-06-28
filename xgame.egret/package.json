@@ -1,0 +1,35 @@
+{
+	"name": "xgame.egretx",
+	"version": "1.0.0",
+	"author": {
+		"email": "i@ronpad.com",
+		"name": "rontian"
+	},
+	"compilerVersion": "5.4.1",
+	"description": "基于XGame核心的egret游戏框架",
+	"license": "MIT",
+	"repository": {
+		"url": "https://gitee.com/rontian/xgame.egretx",
+		"type": "git"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.6.0",
+		"babel-preset-es2015": "^6.24.1",
+		"browserify": "^14.3.0",
+		"gulp": "^3.9.1",
+		"gulp-babel": "^8.0.0",
+		"gulp-concat": "^2.6.1",
+		"gulp-inject-string": "^1.1.2",
+		"gulp-minify": "^3.1.0",
+		"gulp-string-replace": "^1.1.2",
+		"gulp-typescript": "^3.1.6",
+		"gulp-uglify": "^3.0.2",
+		"merge2": "^1.4.1",
+		"tsify": "^3.0.1",
+		"typedoc": "^0.19.2",
+		"typescript": "^2.2.2",
+		"typescript-plus": "^3.1.5",
+		"vinyl-source-stream": "^1.1.0",
+		"watchify": "^3.9.0"
+	}
+}

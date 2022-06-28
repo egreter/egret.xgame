@@ -1,0 +1,28 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"lib": [
+			"es5",
+			"es6",
+			"dom",
+			"es2015.promise"
+		],
+		"noImplicitAny": false,
+		"sourceMap": false,
+		"declaration": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"emitReflection":true,
+		"typeRoots": [
+			"./libs"
+		],
+		"outFile": "./xgame.egret.js"
+	},
+	"include": [
+		"src",
+		"libs"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}

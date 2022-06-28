@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<e:Skin class="skins.DropdownListSkin"
+ xmlns:e="http://ns.egret.com/eui" minHeight="51">
+    <e:Image id="img_bg" source="btn_ar_diban_png" visible="true" scale9Grid="13,13,14,14" left="0" right="0" top="0" bottom="0"/>
+	<e:Label id="lab_title" size="22" scaleX="1" scaleY="1" textColor="0x606DA1" left="15" text="LA" right="60" textAlign="center" top="0" bottom="0" verticalAlign="middle"/>
+	<e:Image id="img_icon" source="btn_ar_select01_png" right="0" top="0" bottom="0"/>
+</e:Skin>

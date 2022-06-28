@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "lib": [
+			"es5",
+			"es6",
+			"dom",
+			"es2015.promise"
+		],
+        "noImplicitAny": false,
+		"sourceMap": false,
+		"declaration": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+        "outFile": "./xgame.reflect.js"
+    },
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

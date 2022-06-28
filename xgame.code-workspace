@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "xgame.client"
+		},
+		{
+			"path": "xgame.core"
+		},
+		{
+			"path": "xgame.egret"
+		},
+		{
+			"path": "xgame.reflect"
+		}
+	],
+    "settings": {}
+}

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<e:Skin class="skins.ItemSkin"
+	 width="90"
+	height="93" xmlns:e="http://ns.egret.com/eui">
+	<e:Image source="PropBox_099_png" x="0" y="0"/>
+	<e:Image source="item_png" horizontalCenter="0" verticalCenter="0" width="80" height="80"/>
+</e:Skin>
