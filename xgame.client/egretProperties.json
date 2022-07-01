@@ -31,6 +31,26 @@
             "name": "socket"
         },
         {
+            "name": "tiled",
+            "path": "./libs/tiled"
+        },
+        {
+            "name": "protobuf",
+            "path": "./libs/protobuf"
+        },
+        {
+            "name": "protobuf-bundles",
+            "path": "./libs/protobuf-bundles"
+        },
+        {
+            "name": "jszip",
+            "path": "./libs/jszip"
+        },
+        {
+            "name": "PathFinding",
+            "path": "./libs/pathFinding"
+        },
+        {
             "name": "xgame.reflect",
             "path": "libs/xgame.reflect"
         },

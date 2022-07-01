@@ -1,0 +1,26 @@
+{
+    "name": "tools",
+    "version": "1.0.0",
+    "description": "游戏相关的一些工具命令",
+    "main": "index.js",
+    "repository": {
+        "url": "https://gitee.com/rontian/xgame.tools",
+        "type": "git"
+    },
+    "scripts": {
+        "proto": "ts-node index.ts proto",
+        "config": "ts-node index.ts config"
+    },
+    "author": "rontian",
+    "license": "ISC",
+    "dependencies": {
+        "commander": "^9.3.0",
+        "node-xlsx": "^0.21.0",
+        "protobufjs": "^6.11.3",
+        "uglify-js": "^3.16.1"
+    },
+    "devDependencies": {
+        "@types/node": "^18.0.0",
+        "@types/uglify-js": "^3.16.0"
+    }
+}

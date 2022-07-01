@@ -5,16 +5,32 @@
 
 > 简单实现依赖注入，框架部分参考TinaX框架
 
-> 不确定是否存在其他问题，仅供参考。
+> 所有模块源码都已经提供，如果对基础库有特殊需求，修改对应库源码进行gulp编译即可。
 
-> 所有模块源码都已经提供，如果有问题,有能力就自己改后使用gulp编译吧!!!
+> 后续会慢慢把一些常用的功能模块整理出来，让框架变得更完整，致力方便能轻松上手专注于游戏逻辑开发。
+
+## 相关库gulp编译说明
+> 为了能顺利使用gulp编译相关库代码，请使用以下环境配置
+
+> node版本11.15.0
+
+> npm 7.22.0
+
+> gulp 4.0.2
+
+> ts使用typescript-plus编译器
+
 
 ## xgame.core 框架核心
 
 > 提供框架基础服务的注册及启动流程，包括一些实用功能。
 
 ### 主要功能列表
-
+- decorators
+    - injectable
+    - inject
+    - impl
+    - event
 - 数据绑定
 - 全局事件管理器
 - 帧调度管理器
@@ -28,14 +44,31 @@
 ```typescript
 let game = new xgame.XGame(new ro.GameBootstrap());
 await game.init();
+
+//获得注入的服务或对象,所有注入对象都需要接口化
+
+game.getService<T>(T);
+
+xgame.that.getService<T>(T);
+//手动依赖注入
+xgame.injectInstance(o);
+//创建对象并依赖注入
+xgame.createInstance<T>(Clazz: new (...args: any[]) => T, ...args: any[]): T;
 ```
 
 ## xgame.egret 基于egret的扩展
 > 提供egret引擎的一些基本功能
 
 ### 主要功能列表
-
+- 网络管理器
+    - HttpManager
+    - SocketManager
 - 触摸点击管理器
+    - addTouchBegin
+    - addTouchEnd
+    - addClick
+    - addLongPress
+    - addRepeatPress
 - 基于eui的界面管理器
     - 场景
     - 全屏UI界面
@@ -54,12 +87,26 @@ uiManager.openPopup                         //打开一个弹出界面
 
 egretx.alert                                //确定弹出框
 egretx.showPopupMenu                        //弹出菜单
-egretx.TipsManager.Instance().append();     //飘窗提示
+egretx.tips                                 //飘窗提示
 ```
 
 ## xgame.client 示例项目
 
 > 提供框架基础功能的使用案例，可运行后查看代码详情。
+
+### tools
+> 一个基于Commander.js的工具库，用于生成protobuf-bundles.js,导出excel成json文件等
+
+> 可以根据自己的需求修改或扩展此目录下的代码文件
+
+```
+cd tools
+npm install
+```
+
+> 命令列表
+- npm run proto     编译proto文件生成protobuf-bundles.js
+- npm run config    将Excel转换为json文件并生成接口声明
 
 ### 框架启动
 ```typescript

@@ -10,16 +10,17 @@
 module xgame {
 
     export function event(eventName: string, moduleId?: number, priority?: number) {
-        return (target: IEventSubject, key: string, descriptor: TypedPropertyDescriptor<Function>) => {
+        return (target: any, key: string, descriptor: TypedPropertyDescriptor<Function>) => {
+            let subject: IEventSubject = target;
             let method = descriptor.value;
             let invoke = descriptor.value = function () {
                 method.apply(this, arguments);
             }
-            if (!target.__eventview__) {
-                target.__eventview__ = true;
-                target.eventDisposableGroup = new DisposableGroup();
-                target.eventObserves = [];
-                target.addEventObserves = function (): void {
+            if (!subject.__eventview__) {
+                subject.__eventview__ = true;
+                subject.eventDisposableGroup = new DisposableGroup();
+                subject.eventObserves = [];
+                subject.addEventObserves = function (): void {
                     let self: IEventSubject = this;
                     if (self.eventObserves && self.eventObserves.length) {
                         for (let o of self.eventObserves) {
@@ -27,7 +28,7 @@ module xgame {
                         }
                     }
                 }
-                target.removeEventObserves = function (): void {
+                subject.removeEventObserves = function (): void {
                     let self: IEventSubject = this;
                     if (self.eventObserves && self.eventObserves.length) {
                         self.eventObserves.length = 0;
@@ -38,7 +39,7 @@ module xgame {
                 }
             }
             let item = <IEventObserve>{ eventName: eventName, moduleId: moduleId, callback: invoke, priority: priority };
-            target.eventObserves.push(item);
+            subject.eventObserves.push(item);
         }
     }
 }

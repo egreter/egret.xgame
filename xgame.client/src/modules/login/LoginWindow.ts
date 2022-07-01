@@ -19,6 +19,7 @@ module ro {
             super.onOpen();
             this.com_input.maxChars = 20;
             this.com_input.restrict = "a-zA-Z0-9_";
+            this.com_input.text = "gmron707";
             let str = "请输入用户名";
             this.addClick(this.btn_login, () => {
                 if (this.com_input.text.length == 0) {

@@ -17,11 +17,6 @@
 			"name": "egret_icon_png"
 		},
 		{
-			"url": "config/description.json",
-			"type": "json",
-			"name": "description_json"
-		},
-		{
 			"url": "assets/map.jpg",
 			"type": "image",
 			"name": "map_jpg"

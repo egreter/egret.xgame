@@ -11,7 +11,7 @@ declare module egretx {
         H_TAIL = 4,
         V_HEAD = 8,
         V_MID = 16,
-        V_TAIL = 32,
+        V_TAIL = 32
     }
 }
 declare namespace eui {
@@ -122,6 +122,218 @@ declare module egretx {
 /*************************************************
 /* @author : rontian
 /* @email  : i@ronpad.com
+/* @date   : 2022-07-01
+*************************************************/
+declare module egretx {
+    let IHttpManager: symbol;
+    interface IHttpManager extends xgame.IXObject {
+        sendRequest<T>(uri: string, method?: string, values?: Array<string[]>, isJSON?: boolean): Promise<T | undefined>;
+        sendRequest<T>(options: IRequestOptions): Promise<T | undefined>;
+    }
+    let IHttpManagerInternal: symbol;
+    interface IHttpManagerInternal extends xgame.IXObject {
+        initialize(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-01
+*************************************************/
+declare module egretx {
+    interface IRequestOptions {
+        uri: string;
+        method?: string;
+        headers?: Array<string[]>;
+        values?: Array<string[]>;
+        isJSON?: boolean;
+    }
+    class HttpManager extends xgame.Singleton implements IHttpManager, IHttpManagerInternal {
+        private pools;
+        constructor();
+        initialize(): void;
+        sendRequest<T>(uri: string, method?: string, values?: Array<string[]>, isJSON?: boolean): Promise<T | undefined>;
+        sendRequest<T>(options: IRequestOptions): Promise<T | undefined>;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-01
+*************************************************/
+declare module egretx {
+    let ISocketManager: symbol;
+    interface ISocketManager extends xgame.IXObject {
+        defaultInstanceName: string;
+        defaultSocketHelper: ISocketHelper;
+        retryMaxTiems: number;
+        retryDelayTime: number;
+        sendTimeout: number;
+        heartBeatCheckTimeout: number;
+        getOrCreateInstance(name?: string, helper?: ISocketHelper): SocketInstance;
+    }
+    let ISocketManagerInternal: symbol;
+    interface ISocketManagerInternal extends xgame.IXObject {
+        initialize(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-01
+*************************************************/
+declare module egretx {
+    class SocketManager extends xgame.Singleton implements ISocketManager, ISocketManagerInternal {
+        defaultInstanceName: string;
+        defaultSocketHelper: ISocketHelper;
+        retryMaxTiems: number;
+        retryDelayTime: number;
+        sendTimeout: number;
+        heartBeatCheckTimeout: number;
+        protected instances: xgame.Dictionary<string, SocketInstance>;
+        constructor();
+        initialize(): void;
+        getOrCreateInstance(name?: string, helper?: ISocketHelper): SocketInstance;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-01
+*************************************************/
+declare module egretx {
+    class HttpRequest extends xgame.XObject implements xgame.IPoolable {
+        uri?: string;
+        method?: string;
+        reconnectTimes: number;
+        protected headers: xgame.Dictionary<string, string>;
+        protected values: xgame.Dictionary<string, string | number>;
+        constructor(uri?: string, method?: string);
+        fromPoolHashCode: number;
+        release(): void;
+        dispose(): void;
+        setUri(uri: string): void;
+        setMethod(method?: string): void;
+        setHeader(key: string, value: string): void;
+        setValue(key: string, value: string | number): void;
+        send<T>(isJSON?: boolean): Promise<T | undefined>;
+        request(): Promise<string | boolean>;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-01
+*************************************************/
+declare module egretx {
+    enum SocketState {
+        Closed = 0,
+        Connecting = 1,
+        Connected = 2
+    }
+    enum SocketCloseCode {
+        Close = 0,
+        IOError = 1,
+        Failed = 2
+    }
+    /**
+     * 网络连接实例的实现类
+     */
+    class SocketInstance extends xgame.XObject {
+        manager: SocketManager;
+        readonly name: string;
+        socketHelper: ISocketHelper;
+        private uri;
+        private guidCount;
+        private generateGUID;
+        private isInited;
+        private happendConnected;
+        private isReconnect;
+        private $state;
+        readonly state: SocketState;
+        private disposableGroup;
+        private recvQueues;
+        constructor(manager: SocketManager, name: string, socketHelper: ISocketHelper);
+        private sendTimeoutStamp;
+        private lastestRecvStamp;
+        private checkHeartBeat;
+        private onAdvanceTime;
+        private _sendPacket;
+        private current;
+        private sendQueues;
+        sendPacket(packet: IPacket): void;
+        setURI(host: string, port: number, wss?: boolean): void;
+        setURI(uri: string): void;
+        private socket;
+        private init;
+        private callback_onConnected;
+        onConnected(): xgame.Signal0;
+        private onConnectHandler;
+        private sendLoginPacket;
+        private callback_onKickOut;
+        onKickOut(): xgame.Signal0;
+        private onReceiveHandler;
+        private callback_onClosed;
+        onClosed(): xgame.Signal1<SocketCloseCode>;
+        private reconnectTimerID;
+        private onCloseHandler;
+        private onIOErrorHandler;
+        private callback_onConnecting;
+        onConnecting(): xgame.Signal1<number>;
+        private retryCount;
+        connect(): void;
+        private _connect;
+        private cleanQueues;
+        close(): void;
+        private _close;
+        private callback_onShutdown;
+        onShutdown(): xgame.Signal0;
+        shutdown(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-01
+*************************************************/
+declare module egretx {
+    interface IPacket extends xgame.IPoolable {
+        guid?: number;
+        cmd?: number;
+        buffer?: egret.ByteArray;
+        first?: boolean;
+        type?: string;
+        message?: any;
+        abort(): void;
+        onResponse(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-01
+*************************************************/
+declare module egretx {
+    interface ISocketHelper extends xgame.IXObject {
+        decodePackets(data: egret.ByteArray): IPacket[];
+        encodePacket(packet: IPacket): egret.ByteArray;
+        hideAnimation(): void;
+        showAnimation(): void;
+        needSendLoginPacket(): boolean;
+        isLoginRespPacket(packet: IPacket): boolean;
+        isLoginSuccess(packet: IPacket): boolean;
+        generateLoginPacket(reconnect: boolean): IPacket;
+        enableHeartBeatCheck(): boolean;
+        isHeartBeatPacket(packet: IPacket): boolean;
+        sendHeartBeatPacket(): void;
+        isKickOutPacket(packet: IPacket): boolean;
+        isDataLocked(packet: IPacket): boolean;
+        receivePacket(packet: IPacket): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
 /* @date   : 2021-10-19
 *************************************************/
 declare module egretx {
@@ -172,7 +384,7 @@ declare module egretx {
         constructor(main: egret.DisplayObjectContainer);
         dispose(): void;
         initialize(): void;
-        private onLeaveStage(event);
+        private onLeaveStage;
         removeTouchEvents(target: egret.DisplayObject | number): void;
         addTouchBegin(target: egret.DisplayObject, listener: (event: egret.TouchEvent) => void, thisObject?: any, scale?: boolean): void;
         removeTouchBegin(target: egret.DisplayObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
@@ -296,11 +508,11 @@ declare module egretx {
 *************************************************/
 declare module egretx {
     class TouchDisposableGroup extends xgame.XObject implements xgame.IDisposable {
-        private displayObject;
+        private displayObject?;
         private touches;
         manager: TouchManager;
         constructor(displayObject?: egret.DisplayObject);
-        private onRemovedFromStage();
+        private onRemovedFromStage;
         dispose(): void;
         addTouchBegin(target: egret.DisplayObject, listener: (event: egret.TouchEvent) => void, thisObject?: any, scale?: boolean): void;
         removeTouchBegin(target: egret.DisplayObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
@@ -360,7 +572,7 @@ declare module egretx {
         clearScene(): void;
         closeUI(uiName: string): void;
         closeUI(entity: UIEntity): void;
-        private _closeUI(entity);
+        private _closeUI;
         private $currentScene;
         readonly currentScene: IUIEntity;
         replaceScene(uiName: string, ...args: any[]): Promise<IUIEntity>;
@@ -373,25 +585,25 @@ declare module egretx {
         openUIWithRoot(uiClass: xgame.TClass<UIPage>, uiRoot: egret.DisplayObjectContainer, ...args: any[]): Promise<IUIEntity>;
         openPopup(uiName: string, hud: egret.DisplayObject, ...args: any[]): Promise<IUIEntity>;
         openPopup(uiClass: xgame.TClass<UIPage>, hud: egret.DisplayObject, ...args: any[]): Promise<IUIEntity>;
-        private startPipelines(options);
+        private startPipelines;
         /**
          * 检查UIPage是否存在或可以多开
          * @param options
          * @returns
          */
-        private checkIsOpened(options);
+        private checkIsOpened;
         /**
          * 如果没有存在就创建UIPage
          * @param options
          * @returns
          */
-        private createUIPage(options);
+        private createUIPage;
         /**
          * 如果UIPage创建成功就打开并传递参数
          * @param options
          * @returns
          */
-        private openUIPage(options);
+        private openUIPage;
     }
 }
 /*************************************************
@@ -486,7 +698,7 @@ declare module egretx {
         TOP = 1,
         BOTTOM = 2,
         LEFT = 3,
-        RIGHT = 4,
+        RIGHT = 4
     }
 }
 /*************************************************
@@ -500,7 +712,7 @@ declare module egretx {
         TOP = 1,
         BOTTOM = 2,
         LEFT = 3,
-        RIGHT = 4,
+        RIGHT = 4
     }
 }
 /*************************************************
@@ -521,7 +733,7 @@ declare module egretx {
         readonly isLoading: boolean;
         private deferred;
         load(): Promise<void>;
-        private doComplete();
+        private doComplete;
         protected $maskAlpha: number;
         readonly maskAlpha: number;
         protected $maskColor: number;
@@ -555,7 +767,7 @@ declare module egretx {
         closeByMask = 16,
         isPopupMenu = 32,
         isPlugin = 64,
-        Scene = 128,
+        Scene = 128
     }
 }
 /*************************************************
@@ -600,7 +812,7 @@ declare module egretx {
         Layer_12_Loading = 12,
         Layer_13 = 13,
         Layer_14 = 14,
-        Layer_15_Top = 15,
+        Layer_15_Top = 15
     }
 }
 /*************************************************
@@ -617,9 +829,9 @@ declare module egretx {
         constructor(...views: egret.DisplayObject[]);
         addWatcher(view: egret.DisplayObject): void;
         removeWatcher(view: egret.DisplayObject): void;
-        private onWatcher(value);
+        private onWatcher;
         private isDispatching;
-        private lateDispatch();
+        private lateDispatch;
         onChanged(): xgame.Signal0;
         dispose(): void;
     }
@@ -679,7 +891,7 @@ declare module egretx {
         mask: eui.Rect;
         groupName: string;
         createMask(color: number, alpha: number, closeByMask: number): void;
-        private onMaskClose();
+        private onMaskClose;
         onSceneChanging(): void;
         onClose(): void;
         closePage(): void;
@@ -768,9 +980,9 @@ declare module egretx {
         private textures;
         constructor();
         gc(force?: boolean): void;
-        private destroyRes(key);
-        private onDisplayListChanged(hashCode);
-        private onDisplayListDisposed(hashCode);
+        private destroyRes;
+        private onDisplayListChanged;
+        private onDisplayListDisposed;
         register(key: string, texture: egret.Texture): void;
     }
 }
@@ -810,7 +1022,7 @@ declare module egretx {
         onClose(): void;
         protected getButton(index: number): eui.Button;
         onOpen(): void;
-        private onButtonClick(event);
+        private onButtonClick;
     }
 }
 /*************************************************
@@ -922,7 +1134,7 @@ declare module egretx {
         protected items: DropdownList[];
         protected getItemAt(index: number): DropdownList;
         protected indexOf(dropdown: DropdownList): number;
-        private onSelectChangeHandler(selectedIndex, value, dropdown);
+        private onSelectChangeHandler;
         private pools;
     }
 }
@@ -987,7 +1199,7 @@ declare module egretx {
         fixedUIDirection(direction: UIDirection): void;
         onClose(): void;
         private selectedItem;
-        private onItemClickHandler(event);
+        private onItemClickHandler;
         onOpen(): void;
         protected updateArrow(direction: UIDirection): void;
     }
@@ -1010,7 +1222,7 @@ declare module egretx {
     enum TipsState {
         FadeIn = 1,
         Stay = 2,
-        FadeOut = 3,
+        FadeOut = 3
     }
     class TipsView extends eui.Component implements ITipsView {
         fromPoolHashCode: number;
@@ -1039,11 +1251,12 @@ declare module egretx {
         constructor();
         protected waitQueues: string[];
         append(message: string): void;
-        private play(message);
-        private endView(view);
+        private play;
+        private endView;
         clear(): void;
         initialize(): void;
     }
+    function tips(message: string): void;
 }
 /*************************************************
 /* @author : rontian
@@ -1140,7 +1353,7 @@ declare module egretx {
         TOP_LEFT = 5,
         TOP_RIGHT = 6,
         BOTTOM_LEFT = 7,
-        BOTTOM_RIGHT = 8,
+        BOTTOM_RIGHT = 8
     }
 }
 /*************************************************

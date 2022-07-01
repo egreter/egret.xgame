@@ -865,6 +865,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             _this.passedTime = 0;
             return _this;
         }
+        Time.prototype.getTimeStamp = function () {
+            return new Date().valueOf();
+        };
         return Time;
     }(xgame.Singleton));
     xgame.Time = Time;
@@ -3355,15 +3358,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 (function (xgame) {
     function event(eventName, moduleId, priority) {
         return function (target, key, descriptor) {
+            var subject = target;
             var method = descriptor.value;
             var invoke = descriptor.value = function () {
                 method.apply(this, arguments);
             };
-            if (!target.__eventview__) {
-                target.__eventview__ = true;
-                target.eventDisposableGroup = new xgame.DisposableGroup();
-                target.eventObserves = [];
-                target.addEventObserves = function () {
+            if (!subject.__eventview__) {
+                subject.__eventview__ = true;
+                subject.eventDisposableGroup = new xgame.DisposableGroup();
+                subject.eventObserves = [];
+                subject.addEventObserves = function () {
                     var self = this;
                     if (self.eventObserves && self.eventObserves.length) {
                         for (var _i = 0, _a = self.eventObserves; _i < _a.length; _i++) {
@@ -3372,7 +3376,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         }
                     }
                 };
-                target.removeEventObserves = function () {
+                subject.removeEventObserves = function () {
                     var self = this;
                     if (self.eventObserves && self.eventObserves.length) {
                         self.eventObserves.length = 0;
@@ -3383,7 +3387,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 };
             }
             var item = { eventName: eventName, moduleId: moduleId, callback: invoke, priority: priority };
-            target.eventObserves.push(item);
+            subject.eventObserves.push(item);
         };
     }
     xgame.event = event;

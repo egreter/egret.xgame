@@ -8,5 +8,8 @@ module xgame {
         public deltaTime: number = 0;
         public timeScale: number = 1;
         public passedTime: number = 0;
+        public getTimeStamp(): number {
+            return new Date().valueOf();
+        }
     }
 }

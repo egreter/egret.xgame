@@ -7,8 +7,9 @@
 /// <reference path="../structs/UIAlign.ts" />
 /// <reference path="../structs/UIDirection.ts" />
 
+
 module egretx {
-    
+
     export class UIPage extends UIComponent {
         //UI的类型参数,见UIFlags
         public flags: number = UIFlags.isStack | UIFlags.isFullScreen;
@@ -64,15 +65,22 @@ module egretx {
             this.$layerID = layerID;
         }
         public onInit(): void {
-
+            let self: UIPage & xgame.IEventSubject = this;
+            if (self.addEventObserves) {
+                self.addEventObserves();
+            }
         }
         public onOpen(): void {
-            
+
         }
         public onSceneChanging(): void {
 
         }
         public onClose(): void {
+            let self: UIPage & xgame.IEventSubject = this;
+            if (self.removeEventObserves) {
+                self.removeEventObserves();
+            }
             this.entity = undefined;
         }
         public onShow(): void {

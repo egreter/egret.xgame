@@ -155,4 +155,7 @@ module egretx {
             parent.addChild(this.$container);
         }
     }
+    export function tips(message: string): void {
+        TipsManager.Instance().append(message);
+    }
 }

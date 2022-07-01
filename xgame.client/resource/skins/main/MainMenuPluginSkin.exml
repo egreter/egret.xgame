@@ -4,8 +4,8 @@
 	height="50" xmlns:e="http://ns.egret.com/eui">
 	<e:Group left="0" right="0" top="0" bottom="0">
 		<e:Button id="btn_0" label="查看详情" x="0" y="10"/>
-		<e:Button id="btn_1" label="打出菜单" x="154" y="0"/>
-		<e:Button label="打出背包" x="164" y="10" id="btn_2"/>
+		<e:Button id="btn_1" label="打开菜单" x="154" y="0"/>
+		<e:Button label="打开背包" x="164" y="10" id="btn_2"/>
 		<e:Button label="打开全屏页面" x="174" y="20" id="btn_3"/>
 		<e:layout>
 			<e:HorizontalLayout gap="30"/>

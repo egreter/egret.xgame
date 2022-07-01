@@ -495,6 +495,7 @@ declare module xgame {
         deltaTime: number;
         timeScale: number;
         passedTime: number;
+        getTimeStamp(): number;
     }
 }
 /*************************************************
@@ -1154,7 +1155,7 @@ declare namespace xgame {
 /* @date   : 2021-08-18
 *************************************************/
 declare module xgame {
-    function event(eventName: string, moduleId?: number, priority?: number): (target: IEventSubject, key: string, descriptor: TypedPropertyDescriptor<Function>) => void;
+    function event(eventName: string, moduleId?: number, priority?: number): (target: any, key: string, descriptor: TypedPropertyDescriptor<Function>) => void;
 }
 /*************************************************
 /* @author : rontian

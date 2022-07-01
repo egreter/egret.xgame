@@ -13,6 +13,7 @@ module ro {
             new CommonModule().onRegister(game);
             new LoginModule().onRegister(game);
             new MainModule().onRegister(game);
+            new NetModule().onRegister(game);
         }
 
         public onStart(game: xgame.IXGame): void {

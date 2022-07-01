@@ -16,11 +16,15 @@ module egretx {
             return true;
         }
         public async onStart(game: xgame.IXGame): Promise<boolean> {
+            game.getService<IHttpManagerInternal>(IHttpManagerInternal).initialize();
+            game.getService<ISocketManagerInternal>(ISocketManagerInternal).initialize();
             game.getService<IUIManagerInternal>(IUIManagerInternal).initialize();
             game.getService<ITouchManagerInternal>(ITouchManagerInternal).initialize();
             return true;
         }
         public onServiceRegister(game: xgame.IXGame): void {
+            game.singleton(IHttpManager, HttpManager).withInstance(HttpManager.Instance()).setAlias(IHttpManagerInternal);;
+            game.singleton(ISocketManager, SocketManager).withInstance(SocketManager.Instance()).setAlias(ISocketManagerInternal);;
             game.singleton(IUIManager, UIManager).withInstance(new UIManager(this.main)).setAlias(IUIManagerInternal);
             game.singleton(ITouchManager, TouchManager).withInstance(new TouchManager(this.main)).setAlias(ITouchManagerInternal);
         }
