@@ -7,8 +7,30 @@
 		<e:Button id="btn_1" label="打开菜单" x="154" y="0"/>
 		<e:Button label="打开背包" x="164" y="10" id="btn_2"/>
 		<e:Button label="打开全屏页面" x="174" y="20" id="btn_3"/>
+        <e:Button id="btn_6" label="播放UI音效" x="0" y="10"/>
+		<e:Button id="btn_7" label="播放普通音效" x="154" y="0"/>
 		<e:layout>
 			<e:HorizontalLayout gap="30"/>
+		</e:layout>
+	</e:Group>
+	<e:Group left="0" right="0" top="77" bottom="-77" x="10" y="10">
+		<e:Button id="btn_8" label="播放一个动画特效" x="164" y="10"/>
+		<e:Button id="btn_9" label="释放动画特效及资源" x="174" y="20"/>
+        <e:Button label="主动画时间轴0.5倍速" x="184" y="30" id="btn_4"/>
+		<e:Button x="194" y="40" id="btn_5" label="主动画时间轴3倍速"/>
+		<e:Button x="204" y="50" id="btn_10" label="主动画时间轴1倍速"/>
+		<e:layout>
+		<e:HorizontalLayout gap="30"/>
+		</e:layout>
+	</e:Group>
+	<e:Group left="0" right="0" top="157" bottom="-157" x="20" y="20">
+		<e:Button id="btn_11" label="龙骨(stand)" x="164" y="10"/>
+		<e:Button id="btn_12" label="龙骨(walk)" x="174" y="20"/>
+		<e:Button label="龙骨(jump)" x="184" y="30" id="btn_13"/>
+		<e:Button x="194" y="40" id="btn_14" label="龙骨(fall)"/>
+		<e:Button x="204" y="50" id="btn_15" label="移除并回收龙骨对象资源"/>
+		<e:layout>
+		<e:HorizontalLayout gap="30"/>
 		</e:layout>
 	</e:Group>
 </e:Skin>

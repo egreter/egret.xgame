@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,egret_icon_png,description_json",
+			"keys": "bg_jpg,egret_icon_png",
 			"name": "preload"
 		}
 	],
@@ -165,6 +165,66 @@
 			"url": "assets/btn_ar_select01.png",
 			"type": "image",
 			"name": "btn_ar_select01_png"
+		},
+		{
+			"url": "assets/sounds/effect.mp3",
+			"type": "sound",
+			"name": "effect_mp3"
+		},
+		{
+			"url": "assets/sounds/music.mp3",
+			"type": "sound",
+			"name": "music_mp3"
+		},
+		{
+			"url": "assets/sounds/effect2.mp3",
+			"type": "sound",
+			"name": "effect2_mp3"
+		},
+		{
+			"url": "assets/sounds/killed.mp3",
+			"type": "sound",
+			"name": "killed_mp3"
+		},
+		{
+			"url": "assets/sounds/refine.mp3",
+			"type": "sound",
+			"name": "refine_mp3"
+		},
+		{
+			"url": "assets/animations/888888.png",
+			"type": "image",
+			"name": "888888_png"
+		},
+		{
+			"url": "assets/animations/888888.json",
+			"type": "json",
+			"name": "888888_json"
+		},
+		{
+			"url": "assets/animations/chunli.png",
+			"type": "image",
+			"name": "chunli_png"
+		},
+		{
+			"url": "assets/animations/chunli.json",
+			"type": "json",
+			"name": "chunli_json"
+		},
+		{
+			"url": "assets/dragonbones/dragon_boy_tex.png",
+			"type": "image",
+			"name": "dragon_boy_tex_png"
+		},
+		{
+			"url": "assets/dragonbones/dragon_boy_ske.json",
+			"type": "json",
+			"name": "dragon_boy_ske_json"
+		},
+		{
+			"url": "assets/dragonbones/dragon_boy_tex.json",
+			"type": "json",
+			"name": "dragon_boy_tex_json"
 		}
 	]
 }

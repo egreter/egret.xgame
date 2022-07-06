@@ -2791,8 +2791,6 @@ declare module xgame {
     class PoolObject<T extends IPoolable> extends xgame.XObject {
         static EXPIRE_TIME: number;
         private instances;
-        private $timestamp;
-        readonly timestamp: number;
         private $create;
         readonly create: number;
         readonly count: number;
@@ -3403,6 +3401,23 @@ declare module xgame {
         static endWiths(originstr: string, endstr: string): boolean;
         static trim(str: string, all?: boolean): string;
         static eraseHtml(str: string): string;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module xgame {
+    enum FlagsCheckType {
+        And = 0,
+        Or = 1,
+    }
+    class VectorFlags<T extends number | string> extends XObject {
+        private flags;
+        checkFlags(flags: T[], type?: FlagsCheckType): boolean;
+        addFlags(...flags: T[]): void;
+        removeFlags(...flags: T[]): void;
     }
 }
 /*************************************************

@@ -8,6 +8,7 @@ module egretx {
     export interface IUIManager extends xgame.IXObject {
         readonly stage: egret.Stage;
         readonly RES: UIResManager;
+        readonly currentScene: IUIEntity;
         readonly onUIOpened: xgame.Signal1<IUIEntity>;
         readonly onUIClosed: xgame.Signal1<IUIEntity>;
         readonly onSceneChanged: xgame.Signal2<IUIEntity, IUIEntity>;

@@ -33,9 +33,52 @@
     - event
 - 数据绑定
 - 全局事件管理器
+
+```typescript
+@inject(xgame.IEventManager)
+public eventManager: xgame.IEventManager;
+
+this.eventManager.dispatchEvent(EventModule.MAIN, MainEvent.BAG_OPENED, "BagWindow");
+
+//全局事件侦听2种写法
+//标准
+this.eventManager.addEventListener(EventModule.MAIN, MainEvent.BAG_OPENED, this.onBagOpened, this);
+//UIPage
+@event(MainEvent.BAG_OPENED, EventModule.MAIN)
+public onBagOpened(event: MainEvent): void {
+    console.log("=======================>", event.data);
+}
+
+```
+
 - 帧调度管理器
+
+```typescript
+xgame.SchedulerManager.Instance().registerUpdate(this.advanceTime, this);
+
+this.disposableGroup = new xgame.DisposableGroup();
+this.disposableGroup.registerUpdate(this.onAdvanceTime, this);
+this.disposableGroup.dispose();
+```
+
 - 对象池管理器
+
+```typescript
+this.pools = new xgame.PoolGroup<AnimationClip>("AnimationClip");
+let clip = this.pools.fetch(id, AnimationClip, () => new AnimationClip(key, movieClipName), this);
+this.pools.recycle(id, AnimationClip, clip);
+this.pools.release(id, AnimationClip);
+this.pools.releases();
+```
+
 - Signals
+
+```typescript
+let callback = new xgame.Singals<number>();
+callback.addOnce((value)=>console.log(value);this);
+callback.dispatch(100);
+```
+
 - 多任务链流程驱动
 - 简易状态机
 - 其他一些实用类
@@ -62,32 +105,137 @@ xgame.createInstance<T>(Clazz: new (...args: any[]) => T, ...args: any[]): T;
 ### 主要功能列表
 - 网络管理器
     - HttpManager
+
+    ```typescript
+    this.http.sendRequest("http://10.10.0.88/serverlist/",
+        egret.HttpMethod.POST,
+        [["platform", "sandbox"],
+        ["notice", "1"],
+        ["uid", "0"],
+        ["packtype", "2"],
+        ["version", "94"]], true).then((ret) => {
+            console.log(ret);
+        });
+    ```
+
     - SocketManager
+
+    ```typescript
+    NetManager.Instance().main.setURI("ws://10.10.0.88:83/s99130/{0}".format(this.user.platUsername));
+    NetManager.Instance().on("CMD_LOGIN").addOnce((resp) => {
+        if (resp.result != ro3.LoginResp.LoginRet.FAIL) {
+            egretx.tips("登录成功");
+            this.uiManager.replaceScene(MainScene);
+        }
+    }, this);
+    //使用主网络实例进行连接，连接成功后，会自动发送登录请求(由SocketHelper决定)
+    NetManager.Instance().main.connect();
+    ```
+
 - 触摸点击管理器
     - addTouchBegin
     - addTouchEnd
     - addClick
+
+    ```typescript
+    this.addClick(this.btn_11, () => {
+        this.eventManager.dispatchEvent(EventModule.MAIN, MainEvent.PLAY_ANIMATION, "stand");
+    }, this);
+    ```
+
     - addLongPress
     - addRepeatPress
 - 基于eui的界面管理器
     - 场景
+
+    ```typescript
+    xgame.inject(egretx.IUIManager)
+    public uiManager: egretx.IUIManager;
+    this.uiManager.replaceScene(MainScene);
+    ```
+
     - 全屏UI界面
+
+    ```typescript
+    this.uiManager.openUI(MainPage);
+    ```
+
     - 弹出窗口
+
+    ```typescript
+    this.uiManager.openUI(BagWindow);
+    ```
+
     - PopupMenu
+
+    ```typescript
+    egretx.showPopupMenu(this.btn_1, egretx.PopupMenu.toOptions(["第一级", "第二级", "第三级"], this.selectedIndex)).addOnce((v) => {
+        if (v) {
+            this.selectedIndex = v.index;
+        }
+    }, this);
+    ```
+
     - (包括Alert,DropdownList,DropdownListGroup,TipsManager等实用扩展)
 
-### 主要API
-```typescript
-uiManager.register                          //注册UI界面
-uiManager.replaceScene()                    //切换场景
-uiManager.openUI()                          //打开一个UI界面
-uiManager.openUIWithLayer                   //在指定层级打开UI界面
-uiManager.openUIWithRoot                    //在指定低级打开UI界面
-uiManager.openPopup                         //打开一个弹出界面
+    ```typescript
+    egretx.alert("确定要返回场景吗？", "提示", 2, false).addOnce((button) => {
+        if (button == 0) {
+            this.close();
+        }
+    }, this);
 
-egretx.alert                                //确定弹出框
-egretx.showPopupMenu                        //弹出菜单
-egretx.tips                                 //飘窗提示
+    egretx.tips("UI音频只能同时播放一个声音，多个播放后者会替换前者！");
+    ```
+- TimelineManager
+
+```typescript
+export interface IAnimatable extends xgame.IXObject {
+    advanceTime(time: number): void;
+}
+TimelineManager.Instance().getOrCreateTimeline().add(this);
+TimelineManager.Instance().getOrCreateTimeline().remove(this);
+//2倍整播放动画
+TimelineManager.Instance().getOrCreateTimeline().timeScale = 2;
+
+```
+
+- AudioManager
+
+```typescript
+ //循环播放背景音乐
+this.audioManager.background.play("music_mp3", 0);
+
+this.audioManager.ui.play("refine_mp3", 1);
+
+this.audioManager.effect.play("effect_mp3", 1);
+```
+
+- AnimationManager
+
+```typescript
+let mc = this.animationManager.fetch("chunli", "test");
+mc.horizontalCenter = 0;
+mc.verticalCenter = 0;
+this.addChild(mc);
+mc.play(-1, "attack");
+
+this.animationManager.recycle(mc);
+this.animationManager.release("888888");
+```
+
+- DragonBonesManager
+
+```typescript
+ private async createDragonBones(): Promise<void> {
+    this.dragonBody = this.dragonBonesManager.fetch("dragon_boy", "DragonBoy");
+    await this.dragonBody.createArmature();
+    if (this.dragonBody.display) {
+        this.dragonBody.display.x = this.dragonBody.display.y = 480;
+        this.dragonBody.setParent(this);
+        this.dragonBody.armature.animation.play("walk");
+    }
+}
 ```
 
 ## xgame.client 示例项目

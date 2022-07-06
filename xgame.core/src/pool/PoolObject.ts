@@ -15,16 +15,9 @@ module xgame {
         group?: string;
         key?: string;
     }
-    function get_timestamp(): number {
-        return Math.floor(new Date().valueOf() / 1000);
-    }
     export class PoolObject<T extends IPoolable> extends xgame.XObject {
         public static EXPIRE_TIME: number = 60;
         private instances: T[] = [];
-        private $timestamp: number = 0;
-        public get timestamp(): number {
-            return this.$timestamp;
-        }
         private $create: number = 0;
         public get create(): number {
             return this.$create;
@@ -33,7 +26,7 @@ module xgame {
             return this.instances.length;
         }
         public get expired(): boolean {
-            if (this.fulled && (get_timestamp() - this.timestamp >= 30)) {
+            if (this.fulled) {
                 return true;
             }
             return false;
@@ -46,7 +39,6 @@ module xgame {
         public key: string | number = "";
         public constructor(Clazz: TClass<T>, count_init: number = 0) {
             super();
-            this.$timestamp = get_timestamp();
             this.Clazz = Clazz;
             if (count_init > 0) {
                 for (let i: number = 0; i < count_init; i++) {
@@ -71,13 +63,11 @@ module xgame {
             }
             instance.fromPoolHashCode = this.hashCode;
             this.$create++;
-            this.$timestamp = get_timestamp();
             return instance;
         }
         public ping(instance: T): void {
             instance.fromPoolHashCode = this.hashCode;
             this.$create++;
-            this.$timestamp = get_timestamp();
         }
         public recycle(instance: T): void {
             if (instance.fromPoolHashCode == this.hashCode) {
@@ -86,7 +76,6 @@ module xgame {
                     if (instance.dispose) {
                         instance.dispose();
                     }
-                    this.$timestamp = get_timestamp();
                 }
             }
         }
@@ -100,7 +89,7 @@ module xgame {
                     instance.release();
                 }
             }
-            this.$timestamp = get_timestamp();
+            this.$create = 0;
         }
     }
 }

@@ -11,7 +11,7 @@ declare module egretx {
         H_TAIL = 4,
         V_HEAD = 8,
         V_MID = 16,
-        V_TAIL = 32
+        V_TAIL = 32,
     }
 }
 declare namespace eui {
@@ -38,6 +38,7 @@ declare module egretx {
     interface IUIManager extends xgame.IXObject {
         readonly stage: egret.Stage;
         readonly RES: UIResManager;
+        readonly currentScene: IUIEntity;
         readonly onUIOpened: xgame.Signal1<IUIEntity>;
         readonly onUIClosed: xgame.Signal1<IUIEntity>;
         readonly onSceneChanged: xgame.Signal2<IUIEntity, IUIEntity>;
@@ -90,6 +91,705 @@ declare module egretx {
 /*************************************************
 /* @author : rontian
 /* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    /**
+     * 帧动画管理器
+     */
+    class AnimationManager extends xgame.Singleton implements IAnimationManager, IAnimationManagerInternal {
+        readonly playingClips: xgame.Dictionary<number, AnimationClip>;
+        constructor();
+        initialize(): void;
+        readonly pools: xgame.PoolGroup<AnimationClip>;
+        /**
+         * 从对象池中取出一个动画
+         * @param key
+         * @param movieClipName
+         */
+        fetch(key: string, movieClipName?: string): AnimationClip;
+        /**
+         * 回收动画对象
+         * @param clip
+         */
+        recycle(clip: AnimationClip): void;
+        /**
+         * 释放指定的动画对象及资源
+         * @param key
+         */
+        release(key: string): void;
+        private _release(id);
+        /**
+         * 释放全部可以释放的动画对象及资源
+         */
+        releases(): void;
+        /**
+         * 根据key获取动画相关资源，默认动画文件前缀相同
+         * @param key
+         * @returns
+         */
+        getRes(key: string): IRes;
+        readonly factories: xgame.Dictionary<string, egret.MovieClipDataFactory>;
+        /**
+         * 构建动画帧数据
+         * @param key
+         * @param movieClipName
+         * @returns
+         */
+        generateMovieClipData(key: string, movieClipName?: string): egret.MovieClipData;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    /**
+     * 帧动画剪辑
+     */
+    class AnimationClip extends eui.Component implements xgame.IPoolable {
+        private $mc;
+        readonly mc: MovieClip;
+        key: string;
+        movieClipname: string;
+        actionName: string;
+        protected data: egret.MovieClipData;
+        protected frameActions: Array<FrameActionItem>;
+        constructor(key: string, movieClipname?: string, actionName?: string);
+        private $timeline;
+        readonly timeline: string;
+        setTimeline(value: string): void;
+        fromPoolHashCode: number;
+        release(): void;
+        dispose(): void;
+        private $frameRate;
+        frameRate: number;
+        private $timeScale;
+        timeScale: number;
+        private $scale;
+        scale: number;
+        private $mc_scaleX;
+        mc_scaleX: number;
+        private $mc_scaleY;
+        mc_scaleY: number;
+        addFrameAction(action: Function, thisObject?: any, frame?: number): void;
+        removeFrameActions(frame?: number): void;
+        private callback_preload;
+        preload(): xgame.Signal0;
+        playWithAutoRemove(actionName?: string): void;
+        play(playTimes?: number, actionName?: string): void;
+        protected loadMC(is_preload?: boolean): Promise<void>;
+        private onFrameLabelEvent(event);
+        private onLoopCompleteEvent(event);
+        private onCompleteEvent(event);
+        initMC(mcData: egret.MovieClipData, is_preload?: boolean): void;
+        private $playTimes;
+        protected _play(): void;
+        stop(): void;
+        reset(): void;
+        removeSelf(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    class FrameAction {
+        name: string;
+        private $items;
+        private $frame;
+        once: boolean;
+        frame: number;
+        constructor(frame?: number);
+        protected hasAction(action: Function, thisObject?: any): number;
+        addAction(action: Function, thisObject?: any): void;
+        removeAction(action: Function, thisObject?: any): void;
+        removeActions(): void;
+        executeActions(target: MovieClip, frameID: number): void;
+        readonly numActions: number;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    class FrameActionItem {
+        action: Function;
+        thisObject: any;
+        frame: number;
+        constructor(action: Function, thisObject?: any, frame?: number);
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    /**
+     * 从egret.MoveClip修改而来
+     */
+    class MovieClip extends egret.DisplayObject implements IAnimatable {
+        static DISPATCH_ENABLE: boolean;
+        private $actions;
+        frameAction: FrameAction;
+        private $timeline;
+        readonly timeline: string;
+        setTimeline(value: string): void;
+        $texture: egret.Texture;
+        private offsetPoint;
+        $movieClipData: egret.MovieClipData;
+        /**
+         * @private
+         */
+        private frames;
+        /**
+         * @private
+         */
+        $totalFrames: number;
+        /**
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @private
+         */
+        frameLabels: any[];
+        /**
+         * @private
+         */
+        $frameLabelStart: number;
+        /**
+         * @private
+         */
+        $frameLabelEnd: number;
+        /**
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @private
+         */
+        frameEvents: any[];
+        /**
+         * @private
+         */
+        private frameIntervalTime;
+        /**
+         * @private
+         */
+        $eventPool: string[];
+        $isPlaying: boolean;
+        /**
+         * @private
+         */
+        private isStopped;
+        /**
+         * @private
+         */
+        private playTimes;
+        /**
+         * @private
+         */
+        $currentFrameNum: number;
+        /**
+         * @private
+         */
+        $nextFrameNum: number;
+        /**
+         * @private
+         */
+        private displayedKeyFrameNum;
+        /**
+         * @private
+         */
+        private passedTime;
+        /**
+         * @private
+         */
+        private $frameRate;
+        private invokeActions;
+        /**
+         * 创建新的 MovieClip 实例。创建 MovieClip 之后，调用舞台上的显示对象容器的addElement方法。
+         * @param movieClipData {movieClipData} 被引用的 movieClipData 对象
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        constructor(movieClipData?: egret.MovieClipData, invokeActions?: Array<FrameActionItem>);
+        setData(movieClipData?: egret.MovieClipData, invokeActions?: FrameActionItem[]): void;
+        setInvokeActions(invokeActions: FrameActionItem[]): void;
+        private $timeScale;
+        timeScale: number;
+        protected createNativeDisplayObject(): void;
+        /**
+         * @private
+         */
+        $smoothing: boolean;
+        /**
+         * Whether or not is smoothed when scaled.
+         * @version Egret 3.0
+         * @platform Web
+         * @language en_US
+         */
+        /**
+         * 控制在缩放时是否进行平滑处理。
+         * @version Egret 3.0
+         * @platform Web
+         * @language zh_CN
+         */
+        smoothing: boolean;
+        /**
+         * @private
+         *
+         */
+        $init(): void;
+        private fillMovieFrames();
+        /**
+         * @private
+         *
+         */
+        $reset(): void;
+        /**
+         * @private
+         *
+         */
+        private _initFrame();
+        /**
+         * @private
+         */
+        $updateRenderNode(): void;
+        /**
+         * @private
+         */
+        $measureContentBounds(bounds: egret.Rectangle): void;
+        /**
+         * @private
+         *
+         * @param stage
+         * @param nestLevel
+         */
+        $onAddToStage(stage: egret.Stage, nestLevel: number): void;
+        /**
+         * @private
+         *
+         */
+        $onRemoveFromStage(): void;
+        /**
+         * @private
+         * 返回帧标签为指定字符串的FrameLabel对象
+         * @param labelName {string} 帧标签名
+         * @param ignoreCase {boolean} 是否忽略大小写，可选参数，默认false
+         * @returns {egret.FrameLabel} FrameLabel对象
+         */
+        private getFrameLabelByName(labelName, ignoreCase?);
+        /**
+         * @private
+         * 根据帧标签，设置开始和结束的帧数
+         * @param labelName {string} 帧标签名
+         */
+        private getFrameStartEnd(labelName);
+        /**
+         * @private
+         * 返回指定序号的帧的FrameLabel对象
+         * @param frame {number} 帧序号
+         * @returns {egret.FrameLabel} FrameLabel对象
+         */
+        private getFrameLabelByFrame(frame);
+        /**
+         * @private
+         * 返回指定序号的帧对应的FrameLabel对象，如果当前帧没有标签，则返回前面最近的有标签的帧的FrameLabel对象
+         * @method egret.MovieClip#getFrameLabelForFrame
+         * @param frame {number} 帧序号
+         * @returns {egret.FrameLabel} FrameLabel对象
+         */
+        private getFrameLabelForFrame(frame);
+        /**
+         * 继续播放当前动画
+         * @param playTimes {number} 播放次数。 参数为整数，可选参数，>=1：设定播放次数，<0：循环播放，默认值 0：不改变播放次数(MovieClip初始播放次数设置为1)，
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        play(playTimes?: number): void;
+        /**
+         * 暂停播放动画
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        stop(): void;
+        /**
+         * 将播放头移到前一帧并停止
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        prevFrame(): void;
+        /**
+         * 跳到后一帧并停止
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        nextFrame(): void;
+        /**
+         * 将播放头移到指定帧并播放
+         * @param frame {any} 指定帧的帧号或帧标签
+         * @param playTimes {number} 播放次数。 参数为整数，可选参数，>=1：设定播放次数，<0：循环播放，默认值 0：不改变播放次数，
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        gotoAndPlay(frame: string | number, playTimes?: number): void;
+        /**
+         * 将播放头移到指定帧并停止
+         * @param frame {any} 指定帧的帧号或帧标签
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        gotoAndStop(frame: string | number): void;
+        /**
+         * @private
+         *
+         * @param frame
+         */
+        private gotoFrame(frame);
+        /**
+         * @private
+         */
+        private lastTime;
+        advanceTime(time: number): void;
+        /**
+         * @private
+         *
+         */
+        private advanceFrame();
+        /**
+         * @private
+         *
+         */
+        private constructFrame();
+        /**
+         * @private
+         *
+         */
+        $renderFrame(): void;
+        /**
+         * @private
+         *
+         */
+        private handlePendingEvent();
+        /**
+         * MovieClip 实例中帧的总数
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        readonly totalFrames: number;
+        /**
+         * MovieClip 实例当前播放的帧的序号
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        readonly currentFrame: number;
+        /**
+         * MovieClip 实例当前播放的帧的标签。如果当前帧没有标签，则 currentFrameLabel返回null。
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        readonly currentFrameLabel: string;
+        /**
+         * 当前播放的帧对应的标签，如果当前帧没有标签，则currentLabel返回包含标签的先前帧的标签。如果当前帧和先前帧都不包含标签，currentLabel返回null。
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        readonly currentLabel: string;
+        /**
+         * MovieClip 实例的帧频
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        frameRate: number;
+        /**
+         * MovieClip 实例当前是否正在播放
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        readonly isPlaying: boolean;
+        /**
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        /**
+         * MovieClip数据源
+         */
+        movieClipData: egret.MovieClipData;
+        /**
+         * @private
+         *
+         * @param value
+         */
+        private setMovieClipData(value, force?);
+        /**
+         * @private
+         *
+         * @param value
+         */
+        private setPlayTimes(value);
+        /**
+         * @private
+         *
+         * @param value
+         */
+        private setIsStopped(value);
+        private getActionAt(frame);
+        addFrameAction(frame: number, action: Function, thisObject?: any): void;
+        removeFrameAction(frame: number, action: Function, thisObject?: any): void;
+        removeFrameActions(frame?: number): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    let IAnimationManager: symbol;
+    interface IAnimationManager extends xgame.IXObject {
+        /**
+         * 从对象池中取出一个动画
+         * @param key
+         * @param movieClipName
+         */
+        fetch(key: string, movieClipName?: string): AnimationClip;
+        /**
+         * 回收动画对象
+         * @param clip
+         */
+        recycle(clip: AnimationClip): void;
+        /**
+         * 释放指定的动画对象及资源
+         * @param key
+         */
+        release(key: string): void;
+        /**
+         * 释放全部可以释放的动画对象及资源
+         */
+        releases(): void;
+        /**
+         * 根据key获取动画相关资源，默认动画文件前缀相同
+         * @param key
+         * @returns
+         */
+        getRes(key: string): IRes;
+        /**
+         * 构建动画帧数据
+         * @param key
+         * @param movieClipName
+         * @returns
+         */
+        generateMovieClipData(key: string, movieClipName?: string): egret.MovieClipData;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    let IAnimationManagerInternal: symbol;
+    interface IAnimationManagerInternal {
+        initialize(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    /**
+     * 音频管理器
+     */
+    class AudioManager extends xgame.Singleton implements IAudioManager, IAudioManagerInternal {
+        /**
+         * 创建音频播放器实例，默认使用WebAudio
+         */
+        createAudioInstance?: (type?: string) => Audio;
+        /**
+         * 重定向音频地址
+         */
+        redirectURL: (url: string) => string;
+        constructor();
+        /**
+         * 背景音乐频道
+         */
+        background: MusicAudioChannel;
+        /**
+         * ui音频
+         */
+        ui: MusicAudioChannel;
+        /**
+         * 特效频道
+         */
+        effect: EffectAudioChannel;
+        initialize(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    enum AudioToggleState {
+        OFF = 0,
+        ON = 1,
+    }
+    /**
+     * 音频频道
+     */
+    class AudioChannel extends xgame.XObject {
+        channelType: AudioChannelType;
+        constructor(channelType: AudioChannelType);
+        protected callback_onPlayCompleted: xgame.Signal1<string>;
+        onPlayCompleted(): xgame.Signal1<string>;
+        private $toggleState;
+        readonly toggleState: AudioToggleState;
+        toggleOn(): void;
+        toggleOff(): void;
+        private $volume;
+        readonly volume: number;
+        setVolume(volume: number): void;
+        protected key: string;
+        protected playTimes: number;
+        play(key: string, playTimes?: number): void;
+        pause(): void;
+        resume(): void;
+        stop(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    class EffectAudioChannel extends AudioChannel {
+        static instanceMax: number;
+        protected freeAudioes: Audio[];
+        protected playAudioes: Audio[];
+        constructor();
+        play(key: string, playTimes?: number): void;
+        pause(): void;
+        resume(): void;
+        stop(): void;
+        private releaseAudio(audio);
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    class MusicAudioChannel extends AudioChannel {
+        constructor();
+        protected main: Audio;
+        play(key: string, playTimes?: number): void;
+        pause(): void;
+        resume(): void;
+        stop(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    class Audio extends xgame.XObject {
+        type: string;
+        protected key: string;
+        protected playTimes: number;
+        constructor(type?: string);
+        protected readonly info: RES.ResourceInfo;
+        load(): Promise<boolean>;
+        play(key: string, startTime?: number, playTimes?: number): Promise<void>;
+        pause(): void;
+        resume(): void;
+        stop(): void;
+        protected $volume: number;
+        readonly volume: number;
+        setVolume(volume: number): void;
+        destroy(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    enum AudioChannelType {
+        BACKGORUND = 0,
+        EFFECT = 1,
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    /**
+     * 默认的音频播放器
+     */
+    class WebAudio extends Audio {
+        private sound;
+        private loadDeferred;
+        constructor(type?: string);
+        load(): Promise<boolean>;
+        protected onIOError(event: egret.IOErrorEvent): void;
+        protected onLoadComplete(event: egret.Event): void;
+        protected soundChannel: egret.SoundChannel;
+        private playDeferred;
+        play(key: string, startTime?: number, playTimes?: number): Promise<void>;
+        private _play(position);
+        protected onSoundComplete(): void;
+        position: number;
+        private $isPaused;
+        readonly isPaused: boolean;
+        pause(): void;
+        resume(): void;
+        protected clearChannel(): void;
+        stop(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    let IAudioManager: symbol;
+    interface IAudioManager extends xgame.IXObject {
+        createAudioInstance?: (type?: string) => Audio;
+        redirectURL: (url: string) => string;
+        background: MusicAudioChannel;
+        ui: MusicAudioChannel;
+        effect: EffectAudioChannel;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    let IAudioManagerInternal: symbol;
+    interface IAudioManagerInternal {
+        initialize(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
 /* @date   : 2021-11-17
 *************************************************/
 declare module egretx {
@@ -118,6 +818,82 @@ declare module egretx {
 *************************************************/
 declare module egretx {
     const injectable: typeof xgame.injectable;
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    /**
+     * 龙骨动画管理器
+     */
+    class DragonBonesManager extends xgame.Singleton implements IDragonBonesManager, IDragonBonesManagerInternal, IAnimatable {
+        factory: dragonBones.EgretFactory;
+        constructor();
+        advanceTime(time: number): void;
+        initialize(): void;
+        readonly pools: xgame.PoolGroup<Armature>;
+        fetch(key: string, armatureName: string, texture?: string): Armature;
+        recycle(armature: Armature): void;
+        release(key: string): void;
+        private _release(id);
+        releases(): void;
+        addClock(armture: Armature): void;
+        removeClock(armture: Armature): void;
+        parseDragonBones(key: string, texture?: string): void;
+        clearDragonBones(key: string, texture?: string): void;
+        buildArmature(key: string, armtureName: string): dragonBones.Armature;
+        getRes(key: string, texture?: string): IRes;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-06
+*************************************************/
+declare module egretx {
+    class Armature extends xgame.XObject implements xgame.IPoolable {
+        key: string;
+        armatureName: string;
+        texture: string;
+        constructor(key: string, armatureName: string, texture?: string);
+        readonly id: string;
+        setParent(parent: egret.DisplayObjectContainer): void;
+        removeSelf(): void;
+        fromPoolHashCode: number;
+        release(): void;
+        dispose(): void;
+        protected $armature: dragonBones.Armature;
+        readonly armature: dragonBones.Armature;
+        readonly display: egret.DisplayObject;
+        createArmature(): Promise<void>;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    let IDragonBonesManager: symbol;
+    interface IDragonBonesManager extends xgame.IXObject {
+        fetch(key: string, armatureName: string, texture?: string): Armature;
+        recycle(armature: Armature): void;
+        release(key: string): void;
+        releases(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    let IDragonBonesManagerInternal: symbol;
+    interface IDragonBonesManagerInternal {
+        initialize(): void;
+    }
 }
 /*************************************************
 /* @author : rontian
@@ -203,8 +979,8 @@ declare module egretx {
 *************************************************/
 declare module egretx {
     class HttpRequest extends xgame.XObject implements xgame.IPoolable {
-        uri?: string;
-        method?: string;
+        uri: string;
+        method: string;
         reconnectTimes: number;
         protected headers: xgame.Dictionary<string, string>;
         protected values: xgame.Dictionary<string, string | number>;
@@ -229,12 +1005,12 @@ declare module egretx {
     enum SocketState {
         Closed = 0,
         Connecting = 1,
-        Connected = 2
+        Connected = 2,
     }
     enum SocketCloseCode {
         Close = 0,
         IOError = 1,
-        Failed = 2
+        Failed = 2,
     }
     /**
      * 网络连接实例的实现类
@@ -245,7 +1021,7 @@ declare module egretx {
         socketHelper: ISocketHelper;
         private uri;
         private guidCount;
-        private generateGUID;
+        private generateGUID();
         private isInited;
         private happendConnected;
         private isReconnect;
@@ -257,35 +1033,35 @@ declare module egretx {
         private sendTimeoutStamp;
         private lastestRecvStamp;
         private checkHeartBeat;
-        private onAdvanceTime;
-        private _sendPacket;
+        private onAdvanceTime();
+        private _sendPacket(packet);
         private current;
         private sendQueues;
         sendPacket(packet: IPacket): void;
         setURI(host: string, port: number, wss?: boolean): void;
         setURI(uri: string): void;
         private socket;
-        private init;
+        private init();
         private callback_onConnected;
         onConnected(): xgame.Signal0;
-        private onConnectHandler;
-        private sendLoginPacket;
+        private onConnectHandler(event);
+        private sendLoginPacket();
         private callback_onKickOut;
         onKickOut(): xgame.Signal0;
-        private onReceiveHandler;
+        private onReceiveHandler(event);
         private callback_onClosed;
         onClosed(): xgame.Signal1<SocketCloseCode>;
         private reconnectTimerID;
-        private onCloseHandler;
-        private onIOErrorHandler;
+        private onCloseHandler(event);
+        private onIOErrorHandler(event);
         private callback_onConnecting;
         onConnecting(): xgame.Signal1<number>;
         private retryCount;
         connect(): void;
-        private _connect;
-        private cleanQueues;
+        private _connect();
+        private cleanQueues(revc?);
         close(): void;
-        private _close;
+        private _close();
         private callback_onShutdown;
         onShutdown(): xgame.Signal0;
         shutdown(): void;
@@ -329,6 +1105,210 @@ declare module egretx {
         isKickOutPacket(packet: IPacket): boolean;
         isDataLocked(packet: IPacket): boolean;
         receivePacket(packet: IPacket): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    /**
+     * 资源管理器
+     */
+    class ResourceManager extends xgame.Singleton implements IResourceManager, IResourceManagerInternal {
+        static DEBUG: boolean;
+        readonly groups: xgame.Dictionary<string, ResourceGroup<any>>;
+        constructor();
+        initialize(): void;
+        getOrCreateGroup<T>(name: string, factory?: () => ResourceGroup<T>): ResourceGroup<T>;
+        private loadQueues;
+        loadResAsync(key: string): Promise<any>;
+        destroyRes(key: string): boolean;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    /**
+     * 资源组
+     */
+    class ResourceGroup<T> extends xgame.XObject {
+        manager: ResourceManager;
+        readonly resourceType: string;
+        readonly keys: xgame.Dictionary<string, string[]>;
+        constructor(manager: ResourceManager, resourceType: string);
+        createInstance(key: string): T;
+        load(key: string, ...args: any[]): Promise<any>;
+        release(key: string): void;
+        readonly statistics: {
+            [key: string]: number;
+        };
+        private $memory;
+        readonly memory: number;
+        protected addMemory(key: string, w: number, h: number): void;
+        protected removeMemory(key: string): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    class DragonBonesResourceGroup extends ResourceGroup<dragonBones.Armature> {
+        constructor(manager: ResourceManager);
+        load(key: string, skeleton?: string): Promise<any>;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    class MovieClipResourceGroup extends ResourceGroup<egret.MovieClip> {
+        constructor(manager: ResourceManager);
+        load(key: string): Promise<void>;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    /**
+     * 资源组类型，可以扩展自己的资源组
+     */
+    enum ResourceType {
+        UI = "UI",
+        MovieClip = "MovieClip",
+        DragonBones = "DragonBones",
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    interface ILoader {
+        key: string;
+        deferred: xgame.Deferred<any>;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    interface IRes {
+        texture: string;
+        json: string;
+        skeleton?: string;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    let IResourceManager: symbol;
+    interface IResourceManager extends xgame.IXObject {
+        getOrCreateGroup<T>(name: string, factory?: () => ResourceGroup<T>): ResourceGroup<T>;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+declare module egretx {
+    let IResourceManagerInternal: symbol;
+    interface IResourceManagerInternal {
+        initialize(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    /**
+     * 时间轴管理器
+     */
+    class TimelineManager extends xgame.Singleton implements ITimelineManager, ITimelineManagerInternal {
+        constructor();
+        initialize(): void;
+        protected advanceTime(): void;
+        private timelines;
+        getOrCreateTimeline(name?: string): Timeline;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    class Timeline extends xgame.Locker {
+        name: string;
+        static MAIN: string;
+        private animatables;
+        private $timeScale;
+        timeScale: number;
+        private $passedTime;
+        readonly passedTime: number;
+        constructor(name: string);
+        advanceTime(time: number): void;
+        add(animatable: IAnimatable): void;
+        remove(animatable: IAnimatable): void;
+        private $isPaused;
+        readonly isPaused: boolean;
+        pause(): void;
+        resume(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    /**
+     * 播放动画接口
+     */
+    interface IAnimatable extends xgame.IXObject {
+        advanceTime(time: number): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    let ITimelineManager: symbol;
+    interface ITimelineManager {
+        getOrCreateTimeline(name?: string): Timeline;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module egretx {
+    let ITimelineManagerInternal: symbol;
+    interface ITimelineManagerInternal {
+        initialize(): void;
     }
 }
 /*************************************************
@@ -384,7 +1364,7 @@ declare module egretx {
         constructor(main: egret.DisplayObjectContainer);
         dispose(): void;
         initialize(): void;
-        private onLeaveStage;
+        private onLeaveStage(event);
         removeTouchEvents(target: egret.DisplayObject | number): void;
         addTouchBegin(target: egret.DisplayObject, listener: (event: egret.TouchEvent) => void, thisObject?: any, scale?: boolean): void;
         removeTouchBegin(target: egret.DisplayObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
@@ -508,11 +1488,11 @@ declare module egretx {
 *************************************************/
 declare module egretx {
     class TouchDisposableGroup extends xgame.XObject implements xgame.IDisposable {
-        private displayObject?;
+        private displayObject;
         private touches;
         manager: TouchManager;
         constructor(displayObject?: egret.DisplayObject);
-        private onRemovedFromStage;
+        private onRemovedFromStage();
         dispose(): void;
         addTouchBegin(target: egret.DisplayObject, listener: (event: egret.TouchEvent) => void, thisObject?: any, scale?: boolean): void;
         removeTouchBegin(target: egret.DisplayObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
@@ -572,7 +1552,7 @@ declare module egretx {
         clearScene(): void;
         closeUI(uiName: string): void;
         closeUI(entity: UIEntity): void;
-        private _closeUI;
+        private _closeUI(entity);
         private $currentScene;
         readonly currentScene: IUIEntity;
         replaceScene(uiName: string, ...args: any[]): Promise<IUIEntity>;
@@ -585,25 +1565,25 @@ declare module egretx {
         openUIWithRoot(uiClass: xgame.TClass<UIPage>, uiRoot: egret.DisplayObjectContainer, ...args: any[]): Promise<IUIEntity>;
         openPopup(uiName: string, hud: egret.DisplayObject, ...args: any[]): Promise<IUIEntity>;
         openPopup(uiClass: xgame.TClass<UIPage>, hud: egret.DisplayObject, ...args: any[]): Promise<IUIEntity>;
-        private startPipelines;
+        private startPipelines(options);
         /**
          * 检查UIPage是否存在或可以多开
          * @param options
          * @returns
          */
-        private checkIsOpened;
+        private checkIsOpened(options);
         /**
          * 如果没有存在就创建UIPage
          * @param options
          * @returns
          */
-        private createUIPage;
+        private createUIPage(options);
         /**
          * 如果UIPage创建成功就打开并传递参数
          * @param options
          * @returns
          */
-        private openUIPage;
+        private openUIPage(options);
     }
 }
 /*************************************************
@@ -698,7 +1678,7 @@ declare module egretx {
         TOP = 1,
         BOTTOM = 2,
         LEFT = 3,
-        RIGHT = 4
+        RIGHT = 4,
     }
 }
 /*************************************************
@@ -712,7 +1692,7 @@ declare module egretx {
         TOP = 1,
         BOTTOM = 2,
         LEFT = 3,
-        RIGHT = 4
+        RIGHT = 4,
     }
 }
 /*************************************************
@@ -733,7 +1713,7 @@ declare module egretx {
         readonly isLoading: boolean;
         private deferred;
         load(): Promise<void>;
-        private doComplete;
+        private doComplete();
         protected $maskAlpha: number;
         readonly maskAlpha: number;
         protected $maskColor: number;
@@ -767,7 +1747,7 @@ declare module egretx {
         closeByMask = 16,
         isPopupMenu = 32,
         isPlugin = 64,
-        Scene = 128
+        Scene = 128,
     }
 }
 /*************************************************
@@ -812,7 +1792,7 @@ declare module egretx {
         Layer_12_Loading = 12,
         Layer_13 = 13,
         Layer_14 = 14,
-        Layer_15_Top = 15
+        Layer_15_Top = 15,
     }
 }
 /*************************************************
@@ -829,9 +1809,9 @@ declare module egretx {
         constructor(...views: egret.DisplayObject[]);
         addWatcher(view: egret.DisplayObject): void;
         removeWatcher(view: egret.DisplayObject): void;
-        private onWatcher;
+        private onWatcher(value);
         private isDispatching;
-        private lateDispatch;
+        private lateDispatch();
         onChanged(): xgame.Signal0;
         dispose(): void;
     }
@@ -891,7 +1871,7 @@ declare module egretx {
         mask: eui.Rect;
         groupName: string;
         createMask(color: number, alpha: number, closeByMask: number): void;
-        private onMaskClose;
+        private onMaskClose();
         onSceneChanging(): void;
         onClose(): void;
         closePage(): void;
@@ -980,9 +1960,9 @@ declare module egretx {
         private textures;
         constructor();
         gc(force?: boolean): void;
-        private destroyRes;
-        private onDisplayListChanged;
-        private onDisplayListDisposed;
+        private destroyRes(key);
+        private onDisplayListChanged(hashCode);
+        private onDisplayListDisposed(hashCode);
         register(key: string, texture: egret.Texture): void;
     }
 }
@@ -1022,7 +2002,7 @@ declare module egretx {
         onClose(): void;
         protected getButton(index: number): eui.Button;
         onOpen(): void;
-        private onButtonClick;
+        private onButtonClick(event);
     }
 }
 /*************************************************
@@ -1134,7 +2114,7 @@ declare module egretx {
         protected items: DropdownList[];
         protected getItemAt(index: number): DropdownList;
         protected indexOf(dropdown: DropdownList): number;
-        private onSelectChangeHandler;
+        private onSelectChangeHandler(selectedIndex, value, dropdown);
         private pools;
     }
 }
@@ -1199,7 +2179,7 @@ declare module egretx {
         fixedUIDirection(direction: UIDirection): void;
         onClose(): void;
         private selectedItem;
-        private onItemClickHandler;
+        private onItemClickHandler(event);
         onOpen(): void;
         protected updateArrow(direction: UIDirection): void;
     }
@@ -1222,7 +2202,7 @@ declare module egretx {
     enum TipsState {
         FadeIn = 1,
         Stay = 2,
-        FadeOut = 3
+        FadeOut = 3,
     }
     class TipsView extends eui.Component implements ITipsView {
         fromPoolHashCode: number;
@@ -1251,8 +2231,8 @@ declare module egretx {
         constructor();
         protected waitQueues: string[];
         append(message: string): void;
-        private play;
-        private endView;
+        private play(message);
+        private endView(view);
         clear(): void;
         initialize(): void;
     }
@@ -1353,7 +2333,7 @@ declare module egretx {
         TOP_LEFT = 5,
         TOP_RIGHT = 6,
         BOTTOM_LEFT = 7,
-        BOTTOM_RIGHT = 8
+        BOTTOM_RIGHT = 8,
     }
 }
 /*************************************************

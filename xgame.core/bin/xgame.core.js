@@ -5985,20 +5985,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 /// <reference path="../utils/isImplementOf.ts" />
 
 (function (xgame) {
-    function get_timestamp() {
-        return Math.floor(new Date().valueOf() / 1000);
-    }
     var PoolObject = (function (_super) {
         __extends(PoolObject, _super);
         function PoolObject(Clazz, count_init) {
             if (count_init === void 0) { count_init = 0; }
             var _this = _super.call(this) || this;
             _this.instances = [];
-            _this.$timestamp = 0;
             _this.$create = 0;
             _this.group = "";
             _this.key = "";
-            _this.$timestamp = get_timestamp();
             _this.Clazz = Clazz;
             if (count_init > 0) {
                 for (var i = 0; i < count_init; i++) {
@@ -6007,13 +6002,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             }
             return _this;
         }
-        Object.defineProperty(PoolObject.prototype, "timestamp", {
-            get: function () {
-                return this.$timestamp;
-            },
-            enumerable: true,
-            configurable: true
-        });
         Object.defineProperty(PoolObject.prototype, "create", {
             get: function () {
                 return this.$create;
@@ -6030,7 +6018,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         });
         Object.defineProperty(PoolObject.prototype, "expired", {
             get: function () {
-                if (this.fulled && (get_timestamp() - this.timestamp >= 30)) {
+                if (this.fulled) {
                     return true;
                 }
                 return false;
@@ -6066,14 +6054,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             }
             instance.fromPoolHashCode = this.hashCode;
             this.$create++;
-            this.$timestamp = get_timestamp();
             return instance;
             var _a;
         };
         PoolObject.prototype.ping = function (instance) {
             instance.fromPoolHashCode = this.hashCode;
             this.$create++;
-            this.$timestamp = get_timestamp();
         };
         PoolObject.prototype.recycle = function (instance) {
             if (instance.fromPoolHashCode == this.hashCode) {
@@ -6082,7 +6068,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     if (instance.dispose) {
                         instance.dispose();
                     }
-                    this.$timestamp = get_timestamp();
                 }
             }
         };
@@ -6096,7 +6081,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     instance.release();
                 }
             }
-            this.$timestamp = get_timestamp();
+            this.$create = 0;
         };
         PoolObject.EXPIRE_TIME = 60;
         return PoolObject;
@@ -8061,6 +8046,63 @@ var __global = this.__global || this;
         }
         return s;
     };
+})(xgame || (xgame = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+
+(function (xgame) {
+    var FlagsCheckType;
+    (function (FlagsCheckType) {
+        FlagsCheckType[FlagsCheckType["And"] = 0] = "And";
+        FlagsCheckType[FlagsCheckType["Or"] = 1] = "Or";
+    })(FlagsCheckType = xgame.FlagsCheckType || (xgame.FlagsCheckType = {}));
+    var VectorFlags = (function (_super) {
+        __extends(VectorFlags, _super);
+        function VectorFlags() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.flags = new xgame.Dictionary();
+            return _this;
+        }
+        VectorFlags.prototype.checkFlags = function (flags, type) {
+            if (type === void 0) { type = FlagsCheckType.And; }
+            var count = 0;
+            for (var _i = 0, flags_1 = flags; _i < flags_1.length; _i++) {
+                var f = flags_1[_i];
+                if (this.flags.containsKey(f)) {
+                    count++;
+                    if (type == FlagsCheckType.Or) {
+                        break;
+                    }
+                }
+            }
+            return count > 0;
+        };
+        VectorFlags.prototype.addFlags = function () {
+            var flags = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                flags[_i] = arguments[_i];
+            }
+            for (var _a = 0, flags_2 = flags; _a < flags_2.length; _a++) {
+                var f = flags_2[_a];
+                if (!this.flags.containsKey(f)) {
+                    this.flags.add(f, true);
+                }
+            }
+        };
+        VectorFlags.prototype.removeFlags = function () {
+            var flags = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                flags[_i] = arguments[_i];
+            }
+            this.flags.removeKeys(flags);
+        };
+        return VectorFlags;
+    }(xgame.XObject));
+    xgame.VectorFlags = VectorFlags;
+    __reflect(VectorFlags.prototype, "xgame.VectorFlags");
 })(xgame || (xgame = {}));
 /*************************************************
 /* @author : rontian

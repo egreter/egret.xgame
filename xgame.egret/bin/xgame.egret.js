@@ -3,12 +3,9 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
 window.__extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -30,8 +27,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -282,10 +279,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./ui/interfaces/IUIManagerInternal.ts" />
 
 (function (egretx) {
-    var EgretProvider = /** @class */ (function (_super_1) {
-        __extends(EgretProvider, _super_1);
+    var EgretProvider = (function (_super) {
+        __extends(EgretProvider, _super);
         function EgretProvider(main) {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.main = main;
             _this.priority = 100;
             return _this;
@@ -300,6 +297,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         EgretProvider.prototype.onStart = function (game) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
+                    game.getService(egretx.IDragonBonesManagerInternal).initialize();
+                    game.getService(egretx.IAnimationManagerInternal).initialize();
+                    game.getService(egretx.ITimelineManagerInternal).initialize();
+                    game.getService(egretx.IAudioManagerInternal).initialize();
+                    game.getService(egretx.IResourceManagerInternal).initialize();
                     game.getService(egretx.IHttpManagerInternal).initialize();
                     game.getService(egretx.ISocketManagerInternal).initialize();
                     game.getService(egretx.IUIManagerInternal).initialize();
@@ -309,17 +311,1776 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             });
         };
         EgretProvider.prototype.onServiceRegister = function (game) {
+            game.singleton(egretx.IDragonBonesManager, egretx.DragonBonesManager).withInstance(egretx.DragonBonesManager.Instance()).setAlias(egretx.IDragonBonesManagerInternal);
+            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(egretx.DragonBonesManager)));
+            game.singleton(egretx.IAnimationManager, egretx.AnimationManager).withInstance(egretx.AnimationManager.Instance()).setAlias(egretx.IAnimationManagerInternal);
+            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(egretx.AnimationManager)));
+            game.singleton(egretx.ITimelineManager, egretx.TimelineManager).withInstance(egretx.TimelineManager.Instance()).setAlias(egretx.ITimelineManagerInternal);
+            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(egretx.TimelineManager)));
+            game.singleton(egretx.IAudioManager, egretx.AudioManager).withInstance(egretx.AudioManager.Instance()).setAlias(egretx.IAudioManagerInternal);
+            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(egretx.AudioManager)));
+            game.singleton(egretx.IResourceManager, egretx.ResourceManager).withInstance(egretx.ResourceManager.Instance()).setAlias(egretx.IResourceManagerInternal);
+            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(egretx.ResourceManager)));
             game.singleton(egretx.IHttpManager, egretx.HttpManager).withInstance(egretx.HttpManager.Instance()).setAlias(egretx.IHttpManagerInternal);
-            ;
+            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(egretx.HttpManager)));
             game.singleton(egretx.ISocketManager, egretx.SocketManager).withInstance(egretx.SocketManager.Instance()).setAlias(egretx.ISocketManagerInternal);
-            ;
+            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(egretx.SocketManager)));
             game.singleton(egretx.IUIManager, egretx.UIManager).withInstance(new egretx.UIManager(this.main)).setAlias(egretx.IUIManagerInternal);
+            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(egretx.UIManager)));
             game.singleton(egretx.ITouchManager, egretx.TouchManager).withInstance(new egretx.TouchManager(this.main)).setAlias(egretx.ITouchManagerInternal);
+            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(egretx.TouchManager)));
         };
         return EgretProvider;
     }(xgame.XObject));
     egretx.EgretProvider = EgretProvider;
     __reflect(EgretProvider.prototype, "egretx.EgretProvider", ["xgame.IServiceProvider"]);
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+
+(function (egretx) {
+    /**
+     * 帧动画管理器
+     */
+    var AnimationManager = (function (_super) {
+        __extends(AnimationManager, _super);
+        function AnimationManager() {
+            var _this = _super.call(this) || this;
+            //当前正在播放的动画对象集
+            _this.playingClips = new xgame.Dictionary();
+            _this.pools = new xgame.PoolGroup("AnimationClip");
+            _this.factories = new xgame.Dictionary();
+            return _this;
+        }
+        AnimationManager.prototype.initialize = function () {
+        };
+        /**
+         * 从对象池中取出一个动画
+         * @param key
+         * @param movieClipName
+         */
+        AnimationManager.prototype.fetch = function (key, movieClipName) {
+            movieClipName = movieClipName || key;
+            var id = "{0}:{1}".format(key, movieClipName);
+            var clip = this.pools.fetch(id, egretx.AnimationClip, function () { return new egretx.AnimationClip(key, movieClipName); }, this);
+            this.playingClips.add(clip.hashCode, clip);
+            return clip;
+        };
+        /**
+         * 回收动画对象
+         * @param clip
+         */
+        AnimationManager.prototype.recycle = function (clip) {
+            this.playingClips.remove(clip.hashCode);
+            var id = "{0}:{1}".format(clip.key, clip.movieClipname);
+            this.pools.recycle(id, egretx.AnimationClip, clip);
+        };
+        /**
+         * 释放指定的动画对象及资源
+         * @param key
+         */
+        AnimationManager.prototype.release = function (key) {
+            var _this = this;
+            var pools = this.pools.pools;
+            pools.forKeys(function (id) {
+                var id_list = id.split(":");
+                if (id_list[0] == key) {
+                    _this._release(id);
+                }
+            }, this, true);
+        };
+        AnimationManager.prototype._release = function (id) {
+            if (this.pools.getPool(id, egretx.AnimationClip).expired) {
+                this.pools.release(id, egretx.AnimationClip);
+                var key = id.split(":")[0];
+                if (this.factories.containsKey(key)) {
+                    this.factories.remove(key);
+                    console.log("AnimationManager.clearMovieClipDataFactory({0})".format(key));
+                }
+                egretx.ResourceManager.Instance().getOrCreateGroup(egretx.ResourceType.MovieClip).release(key);
+            }
+        };
+        /**
+         * 释放全部可以释放的动画对象及资源
+         */
+        AnimationManager.prototype.releases = function () {
+            var _this = this;
+            var pools = this.pools.pools;
+            pools.forKeys(function (id) {
+                _this._release(id);
+            }, this, true);
+        };
+        /**
+         * 根据key获取动画相关资源，默认动画文件前缀相同
+         * @param key
+         * @returns
+         */
+        AnimationManager.prototype.getRes = function (key) {
+            var res = {};
+            res.json = key + "_json";
+            res.texture = key + "_png";
+            return res;
+        };
+        /**
+         * 构建动画帧数据
+         * @param key
+         * @param movieClipName
+         * @returns
+         */
+        AnimationManager.prototype.generateMovieClipData = function (key, movieClipName) {
+            movieClipName = movieClipName || key;
+            var res = this.getRes(key);
+            if (!RES.hasRes(res.json) || !RES.hasRes(res.texture)) {
+                console.warn("动画{0}的资源没有加载".format(key));
+                return null;
+            }
+            var factory = this.factories.get(key);
+            if (!factory) {
+                factory = new egret.MovieClipDataFactory(RES.getRes(res.json), RES.getRes(res.texture));
+                this.factories.add(key, factory);
+            }
+            movieClipName = movieClipName || key;
+            return factory.generateMovieClipData(movieClipName);
+        };
+        return AnimationManager;
+    }(xgame.Singleton));
+    egretx.AnimationManager = AnimationManager;
+    __reflect(AnimationManager.prototype, "egretx.AnimationManager", ["egretx.IAnimationManager", "xgame.IXObject", "egretx.IAnimationManagerInternal"]);
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+
+(function (egretx) {
+    /**
+     * 帧动画剪辑
+     */
+    var AnimationClip = (function (_super) {
+        __extends(AnimationClip, _super);
+        function AnimationClip(key, movieClipname, actionName) {
+            if (actionName === void 0) { actionName = "mc"; }
+            var _this = _super.call(this) || this;
+            _this.frameActions = [];
+            _this.$timeline = egretx.Timeline.MAIN;
+            _this.fromPoolHashCode = 0;
+            _this.$timeScale = 1.0;
+            _this.$scale = 1;
+            _this.$mc_scaleX = 1;
+            _this.$mc_scaleY = 1;
+            _this.callback_preload = new xgame.Signal0();
+            _this.$playTimes = 0;
+            movieClipname = movieClipname || key;
+            _this.name = "{0}:{1}".format(key, movieClipname);
+            _this.key = key;
+            _this.movieClipname = movieClipname;
+            _this.actionName = actionName;
+            _this.touchChildren = false;
+            _this.touchEnabled = false;
+            return _this;
+        }
+        Object.defineProperty(AnimationClip.prototype, "mc", {
+            get: function () {
+                return this.$mc;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(AnimationClip.prototype, "timeline", {
+            get: function () {
+                return this.$timeline;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        AnimationClip.prototype.setTimeline = function (value) {
+            this.$timeline = value;
+        };
+        AnimationClip.prototype.release = function () {
+            this.dispose();
+            this.data = undefined;
+            this.$mc = undefined;
+            this.frameActions.length = 0;
+        };
+        AnimationClip.prototype.dispose = function () {
+            this.removeSelf();
+        };
+        Object.defineProperty(AnimationClip.prototype, "frameRate", {
+            get: function () {
+                return this.$frameRate;
+            },
+            set: function (value) {
+                this.$frameRate = value;
+                if (this.mc) {
+                    this.mc.frameRate = this.frameRate;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(AnimationClip.prototype, "timeScale", {
+            get: function () {
+                return this.$timeScale;
+            },
+            set: function (value) {
+                this.$timeScale = value;
+                if (this.$mc) {
+                    this.$mc.timeScale = value;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(AnimationClip.prototype, "scale", {
+            get: function () {
+                return this.$scale;
+            },
+            set: function (value) {
+                this.$scale = value;
+                this.mc_scaleX = value;
+                this.mc_scaleY = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(AnimationClip.prototype, "mc_scaleX", {
+            get: function () {
+                return this.$mc_scaleX;
+            },
+            set: function (value) {
+                this.$mc_scaleX = value;
+                if (this.$mc) {
+                    this.$mc.scaleX = this.$mc_scaleX;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(AnimationClip.prototype, "mc_scaleY", {
+            get: function () {
+                return this.$mc_scaleY;
+            },
+            set: function (value) {
+                this.$mc_scaleY = value;
+                if (this.$mc) {
+                    this.$mc.scaleY = this.$mc_scaleY;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        AnimationClip.prototype.addFrameAction = function (action, thisObject, frame) {
+            if (this.$mc) {
+                if (isNaN(frame) || frame == 0) {
+                    frame = this.data.numFrames;
+                }
+                this.$mc.addFrameAction(frame, action, thisObject);
+            }
+            else {
+                this.frameActions.push(new egretx.FrameActionItem(action, thisObject, frame));
+            }
+        };
+        AnimationClip.prototype.removeFrameActions = function (frame) {
+            if (this.$mc) {
+                if (isNaN(frame) || frame == 0) {
+                    frame = this.data.numFrames;
+                }
+                this.$mc.removeFrameActions(frame);
+            }
+        };
+        AnimationClip.prototype.preload = function () {
+            var self = this;
+            if (this.$mc) {
+                this.callback_preload.dispatch();
+            }
+            else {
+                this.loadMC(true).then(function () {
+                    self.callback_preload.dispatch();
+                });
+            }
+            return this.callback_preload;
+        };
+        AnimationClip.prototype.playWithAutoRemove = function (actionName) {
+            var _this = this;
+            this.addFrameAction(function () {
+                egretx.AnimationManager.Instance().recycle(_this);
+            }, this);
+            this.play(1, actionName);
+        };
+        AnimationClip.prototype.play = function (playTimes, actionName) {
+            if (actionName != undefined) {
+                this.actionName = actionName;
+            }
+            if (isNaN(playTimes)) {
+                this.$playTimes = 0;
+            }
+            else {
+                this.$playTimes = playTimes;
+            }
+            if (this.mc) {
+                this._play();
+            }
+            else {
+                if (this.data) {
+                    this.initMC(this.data);
+                }
+                else {
+                    this.loadMC();
+                }
+            }
+        };
+        AnimationClip.prototype.loadMC = function (is_preload) {
+            return __awaiter(this, void 0, void 0, function () {
+                var resourceGroup, res;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            resourceGroup = egretx.ResourceManager.Instance().getOrCreateGroup(egretx.ResourceType.MovieClip);
+                            resourceGroup.load(this.key);
+                            res = egretx.AnimationManager.Instance().getRes(this.key);
+                            return [4 /*yield*/, egretx.ResourceManager.Instance().loadResAsync(res.json)];
+                        case 1:
+                            _a.sent();
+                            return [4 /*yield*/, egretx.ResourceManager.Instance().loadResAsync(res.texture)];
+                        case 2:
+                            _a.sent();
+                            this.data = egretx.AnimationManager.Instance().generateMovieClipData(this.key, this.movieClipname);
+                            this.initMC(this.data, is_preload);
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        AnimationClip.prototype.onFrameLabelEvent = function (event) {
+            this.dispatchEvent(event);
+        };
+        AnimationClip.prototype.onLoopCompleteEvent = function (event) {
+            this.dispatchEvent(event);
+        };
+        AnimationClip.prototype.onCompleteEvent = function (event) {
+            this.dispatchEvent(event);
+        };
+        AnimationClip.prototype.initMC = function (mcData, is_preload) {
+            var res = egretx.AnimationManager.Instance().getRes(this.key);
+            if (!RES.getRes(res.json)) {
+                return;
+            }
+            ;
+            for (var _i = 0, _a = this.frameActions; _i < _a.length; _i++) {
+                var item = _a[_i];
+                if (item.frame == -1) {
+                    item.frame = mcData.numFrames;
+                }
+            }
+            this.$mc = new egretx.MovieClip(mcData, this.frameActions);
+            this.mc.timeScale = this.timeScale;
+            this.mc.setTimeline(this.timeline);
+            this.mc.scaleX = this.mc_scaleX;
+            this.mc.scaleY = this.mc_scaleY;
+            if (egretx.MovieClip.DISPATCH_ENABLE) {
+                this.mc.addEventListener(egret.MovieClipEvent.FRAME_LABEL, this.onFrameLabelEvent, this);
+                this.mc.addEventListener(egret.MovieClipEvent.LOOP_COMPLETE, this.onLoopCompleteEvent, this);
+                this.mc.addEventListener(egret.MovieClipEvent.COMPLETE, this.onCompleteEvent, this);
+            }
+            if (!isNaN(this.frameRate) && this.frameRate > 0) {
+                this.mc.frameRate = this.frameRate;
+            }
+            this.frameActions.length = 0;
+            this.addChild(this.$mc);
+            if (!is_preload) {
+                this._play();
+            }
+        };
+        AnimationClip.prototype._play = function () {
+            if (this.mc) {
+                if (this.actionName) {
+                    this.mc.gotoAndPlay(this.actionName, this.$playTimes);
+                }
+                else {
+                    this.mc.play(this.$playTimes);
+                }
+            }
+        };
+        AnimationClip.prototype.stop = function () {
+            if (this.mc) {
+                this.mc.stop();
+            }
+        };
+        AnimationClip.prototype.reset = function () {
+            if (this.mc) {
+                this.mc.removeFrameActions();
+            }
+        };
+        AnimationClip.prototype.removeSelf = function () {
+            this.stop();
+            if (this.mc) {
+                this.mc.removeEventListener(egret.MovieClipEvent.FRAME_LABEL, this.onFrameLabelEvent, this);
+                this.mc.removeEventListener(egret.MovieClipEvent.LOOP_COMPLETE, this.onLoopCompleteEvent, this);
+                this.mc.removeEventListener(egret.MovieClipEvent.COMPLETE, this.onCompleteEvent, this);
+            }
+            if (this.parent) {
+                this.parent.removeChild(this);
+            }
+        };
+        return AnimationClip;
+    }(eui.Component));
+    egretx.AnimationClip = AnimationClip;
+    __reflect(AnimationClip.prototype, "egretx.AnimationClip", ["xgame.IPoolable", "xgame.IDisposable", "xgame.IXObject"]);
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+
+(function (egretx) {
+    var FrameAction = (function () {
+        function FrameAction(frame) {
+            this.name = "FrameAction";
+            this.frame = frame;
+        }
+        Object.defineProperty(FrameAction.prototype, "frame", {
+            get: function () {
+                return this.$frame;
+            },
+            set: function (value) {
+                if (isNaN(value)) {
+                    this.$frame = -1;
+                }
+                else {
+                    this.$frame = value;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        FrameAction.prototype.hasAction = function (action, thisObject) {
+            if (this.$items == null) {
+                return -1;
+            }
+            for (var i = 0; i < this.$items.length; i++) {
+                var item = this.$items[i];
+                if (item.action == action && item.thisObject == thisObject) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+        FrameAction.prototype.addAction = function (action, thisObject) {
+            if (this.$items == null) {
+                this.$items = [];
+            }
+            if (this.hasAction(action, thisObject) == -1) {
+                this.$items[this.$items.length] = new egretx.FrameActionItem(action, thisObject, this.frame);
+            }
+        };
+        FrameAction.prototype.removeAction = function (action, thisObject) {
+            if (this.$items) {
+                var index = this.hasAction(action, thisObject);
+                if (index >= 0) {
+                    this.$items.splice(index, 1);
+                }
+            }
+        };
+        FrameAction.prototype.removeActions = function () {
+            if (this.$items) {
+                this.$items.length = 0;
+            }
+        };
+        FrameAction.prototype.executeActions = function (target, frameID) {
+            if (this.$items) {
+                var list = this.$items.slice();
+                for (var i = 0, len = list.length; i < len; ++i) {
+                    var item = list[i];
+                    var action = item.action;
+                    var numArgs = action.length;
+                    if (numArgs == 0) {
+                        action.call(item.thisObject);
+                    }
+                    else if (numArgs == 1) {
+                        action.call(item.thisObject, target);
+                    }
+                    else if (numArgs == 2) {
+                        action.call(item.thisObject, target, frameID);
+                    }
+                }
+            }
+        };
+        Object.defineProperty(FrameAction.prototype, "numActions", {
+            get: function () {
+                return this.$items ? this.$items.length : 0;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return FrameAction;
+    }());
+    egretx.FrameAction = FrameAction;
+    __reflect(FrameAction.prototype, "egretx.FrameAction");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+
+(function (egretx) {
+    var FrameActionItem = (function () {
+        function FrameActionItem(action, thisObject, frame) {
+            this.action = action;
+            this.thisObject = thisObject;
+            if (isNaN(frame) || frame == 0) {
+                this.frame = -1;
+            }
+            else {
+                this.frame = frame;
+            }
+        }
+        return FrameActionItem;
+    }());
+    egretx.FrameActionItem = FrameActionItem;
+    __reflect(FrameActionItem.prototype, "egretx.FrameActionItem");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+
+(function (egretx) {
+    /**
+     * 从egret.MoveClip修改而来
+     */
+    var MovieClip = (function (_super) {
+        __extends(MovieClip, _super);
+        //Construct Function
+        /**
+         * 创建新的 MovieClip 实例。创建 MovieClip 之后，调用舞台上的显示对象容器的addElement方法。
+         * @param movieClipData {movieClipData} 被引用的 movieClipData 对象
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        function MovieClip(movieClipData, invokeActions) {
+            var _this = _super.call(this) || this;
+            _this.$actions = new xgame.Dictionary();
+            _this.$timeline = egretx.Timeline.MAIN;
+            //Render Property
+            _this.$texture = null;
+            //Render Property
+            // private offsetPoint: egret.Point = egret.Point.create(0, 0);
+            _this.offsetPoint = new egret.Point(0, 0);
+            //Data Property
+            _this.$movieClipData = null;
+            /**
+             * @private
+             */
+            _this.frames = null;
+            /**
+             * @private
+             */
+            _this.$totalFrames = 0;
+            /**
+             * @version Egret 2.4
+             * @platform Web,Native
+             * @private
+             */
+            _this.frameLabels = null;
+            /**
+             * @private
+             */
+            _this.$frameLabelStart = 0;
+            /**
+             * @private
+             */
+            _this.$frameLabelEnd = 0;
+            /**
+             * @version Egret 2.4
+             * @platform Web,Native
+             * @private
+             */
+            _this.frameEvents = null;
+            /**
+             * @private
+             */
+            _this.frameIntervalTime = 0;
+            /**
+             * @private
+             */
+            _this.$eventPool = null;
+            //Animation Property
+            _this.$isPlaying = false;
+            /**
+             * @private
+             */
+            _this.isStopped = true;
+            /**
+             * @private
+             */
+            _this.playTimes = 0;
+            /**
+             * @private
+             */
+            _this.$currentFrameNum = 0;
+            /**
+             * @private
+             */
+            _this.$nextFrameNum = 1;
+            /**
+             * @private
+             */
+            _this.displayedKeyFrameNum = 0;
+            /**
+             * @private
+             */
+            _this.passedTime = 0;
+            /**
+             * @private
+             */
+            _this.$frameRate = NaN;
+            _this.$timeScale = 1.0;
+            /**
+             * @private
+             */
+            _this.lastTime = 0;
+            _this.invokeActions = invokeActions;
+            _this.$smoothing = egret.Bitmap.defaultSmoothing;
+            _this.setMovieClipData(movieClipData);
+            if (!egret.nativeRender) {
+                _this.$renderNode = new egret.sys.NormalBitmapNode();
+            }
+            return _this;
+        }
+        Object.defineProperty(MovieClip.prototype, "timeline", {
+            get: function () {
+                return this.$timeline;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        MovieClip.prototype.setTimeline = function (value) {
+            this.$timeline = value;
+        };
+        MovieClip.prototype.setData = function (movieClipData, invokeActions) {
+            this.setInvokeActions(invokeActions);
+            this.setMovieClipData(movieClipData, true);
+        };
+        MovieClip.prototype.setInvokeActions = function (invokeActions) {
+            this.invokeActions = invokeActions;
+        };
+        Object.defineProperty(MovieClip.prototype, "timeScale", {
+            get: function () {
+                return this.$timeScale;
+            },
+            set: function (value) {
+                this.$timeScale = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        MovieClip.prototype.createNativeDisplayObject = function () {
+            this.$nativeDisplayObject = new egret_native.NativeDisplayObject(11 /* BITMAP_TEXT */);
+        };
+        Object.defineProperty(MovieClip.prototype, "smoothing", {
+            /**
+             * Whether or not is smoothed when scaled.
+             * @version Egret 3.0
+             * @platform Web
+             * @language en_US
+             */
+            /**
+             * 控制在缩放时是否进行平滑处理。
+             * @version Egret 3.0
+             * @platform Web
+             * @language zh_CN
+             */
+            get: function () {
+                return this.$smoothing;
+            },
+            set: function (value) {
+                if (value == this.$smoothing) {
+                    return;
+                }
+                this.$smoothing = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * @private
+         *
+         */
+        MovieClip.prototype.$init = function () {
+            this.$reset();
+            var movieClipData = this.$movieClipData;
+            if (movieClipData && movieClipData.$isDataValid()) {
+                this.frames = movieClipData.frames;
+                this.$totalFrames = movieClipData.numFrames;
+                this.frameLabels = movieClipData.labels;
+                this.frameEvents = movieClipData.events;
+                this.$frameRate = movieClipData.frameRate;
+                this.frameIntervalTime = 1000 / this.$frameRate;
+                this.fillMovieFrames();
+                this._initFrame();
+            }
+        };
+        MovieClip.prototype.fillMovieFrames = function () {
+            var len = this.movieClipData.frames.length;
+            this.$actions.add(len, new egretx.FrameAction(len));
+            if (this.invokeActions && this.invokeActions.length > 0) {
+                for (var _i = 0, _a = this.invokeActions; _i < _a.length; _i++) {
+                    var item = _a[_i];
+                    if (item.frame == -1) {
+                        item.frame = this.movieClipData.numFrames;
+                    }
+                    var action = this.getActionAt(item.frame);
+                    if (action) {
+                        action.addAction(item.action, item.thisObject);
+                    }
+                    else {
+                        //this.logger.logDebug(LogChannel.RONTIAN,"frame not found=>" + item.frame + "=>" + this.frames.length + "=>" + this.movieClipData.numFrames);
+                    }
+                }
+            }
+        };
+        /**
+         * @private
+         *
+         */
+        MovieClip.prototype.$reset = function () {
+            this.frames = null;
+            this.playTimes = 0;
+            this.$isPlaying = false;
+            this.setIsStopped(true);
+            this.$currentFrameNum = 0;
+            this.$nextFrameNum = 1;
+            this.displayedKeyFrameNum = 0;
+            this.passedTime = 0;
+            this.$eventPool = [];
+            this.$actions.clear();
+        };
+        /**
+         * @private
+         *
+         */
+        MovieClip.prototype._initFrame = function () {
+            if (this.$movieClipData.$isTextureValid()) {
+                this.advanceFrame();
+                this.constructFrame();
+            }
+        };
+        /**
+         * @private
+         */
+        MovieClip.prototype.$updateRenderNode = function () {
+            var texture = this.$texture;
+            if (texture) {
+                var offsetX = Math.round(this.offsetPoint.x);
+                var offsetY = Math.round(this.offsetPoint.y);
+                var bitmapWidth = texture.$bitmapWidth;
+                var bitmapHeight = texture.$bitmapHeight;
+                var textureWidth = texture.$getTextureWidth();
+                var textureHeight = texture.$getTextureHeight();
+                //this.logger.logDebug(LogChannel.RONTIAN, textureWidth, textureHeight, this.width, this.height);
+                var destW = Math.round(texture.$getScaleBitmapWidth());
+                var destH = Math.round(texture.$getScaleBitmapHeight());
+                var sourceWidth = texture.$sourceWidth;
+                var sourceHeight = texture.$sourceHeight;
+                egret.sys.BitmapNode.$updateTextureData(this.$renderNode, texture.$bitmapData, texture.$bitmapX, texture.$bitmapY, bitmapWidth, bitmapHeight, offsetX, offsetY, textureWidth, textureHeight, destW, destH, sourceWidth, sourceHeight, egret.BitmapFillMode.SCALE, this.$smoothing);
+            }
+        };
+        /**
+         * @private
+         */
+        MovieClip.prototype.$measureContentBounds = function (bounds) {
+            var texture = this.$texture;
+            if (texture) {
+                var x = this.offsetPoint.x;
+                var y = this.offsetPoint.y;
+                var w = texture.$getTextureWidth();
+                var h = texture.$getTextureHeight();
+                bounds.setTo(x, y, w, h);
+            }
+            else {
+                bounds.setEmpty();
+            }
+        };
+        /**
+         * @private
+         *
+         * @param stage
+         * @param nestLevel
+         */
+        MovieClip.prototype.$onAddToStage = function (stage, nestLevel) {
+            _super.prototype.$onAddToStage.call(this, stage, nestLevel);
+            if (this.$isPlaying && this.$totalFrames > 1) {
+                this.setIsStopped(false);
+            }
+        };
+        /**
+         * @private
+         *
+         */
+        MovieClip.prototype.$onRemoveFromStage = function () {
+            this.setIsStopped(true);
+            _super.prototype.$onRemoveFromStage.call(this);
+        };
+        //Data Function
+        /**
+         * @private
+         * 返回帧标签为指定字符串的FrameLabel对象
+         * @param labelName {string} 帧标签名
+         * @param ignoreCase {boolean} 是否忽略大小写，可选参数，默认false
+         * @returns {egret.FrameLabel} FrameLabel对象
+         */
+        MovieClip.prototype.getFrameLabelByName = function (labelName, ignoreCase) {
+            if (ignoreCase === void 0) { ignoreCase = false; }
+            if (ignoreCase) {
+                labelName = labelName.toLowerCase();
+            }
+            var frameLabels = this.frameLabels;
+            if (frameLabels) {
+                var outputFramelabel = null;
+                for (var i = 0; i < frameLabels.length; i++) {
+                    outputFramelabel = frameLabels[i];
+                    if (ignoreCase ? outputFramelabel.name.toLowerCase() == labelName : outputFramelabel.name == labelName) {
+                        return outputFramelabel;
+                    }
+                }
+            }
+            return null;
+        };
+        /**
+         * @private
+         * 根据帧标签，设置开始和结束的帧数
+         * @param labelName {string} 帧标签名
+         */
+        MovieClip.prototype.getFrameStartEnd = function (labelName) {
+            var frameLabels = this.frameLabels;
+            if (frameLabels) {
+                var outputFramelabel = null;
+                for (var i = 0; i < frameLabels.length; i++) {
+                    outputFramelabel = frameLabels[i];
+                    if (labelName == outputFramelabel.name) {
+                        this.$frameLabelStart = outputFramelabel.frame;
+                        this.$frameLabelEnd = outputFramelabel.end;
+                        break;
+                    }
+                }
+            }
+        };
+        /**
+         * @private
+         * 返回指定序号的帧的FrameLabel对象
+         * @param frame {number} 帧序号
+         * @returns {egret.FrameLabel} FrameLabel对象
+         */
+        MovieClip.prototype.getFrameLabelByFrame = function (frame) {
+            var frameLabels = this.frameLabels;
+            if (frameLabels) {
+                var outputFramelabel = null;
+                for (var i = 0; i < frameLabels.length; i++) {
+                    outputFramelabel = frameLabels[i];
+                    if (outputFramelabel.frame == frame) {
+                        return outputFramelabel;
+                    }
+                }
+            }
+            return null;
+        };
+        /**
+         * @private
+         * 返回指定序号的帧对应的FrameLabel对象，如果当前帧没有标签，则返回前面最近的有标签的帧的FrameLabel对象
+         * @method egret.MovieClip#getFrameLabelForFrame
+         * @param frame {number} 帧序号
+         * @returns {egret.FrameLabel} FrameLabel对象
+         */
+        MovieClip.prototype.getFrameLabelForFrame = function (frame) {
+            var outputFrameLabel = null;
+            var tempFrameLabel = null;
+            var frameLabels = this.frameLabels;
+            if (frameLabels) {
+                for (var i = 0; i < frameLabels.length; i++) {
+                    tempFrameLabel = frameLabels[i];
+                    if (tempFrameLabel.frame > frame) {
+                        return outputFrameLabel;
+                    }
+                    outputFrameLabel = tempFrameLabel;
+                }
+            }
+            return outputFrameLabel;
+        };
+        //Animation Function
+        /**
+         * 继续播放当前动画
+         * @param playTimes {number} 播放次数。 参数为整数，可选参数，>=1：设定播放次数，<0：循环播放，默认值 0：不改变播放次数(MovieClip初始播放次数设置为1)，
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        MovieClip.prototype.play = function (playTimes) {
+            if (playTimes === void 0) { playTimes = 0; }
+            this.lastTime = egret.getTimer();
+            this.passedTime = 0;
+            this.$isPlaying = true;
+            this.setPlayTimes(playTimes);
+            if (this.$totalFrames > 1 && this.$stage) {
+                this.setIsStopped(false);
+            }
+        };
+        /**
+         * 暂停播放动画
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        MovieClip.prototype.stop = function () {
+            this.$isPlaying = false;
+            this.setIsStopped(true);
+        };
+        /**
+         * 将播放头移到前一帧并停止
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        MovieClip.prototype.prevFrame = function () {
+            this.gotoAndStop(this.$currentFrameNum - 1);
+        };
+        /**
+         * 跳到后一帧并停止
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        MovieClip.prototype.nextFrame = function () {
+            this.gotoAndStop(this.$currentFrameNum + 1);
+        };
+        /**
+         * 将播放头移到指定帧并播放
+         * @param frame {any} 指定帧的帧号或帧标签
+         * @param playTimes {number} 播放次数。 参数为整数，可选参数，>=1：设定播放次数，<0：循环播放，默认值 0：不改变播放次数，
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        MovieClip.prototype.gotoAndPlay = function (frame, playTimes) {
+            if (playTimes === void 0) { playTimes = 0; }
+            if (arguments.length == 0 || arguments.length > 2) {
+                egret.$error(1022, "MovieClip.gotoAndPlay()");
+            }
+            if (typeof frame === "string") {
+                this.getFrameStartEnd(frame);
+            }
+            else {
+                this.$frameLabelStart = 0;
+                this.$frameLabelEnd = 0;
+            }
+            this.play(playTimes);
+            this.gotoFrame(frame);
+        };
+        /**
+         * 将播放头移到指定帧并停止
+         * @param frame {any} 指定帧的帧号或帧标签
+         * @version Egret 2.4
+         * @platform Web,Native
+         */
+        MovieClip.prototype.gotoAndStop = function (frame) {
+            if (arguments.length != 1) {
+                egret.$error(1022, "MovieClip.gotoAndStop()");
+            }
+            this.stop();
+            this.gotoFrame(frame);
+        };
+        /**
+         * @private
+         *
+         * @param frame
+         */
+        MovieClip.prototype.gotoFrame = function (frame) {
+            var frameNum;
+            if (typeof frame === "string") {
+                var fb = this.getFrameLabelByName(frame);
+                if (!fb) {
+                    return;
+                }
+                frameNum = fb.frame;
+            }
+            else {
+                frameNum = parseInt(frame + '', 10);
+                if (frameNum != frame) {
+                    egret.$error(1022, "Frame Label Not Found");
+                }
+            }
+            //this.logger.logDebug(LogChannel.RONTIAN,"gotoFrame=>{0}", frameNum);
+            if (frameNum < 1) {
+                frameNum = 1;
+            }
+            else if (frameNum > this.$totalFrames) {
+                frameNum = this.$totalFrames;
+            }
+            // if (frameNum == this.$nextFrameNum) {
+            //     return;
+            // }
+            this.$nextFrameNum = frameNum;
+            this.advanceFrame();
+            this.constructFrame();
+            this.handlePendingEvent();
+        };
+        MovieClip.prototype.advanceTime = function (time) {
+            var self = this;
+            var deltaTime = time * this.timeScale;
+            var frameIntervalTime = self.frameIntervalTime;
+            var currentTime = self.passedTime + deltaTime;
+            self.passedTime = currentTime % frameIntervalTime;
+            var num = currentTime / frameIntervalTime;
+            if (num < 1) {
+                return;
+            }
+            while (num >= 1) {
+                num--;
+                self.$nextFrameNum++;
+                if (self.$nextFrameNum > self.$totalFrames || (self.$frameLabelStart > 0 && self.$nextFrameNum > self.$frameLabelEnd)) {
+                    if (self.playTimes == -1) {
+                        self.$eventPool.push(egret.Event.LOOP_COMPLETE);
+                        self.$nextFrameNum = 1;
+                    }
+                    else {
+                        self.playTimes--;
+                        if (self.playTimes > 0) {
+                            self.$eventPool.push(egret.Event.LOOP_COMPLETE);
+                            self.$nextFrameNum = 1;
+                        }
+                        else {
+                            self.$nextFrameNum = self.$totalFrames;
+                            self.$eventPool.push(egret.Event.COMPLETE);
+                            self.stop();
+                            break;
+                        }
+                    }
+                }
+                if (self.$currentFrameNum == self.$frameLabelEnd) {
+                    self.$nextFrameNum = self.$frameLabelStart;
+                }
+                self.advanceFrame();
+            }
+            self.constructFrame();
+            self.handlePendingEvent();
+        };
+        /**
+         * @private
+         *
+         */
+        MovieClip.prototype.advanceFrame = function () {
+            this.$currentFrameNum = this.$nextFrameNum;
+            var event = this.frameEvents[this.$nextFrameNum];
+            if (event && event != "") {
+                if (MovieClip.DISPATCH_ENABLE) {
+                    egret.MovieClipEvent.dispatchMovieClipEvent(this, egret.MovieClipEvent.FRAME_LABEL, event);
+                }
+            }
+        };
+        /**
+         * @private
+         *
+         */
+        MovieClip.prototype.constructFrame = function () {
+            var self = this;
+            var currentFrameNum = self.$currentFrameNum;
+            if (self.displayedKeyFrameNum == currentFrameNum) {
+                return;
+            }
+            var texture = self.$movieClipData.getTextureByFrame(currentFrameNum);
+            self.$texture = texture;
+            self.$movieClipData.$getOffsetByFrame(currentFrameNum, self.offsetPoint);
+            self.displayedKeyFrameNum = currentFrameNum;
+            self.$renderDirty = true;
+            if (egret.nativeRender) {
+                self.$nativeDisplayObject.setDataToBitmapNode(self.$nativeDisplayObject.id, texture, [texture.$bitmapX, texture.$bitmapY, texture.$bitmapWidth, texture.$bitmapHeight,
+                    self.offsetPoint.x, self.offsetPoint.y, texture.$getScaleBitmapWidth(), texture.$getScaleBitmapHeight(),
+                    texture.$sourceWidth, texture.$sourceHeight]);
+                //todo 负数offsetPoint
+                self.$nativeDisplayObject.setWidth(texture.$getTextureWidth() + self.offsetPoint.x);
+                self.$nativeDisplayObject.setHeight(texture.$getTextureHeight() + self.offsetPoint.y);
+            }
+            else {
+                var p = self.$parent;
+                if (p && !p.$cacheDirty) {
+                    p.$cacheDirty = true;
+                    p.$cacheDirtyUp();
+                }
+                var maskedObject = self.$maskedObject;
+                if (maskedObject && !maskedObject.$cacheDirty) {
+                    maskedObject.$cacheDirty = true;
+                    maskedObject.$cacheDirtyUp();
+                }
+            }
+            if (this.$actions.containsKey(this.currentFrame)) {
+                var action = this.$actions.get(this.currentFrame);
+                if (action && action.numActions > 0) {
+                    action.executeActions(this, currentFrameNum);
+                }
+            }
+        };
+        /**
+         * @private
+         *
+         */
+        MovieClip.prototype.$renderFrame = function () {
+            var self = this;
+            self.$texture = self.$movieClipData.getTextureByFrame(self.$currentFrameNum);
+            self.$renderDirty = true;
+            var p = self.$parent;
+            if (p && !p.$cacheDirty) {
+                p.$cacheDirty = true;
+                p.$cacheDirtyUp();
+            }
+            var maskedObject = self.$maskedObject;
+            if (maskedObject && !maskedObject.$cacheDirty) {
+                maskedObject.$cacheDirty = true;
+                maskedObject.$cacheDirtyUp();
+            }
+        };
+        /**
+         * @private
+         *
+         */
+        MovieClip.prototype.handlePendingEvent = function () {
+            if (this.$eventPool.length != 0) {
+                this.$eventPool.reverse();
+                var eventPool = this.$eventPool;
+                var length_1 = eventPool.length;
+                var isComplete = false;
+                var isLoopComplete = false;
+                for (var i = 0; i < length_1; i++) {
+                    var event_1 = eventPool.pop();
+                    if (event_1 == egret.Event.LOOP_COMPLETE) {
+                        isLoopComplete = true;
+                    }
+                    else if (event_1 == egret.Event.COMPLETE) {
+                        isComplete = true;
+                    }
+                    else {
+                        if (MovieClip.DISPATCH_ENABLE) {
+                            this.dispatchEventWith(event_1);
+                        }
+                    }
+                }
+                if (isLoopComplete) {
+                    if (MovieClip.DISPATCH_ENABLE) {
+                        this.dispatchEventWith(egret.Event.LOOP_COMPLETE);
+                    }
+                }
+                if (isComplete) {
+                    if (MovieClip.DISPATCH_ENABLE) {
+                        this.dispatchEventWith(egret.Event.COMPLETE);
+                    }
+                }
+            }
+        };
+        Object.defineProperty(MovieClip.prototype, "totalFrames", {
+            //Properties
+            /**
+             * MovieClip 实例中帧的总数
+             * @version Egret 2.4
+             * @platform Web,Native
+             */
+            get: function () {
+                return this.$totalFrames;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MovieClip.prototype, "currentFrame", {
+            /**
+             * MovieClip 实例当前播放的帧的序号
+             * @version Egret 2.4
+             * @platform Web,Native
+             */
+            get: function () {
+                return this.$currentFrameNum;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MovieClip.prototype, "currentFrameLabel", {
+            /**
+             * MovieClip 实例当前播放的帧的标签。如果当前帧没有标签，则 currentFrameLabel返回null。
+             * @version Egret 2.4
+             * @platform Web,Native
+             */
+            get: function () {
+                var label = this.getFrameLabelByFrame(this.$currentFrameNum);
+                return label && label.name;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MovieClip.prototype, "currentLabel", {
+            /**
+             * 当前播放的帧对应的标签，如果当前帧没有标签，则currentLabel返回包含标签的先前帧的标签。如果当前帧和先前帧都不包含标签，currentLabel返回null。
+             * @version Egret 2.4
+             * @platform Web,Native
+             */
+            get: function () {
+                var label = this.getFrameLabelForFrame(this.$currentFrameNum);
+                return label ? label.name : null;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MovieClip.prototype, "frameRate", {
+            /**
+             * MovieClip 实例的帧频
+             * @version Egret 2.4
+             * @platform Web,Native
+             */
+            get: function () {
+                return this.$frameRate;
+            },
+            set: function (value) {
+                if (value == this.$frameRate) {
+                    return;
+                }
+                this.$frameRate = value;
+                this.frameIntervalTime = 1000 / this.$frameRate;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MovieClip.prototype, "isPlaying", {
+            /**
+             * MovieClip 实例当前是否正在播放
+             * @version Egret 2.4
+             * @platform Web,Native
+             */
+            get: function () {
+                return this.$isPlaying;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(MovieClip.prototype, "movieClipData", {
+            /**
+             * @version Egret 2.4
+             * @platform Web,Native
+             */
+            get: function () {
+                return this.$movieClipData;
+            },
+            /**
+             * MovieClip数据源
+             */
+            set: function (value) {
+                this.setMovieClipData(value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * @private
+         *
+         * @param value
+         */
+        MovieClip.prototype.setMovieClipData = function (value, force) {
+            if (this.$movieClipData == value && !force) {
+                return;
+            }
+            this.$movieClipData = value;
+            this.$init();
+        };
+        /**
+         * @private
+         *
+         * @param value
+         */
+        MovieClip.prototype.setPlayTimes = function (value) {
+            if (value < 0 || value >= 1) {
+                this.playTimes = value < 0 ? -1 : Math.floor(value);
+            }
+        };
+        /**
+         * @private
+         *
+         * @param value
+         */
+        MovieClip.prototype.setIsStopped = function (value) {
+            if (this.isStopped == value) {
+                return;
+            }
+            this.isStopped = value;
+            if (value) {
+                egretx.TimelineManager.Instance().getOrCreateTimeline(this.timeline).remove(this);
+            }
+            else {
+                this.playTimes = this.playTimes == 0 ? 1 : this.playTimes;
+                this.lastTime = egret.getTimer();
+                egretx.TimelineManager.Instance().getOrCreateTimeline(this.timeline).add(this);
+            }
+        };
+        MovieClip.prototype.getActionAt = function (frame) {
+            if (frame < 1 || frame > this.totalFrames) {
+                return null;
+            }
+            if (!this.$actions.containsKey(frame)) {
+                this.$actions.add(frame, new egretx.FrameAction(frame));
+            }
+            return this.$actions.get(frame);
+        };
+        MovieClip.prototype.addFrameAction = function (frame, action, thisObject) {
+            this.getActionAt(frame).addAction(action, thisObject);
+        };
+        MovieClip.prototype.removeFrameAction = function (frame, action, thisObject) {
+            this.getActionAt(frame).removeAction(action, thisObject);
+        };
+        MovieClip.prototype.removeFrameActions = function (frame) {
+            if (isNaN(frame)) {
+                this.$actions.forValues(function (v) {
+                    v.removeActions();
+                }, this);
+            }
+            else {
+                this.getActionAt(frame).removeActions();
+            }
+        };
+        MovieClip.DISPATCH_ENABLE = false;
+        return MovieClip;
+    }(egret.DisplayObject));
+    egretx.MovieClip = MovieClip;
+    __reflect(MovieClip.prototype, "egretx.MovieClip", ["egretx.IAnimatable", "xgame.IXObject"]);
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+
+(function (egretx) {
+    egretx.IAnimationManager = Symbol.for("IAnimationManager");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+
+(function (egretx) {
+    egretx.IAnimationManagerInternal = Symbol.for("IAnimationManagerInternal");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+
+(function (egretx) {
+    /**
+     * 音频管理器
+     */
+    var AudioManager = (function (_super) {
+        __extends(AudioManager, _super);
+        function AudioManager() {
+            return _super.call(this) || this;
+        }
+        AudioManager.prototype.initialize = function () {
+            this.background = new egretx.MusicAudioChannel();
+            this.ui = new egretx.MusicAudioChannel();
+            this.effect = new egretx.EffectAudioChannel();
+        };
+        return AudioManager;
+    }(xgame.Singleton));
+    egretx.AudioManager = AudioManager;
+    __reflect(AudioManager.prototype, "egretx.AudioManager", ["egretx.IAudioManager", "xgame.IXObject", "egretx.IAudioManagerInternal"]);
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+
+(function (egretx) {
+    var AudioToggleState;
+    (function (AudioToggleState) {
+        AudioToggleState[AudioToggleState["OFF"] = 0] = "OFF";
+        AudioToggleState[AudioToggleState["ON"] = 1] = "ON";
+    })(AudioToggleState = egretx.AudioToggleState || (egretx.AudioToggleState = {}));
+    /**
+     * 音频频道
+     */
+    var AudioChannel = (function (_super) {
+        __extends(AudioChannel, _super);
+        function AudioChannel(channelType) {
+            var _this = _super.call(this) || this;
+            _this.channelType = channelType;
+            _this.callback_onPlayCompleted = new xgame.Signal1();
+            _this.$toggleState = AudioToggleState.ON;
+            _this.$volume = 0.5;
+            _this.playTimes = 1;
+            return _this;
+        }
+        AudioChannel.prototype.onPlayCompleted = function () {
+            return this.callback_onPlayCompleted;
+        };
+        Object.defineProperty(AudioChannel.prototype, "toggleState", {
+            get: function () {
+                return this.$toggleState;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        AudioChannel.prototype.toggleOn = function () {
+            if (this.toggleState == AudioToggleState.ON) {
+                return;
+            }
+            this.$toggleState = AudioToggleState.ON;
+            this.resume();
+        };
+        AudioChannel.prototype.toggleOff = function () {
+            if (this.toggleState == AudioToggleState.OFF) {
+                return;
+            }
+            this.$toggleState = AudioToggleState.OFF;
+            this.stop();
+        };
+        Object.defineProperty(AudioChannel.prototype, "volume", {
+            get: function () {
+                return this.$volume;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        AudioChannel.prototype.setVolume = function (volume) {
+            this.$volume = volume;
+        };
+        AudioChannel.prototype.play = function (key, playTimes) {
+            if (playTimes === void 0) { playTimes = 1; }
+        };
+        AudioChannel.prototype.pause = function () {
+        };
+        AudioChannel.prototype.resume = function () {
+        };
+        AudioChannel.prototype.stop = function () {
+        };
+        return AudioChannel;
+    }(xgame.XObject));
+    egretx.AudioChannel = AudioChannel;
+    __reflect(AudioChannel.prototype, "egretx.AudioChannel");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+/// <reference path="./core/AudioChannel.ts" />
+
+(function (egretx) {
+    var EffectAudioChannel = (function (_super) {
+        __extends(EffectAudioChannel, _super);
+        function EffectAudioChannel() {
+            var _this = _super.call(this, egretx.AudioChannelType.EFFECT) || this;
+            _this.freeAudioes = [];
+            _this.playAudioes = [];
+            for (var i = 0; i < EffectAudioChannel.instanceMax; i++) {
+                if (egretx.AudioManager.Instance().createAudioInstance) {
+                    _this.freeAudioes.push(egretx.AudioManager.Instance().createAudioInstance("effect"));
+                }
+                else {
+                    _this.freeAudioes.push(new egretx.WebAudio("effect"));
+                }
+            }
+            return _this;
+        }
+        EffectAudioChannel.prototype.play = function (key, playTimes) {
+            var _this = this;
+            if (!this.freeAudioes.length) {
+                console.log("没有可用的播放器了，放弃播放音效:" + key);
+                return;
+            }
+            var audio = this.freeAudioes.shift();
+            this.playAudioes.push(audio);
+            audio.play(key, 0, playTimes).then(function () {
+                _this.releaseAudio(audio);
+            });
+        };
+        EffectAudioChannel.prototype.pause = function () {
+            for (var i = this.playAudioes.length - 1; i >= 0; i--) {
+                var audio = this.playAudioes[i];
+                audio.pause();
+            }
+        };
+        EffectAudioChannel.prototype.resume = function () {
+            for (var i = this.playAudioes.length - 1; i >= 0; i--) {
+                var audio = this.playAudioes[i];
+                audio.resume();
+            }
+        };
+        EffectAudioChannel.prototype.stop = function () {
+            while (this.playAudioes.length) {
+                var audio = this.playAudioes.pop();
+                audio.stop();
+                this.freeAudioes.unshift(audio);
+            }
+        };
+        EffectAudioChannel.prototype.releaseAudio = function (audio) {
+            var indexOf = this.playAudioes.indexOf(audio);
+            if (indexOf >= 0) {
+                this.playAudioes.splice(indexOf, 1);
+            }
+            if (this.freeAudioes.indexOf(audio) == -1) {
+                this.freeAudioes.unshift(audio);
+            }
+        };
+        EffectAudioChannel.instanceMax = 3;
+        return EffectAudioChannel;
+    }(egretx.AudioChannel));
+    egretx.EffectAudioChannel = EffectAudioChannel;
+    __reflect(EffectAudioChannel.prototype, "egretx.EffectAudioChannel");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+/// <reference path="./core/AudioChannel.ts" />
+
+(function (egretx) {
+    var MusicAudioChannel = (function (_super) {
+        __extends(MusicAudioChannel, _super);
+        function MusicAudioChannel() {
+            var _this = _super.call(this, egretx.AudioChannelType.BACKGORUND) || this;
+            if (egretx.AudioManager.Instance().createAudioInstance) {
+                _this.main = egretx.AudioManager.Instance().createAudioInstance("music");
+            }
+            else {
+                _this.main = new egretx.WebAudio("music");
+            }
+            return _this;
+        }
+        MusicAudioChannel.prototype.play = function (key, playTimes) {
+            this.key = key;
+            this.playTimes = playTimes;
+            this.main.play(key, 0, playTimes);
+        };
+        MusicAudioChannel.prototype.pause = function () {
+            this.main.pause();
+        };
+        MusicAudioChannel.prototype.resume = function () {
+            this.main.resume();
+        };
+        MusicAudioChannel.prototype.stop = function () {
+            this.main.stop();
+        };
+        return MusicAudioChannel;
+    }(egretx.AudioChannel));
+    egretx.MusicAudioChannel = MusicAudioChannel;
+    __reflect(MusicAudioChannel.prototype, "egretx.MusicAudioChannel");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+
+(function (egretx) {
+    var Audio = (function (_super) {
+        __extends(Audio, _super);
+        function Audio(type) {
+            if (type === void 0) { type = "EFFECT"; }
+            var _this = _super.call(this) || this;
+            _this.type = type;
+            _this.$volume = 0.5;
+            return _this;
+        }
+        Object.defineProperty(Audio.prototype, "info", {
+            get: function () {
+                return this.key && RES.getResourceInfo(this.key);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Audio.prototype.load = function () {
+            return null;
+        };
+        Audio.prototype.play = function (key, startTime, playTimes) {
+            if (startTime === void 0) { startTime = 0; }
+            if (playTimes === void 0) { playTimes = 0; }
+            return null;
+        };
+        Audio.prototype.pause = function () {
+        };
+        Audio.prototype.resume = function () {
+        };
+        Audio.prototype.stop = function () {
+        };
+        Object.defineProperty(Audio.prototype, "volume", {
+            get: function () {
+                return this.$volume;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Audio.prototype.setVolume = function (volume) {
+            this.$volume = volume;
+        };
+        Audio.prototype.destroy = function () {
+        };
+        return Audio;
+    }(xgame.XObject));
+    egretx.Audio = Audio;
+    __reflect(Audio.prototype, "egretx.Audio");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+
+(function (egretx) {
+    var AudioChannelType;
+    (function (AudioChannelType) {
+        AudioChannelType[AudioChannelType["BACKGORUND"] = 0] = "BACKGORUND";
+        AudioChannelType[AudioChannelType["EFFECT"] = 1] = "EFFECT";
+    })(AudioChannelType = egretx.AudioChannelType || (egretx.AudioChannelType = {}));
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+
+(function (egretx) {
+    /**
+     * 默认的音频播放器
+     */
+    var WebAudio = (function (_super) {
+        __extends(WebAudio, _super);
+        function WebAudio(type) {
+            var _this = _super.call(this, type) || this;
+            _this.position = 0;
+            _this.$isPaused = false;
+            return _this;
+        }
+        WebAudio.prototype.load = function () {
+            this.sound = new egret.Sound();
+            this.sound.type = this.type;
+            this.sound.addEventListener(egret.Event.COMPLETE, this.onLoadComplete, this);
+            this.sound.addEventListener(egret.IOErrorEvent.IO_ERROR, this.onIOError, this);
+            this.loadDeferred = new xgame.Deferred();
+            var url = this.info.root + this.info.url;
+            if (egretx.AudioManager.Instance().redirectURL) {
+                url = egretx.AudioManager.Instance().redirectURL(url);
+            }
+            this.sound.load(url);
+            return this.loadDeferred.promise;
+        };
+        WebAudio.prototype.onIOError = function (event) {
+            console.warn("WebAudio=>onIOError", event);
+            this.sound.removeEventListener(egret.Event.COMPLETE, this.onLoadComplete, this);
+            this.sound.removeEventListener(egret.IOErrorEvent.IO_ERROR, this.onIOError, this);
+            this.loadDeferred.resolve(false);
+        };
+        WebAudio.prototype.onLoadComplete = function (event) {
+            this.sound.removeEventListener(egret.Event.COMPLETE, this.onLoadComplete, this);
+            this.sound.removeEventListener(egret.IOErrorEvent.IO_ERROR, this.onIOError, this);
+            this.loadDeferred.resolve(true);
+        };
+        WebAudio.prototype.play = function (key, startTime, playTimes) {
+            var _this = this;
+            if (startTime === void 0) { startTime = 0; }
+            if (playTimes === void 0) { playTimes = 0; }
+            this.stop();
+            this.key = key;
+            this.playTimes = playTimes;
+            this.playDeferred = new xgame.Deferred();
+            this.load().then(function (success) {
+                if (success) {
+                    _this._play(startTime);
+                }
+                else {
+                    _this.playDeferred.resolve();
+                }
+            });
+            return this.playDeferred.promise;
+        };
+        WebAudio.prototype._play = function (position) {
+            this.$isPaused = false;
+            this.soundChannel = this.sound.play(position, this.playTimes);
+            this.soundChannel.volume = this.volume;
+            this.soundChannel.addEventListener(egret.Event.SOUND_COMPLETE, this.onSoundComplete, this);
+        };
+        WebAudio.prototype.onSoundComplete = function () {
+            if (this.playTimes > 0) {
+                this.playTimes--;
+                if (this.playTimes <= 0) {
+                    if (this.playDeferred) {
+                        this.playDeferred.resolve();
+                    }
+                    this.stop();
+                }
+            }
+        };
+        Object.defineProperty(WebAudio.prototype, "isPaused", {
+            get: function () {
+                return this.$isPaused;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        WebAudio.prototype.pause = function () {
+            if (!this.isPaused && this.soundChannel) {
+                this.$isPaused = true;
+                this.position = this.soundChannel.position;
+                this.clearChannel();
+            }
+        };
+        WebAudio.prototype.resume = function () {
+            if (this.isPaused) {
+                this.$isPaused = false;
+                this._play(this.position);
+            }
+        };
+        WebAudio.prototype.clearChannel = function () {
+            if (this.soundChannel) {
+                this.soundChannel.stop();
+                this.soundChannel.removeEventListener(egret.Event.SOUND_COMPLETE, this.onSoundComplete, this);
+                this.soundChannel = null;
+            }
+        };
+        WebAudio.prototype.stop = function () {
+            this.playDeferred = undefined;
+            this.$isPaused = false;
+            this.position = 0;
+            this.clearChannel();
+            if (this.sound) {
+                this.sound.removeEventListener(egret.Event.COMPLETE, this.onLoadComplete, this);
+                this.sound.removeEventListener(egret.IOErrorEvent.IO_ERROR, this.onIOError, this);
+                try {
+                    this.sound.close();
+                }
+                catch (err) {
+                }
+            }
+        };
+        return WebAudio;
+    }(egretx.Audio));
+    egretx.WebAudio = WebAudio;
+    __reflect(WebAudio.prototype, "egretx.WebAudio");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+
+(function (egretx) {
+    egretx.IAudioManager = Symbol.for("IAudioManager");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+
+(function (egretx) {
+    egretx.IAudioManagerInternal = Symbol.for("IAudioManagerInternal");
 })(egretx || (egretx = {}));
 /*************************************************
 /* @author : rontian
@@ -360,6 +2121,235 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /*************************************************
 /* @author : rontian
 /* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+
+(function (egretx) {
+    /**
+     * 龙骨动画管理器
+     */
+    var DragonBonesManager = (function (_super) {
+        __extends(DragonBonesManager, _super);
+        function DragonBonesManager() {
+            var _this = _super.call(this) || this;
+            _this.pools = new xgame.PoolGroup("Armature");
+            return _this;
+        }
+        DragonBonesManager.prototype.advanceTime = function (time) {
+            if (!this.factory) {
+                return;
+            }
+            this.factory.clock.advanceTime(time / 1000);
+        };
+        DragonBonesManager.prototype.initialize = function () {
+            egretx.TimelineManager.Instance().getOrCreateTimeline().add(this);
+        };
+        DragonBonesManager.prototype.fetch = function (key, armatureName, texture) {
+            var id = "{0}:{1}".format(key, armatureName);
+            if (texture) {
+                id = "{0}:{1}".format(key, texture);
+            }
+            var armature = this.pools.fetch(id, egretx.Armature, function () { return new egretx.Armature(key, armatureName, texture); }, this);
+            return armature;
+        };
+        DragonBonesManager.prototype.recycle = function (armature) {
+            this.pools.recycle(armature.id, egretx.Armature, armature);
+        };
+        DragonBonesManager.prototype.release = function (key) {
+            var _this = this;
+            var pools = this.pools.pools;
+            pools.forKeys(function (id) {
+                var id_list = id.split(":");
+                if (id_list[0] == key) {
+                    _this._release(id);
+                }
+            }, this, true);
+        };
+        DragonBonesManager.prototype._release = function (id) {
+            if (this.pools.getPool(id, egretx.Armature).expired) {
+                this.pools.release(id, egretx.Armature);
+                var params = id.split(":");
+                var key = params[0];
+                var texture = params[2] || key;
+                this.clearDragonBones(key, texture);
+                egretx.ResourceManager.Instance().getOrCreateGroup(egretx.ResourceType.DragonBones).release(key);
+            }
+        };
+        DragonBonesManager.prototype.releases = function () {
+            var _this = this;
+            var pools = this.pools.pools;
+            pools.forKeys(function (id) {
+                _this._release(id);
+            }, this, true);
+        };
+        DragonBonesManager.prototype.addClock = function (armture) {
+            if (armture.armature) {
+                this.factory.clock.add(armture.armature);
+            }
+        };
+        DragonBonesManager.prototype.removeClock = function (armture) {
+            if (armture.armature) {
+                this.factory.clock.remove(armture.armature);
+            }
+        };
+        DragonBonesManager.prototype.parseDragonBones = function (key, texture) {
+            texture = texture || key;
+            if (!this.factory) {
+                this.factory = new dragonBones.EgretFactory();
+            }
+            var res = this.getRes(key, texture);
+            if (!this.factory.getDragonBonesData(key)) {
+                this.factory.parseDragonBonesData(RES.getRes(res.skeleton), key);
+            }
+            if (!this.factory.getTextureAtlasData(texture)) {
+                this.factory.parseTextureAtlasData(RES.getRes(res.json), RES.getRes(res.texture), texture);
+            }
+        };
+        DragonBonesManager.prototype.clearDragonBones = function (key, texture) {
+            texture = texture || key;
+            var res = this.getRes(key, texture);
+            if (this.factory.getDragonBonesData(key)) {
+                this.factory.removeDragonBonesData(key);
+                console.log("DragonBonesManager.removeDragonBonesData({0})".format(key));
+            }
+            if (this.factory.getTextureAtlasData(texture)) {
+                this.factory.removeTextureAtlasData(texture);
+                console.log("DragonBonesManager.removeTextureAtlasData({0})".format(texture));
+            }
+        };
+        DragonBonesManager.prototype.buildArmature = function (key, armtureName) {
+            return this.factory.buildArmature(armtureName, key);
+        };
+        DragonBonesManager.prototype.getRes = function (key, texture) {
+            var res = {};
+            res.skeleton = "{0}_ske_json".format(key);
+            if (texture) {
+                res.json = "{0}_tex_json".format(texture);
+                res.texture = "{0}_tex_png".format(texture);
+            }
+            else {
+                res.json = "{0}_tex_json".format(key);
+                res.texture = "{0}_tex_png".format(key);
+            }
+            return res;
+        };
+        return DragonBonesManager;
+    }(xgame.Singleton));
+    egretx.DragonBonesManager = DragonBonesManager;
+    __reflect(DragonBonesManager.prototype, "egretx.DragonBonesManager", ["egretx.IDragonBonesManager", "xgame.IXObject", "egretx.IDragonBonesManagerInternal", "egretx.IAnimatable"]);
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-06
+*************************************************/
+
+(function (egretx) {
+    var Armature = (function (_super) {
+        __extends(Armature, _super);
+        function Armature(key, armatureName, texture) {
+            var _this = _super.call(this) || this;
+            _this.key = key;
+            _this.armatureName = armatureName;
+            _this.texture = texture;
+            return _this;
+        }
+        Object.defineProperty(Armature.prototype, "id", {
+            get: function () {
+                var value = this.key + ":" + this.armatureName;
+                if (this.texture) {
+                    value = this.key + ":" + this.texture;
+                }
+                return value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Armature.prototype.setParent = function (parent) {
+            if (this.armature && this.armature.display) {
+                parent.addChild(this.armature.display);
+            }
+        };
+        Armature.prototype.removeSelf = function () {
+            if (this.armature.display && this.armature.display.parent) {
+                this.armature.display.parent.removeChild(this.armature.display);
+            }
+        };
+        Armature.prototype.release = function () {
+            this.dispose();
+            if (this.armature) {
+                this.armature.dispose();
+            }
+            this.$armature = undefined;
+        };
+        Armature.prototype.dispose = function () {
+            if (this.armature) {
+                this.armature.animation.stop();
+                egretx.DragonBonesManager.Instance().removeClock(this);
+            }
+            this.removeSelf();
+        };
+        Object.defineProperty(Armature.prototype, "armature", {
+            get: function () {
+                return this.$armature;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Armature.prototype, "display", {
+            get: function () {
+                return this.armature && this.armature.display;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Armature.prototype.createArmature = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!!this.armature) return [3 /*break*/, 2];
+                            return [4 /*yield*/, egretx.ResourceManager.Instance().getOrCreateGroup(egretx.ResourceType.DragonBones).load(this.key, this.texture)];
+                        case 1:
+                            _a.sent();
+                            egretx.DragonBonesManager.Instance().parseDragonBones(this.key, this.texture);
+                            this.$armature = egretx.DragonBonesManager.Instance().buildArmature(this.key, this.armatureName);
+                            _a.label = 2;
+                        case 2:
+                            if (this.armature) {
+                                egretx.DragonBonesManager.Instance().addClock(this);
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        return Armature;
+    }(xgame.XObject));
+    egretx.Armature = Armature;
+    __reflect(Armature.prototype, "egretx.Armature", ["xgame.IPoolable", "xgame.IDisposable", "xgame.IXObject"]);
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+
+(function (egretx) {
+    egretx.IDragonBonesManager = Symbol.for("IDragonBonesManager");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+
+(function (egretx) {
+    egretx.IDragonBonesManagerInternal = Symbol.for("IDragonBonesManagerInternal");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
 /* @date   : 2022-07-01
 *************************************************/
 
@@ -375,10 +2365,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./interfaces/IHttpManager.ts" />
 
 (function (egretx) {
-    var HttpManager = /** @class */ (function (_super_1) {
-        __extends(HttpManager, _super_1);
+    var HttpManager = (function (_super) {
+        __extends(HttpManager, _super);
         function HttpManager() {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.pools = new xgame.PoolObject(egretx.HttpRequest);
             return _this;
         }
@@ -448,10 +2438,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./interfaces/ISocketManager.ts" />
 
 (function (egretx) {
-    var SocketManager = /** @class */ (function (_super_1) {
-        __extends(SocketManager, _super_1);
+    var SocketManager = (function (_super) {
+        __extends(SocketManager, _super);
         function SocketManager() {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.defaultInstanceName = "main";
             //失败尝试重连次数
             _this.retryMaxTiems = 3;
@@ -490,10 +2480,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var HttpRequest = /** @class */ (function (_super_1) {
-        __extends(HttpRequest, _super_1);
+    var HttpRequest = (function (_super) {
+        __extends(HttpRequest, _super);
         function HttpRequest(uri, method) {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.uri = uri;
             _this.method = method;
             _this.reconnectTimes = 5;
@@ -620,10 +2610,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 网络连接实例的实现类
      */
-    var SocketInstance = /** @class */ (function (_super_1) {
-        __extends(SocketInstance, _super_1);
+    var SocketInstance = (function (_super) {
+        __extends(SocketInstance, _super);
         function SocketInstance(manager, name, socketHelper) {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.manager = manager;
             _this.name = name;
             _this.socketHelper = socketHelper;
@@ -907,6 +2897,439 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /*************************************************
 /* @author : rontian
 /* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+
+(function (egretx) {
+    /**
+     * 资源管理器
+     */
+    var ResourceManager = (function (_super) {
+        __extends(ResourceManager, _super);
+        function ResourceManager() {
+            var _this = _super.call(this) || this;
+            _this.groups = new xgame.Dictionary();
+            _this.loadQueues = new xgame.Dictionary();
+            return _this;
+        }
+        ResourceManager.prototype.initialize = function () {
+            this.groups.add(egretx.ResourceType.MovieClip, new egretx.MovieClipResourceGroup(this));
+            this.groups.add(egretx.ResourceType.DragonBones, new egretx.DragonBonesResourceGroup(this));
+        };
+        ResourceManager.prototype.getOrCreateGroup = function (name, factory) {
+            var group = this.groups.get(name);
+            if (!group && factory) {
+                group = factory();
+                this.groups.add(name, group);
+            }
+            return group;
+        };
+        ResourceManager.prototype.loadResAsync = function (key) {
+            return __awaiter(this, void 0, void 0, function () {
+                var _this = this;
+                var loader;
+                return __generator(this, function (_a) {
+                    if (!RES.hasRes(key)) {
+                        throw new Error("资源配置:{0}找不到".format(key));
+                    }
+                    if (RES.getRes(key)) {
+                        return [2 /*return*/, RES.getRes(key)];
+                    }
+                    if (!this.loadQueues.containsKey(key)) {
+                        loader = { key: key, deferred: new xgame.Deferred() };
+                        this.loadQueues.add(key, loader);
+                        RES.getResAsync(key).then(function () {
+                            loader = _this.loadQueues.remove(key);
+                            loader.deferred.resolve(RES.getRes(key));
+                        });
+                    }
+                    else {
+                        loader = this.loadQueues.get(key);
+                    }
+                    return [2 /*return*/, loader.deferred.promise];
+                });
+            });
+        };
+        ResourceManager.prototype.destroyRes = function (key) {
+            if (RES.getRes(key)) {
+                if (ResourceManager.DEBUG) {
+                    console.log("ResourceManager.destroyRes({0})".format(key));
+                }
+                return RES.destroyRes(key, true);
+            }
+            return false;
+        };
+        ResourceManager.DEBUG = true;
+        return ResourceManager;
+    }(xgame.Singleton));
+    egretx.ResourceManager = ResourceManager;
+    __reflect(ResourceManager.prototype, "egretx.ResourceManager", ["egretx.IResourceManager", "xgame.IXObject", "egretx.IResourceManagerInternal"]);
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+
+(function (egretx) {
+    /**
+     * 资源组
+     */
+    var ResourceGroup = (function (_super) {
+        __extends(ResourceGroup, _super);
+        function ResourceGroup(manager, resourceType) {
+            var _this = _super.call(this) || this;
+            _this.manager = manager;
+            _this.resourceType = resourceType;
+            _this.keys = new xgame.Dictionary();
+            _this.statistics = {};
+            _this.$memory = 0;
+            return _this;
+        }
+        ResourceGroup.prototype.createInstance = function (key) {
+            return null;
+        };
+        ResourceGroup.prototype.load = function (key) {
+            var args = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                args[_i - 1] = arguments[_i];
+            }
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2 /*return*/];
+                });
+            });
+        };
+        ResourceGroup.prototype.release = function (key) {
+            if (this.keys.containsKey(key)) {
+                var list = this.keys.get(key);
+                for (var _i = 0, list_1 = list; _i < list_1.length; _i++) {
+                    var res = list_1[_i];
+                    egretx.ResourceManager.Instance().destroyRes(res);
+                }
+            }
+        };
+        Object.defineProperty(ResourceGroup.prototype, "memory", {
+            get: function () {
+                return this.$memory;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        ResourceGroup.prototype.addMemory = function (key, w, h) {
+            if (this.statistics[key] == undefined) {
+                var m = w * h * 4;
+                this.statistics[key] = m;
+                this.$memory += m;
+            }
+        };
+        ResourceGroup.prototype.removeMemory = function (key) {
+            if (this.statistics[key] != undefined) {
+                var m = this.statistics[key];
+                this.$memory -= m;
+                delete this.statistics[key];
+            }
+        };
+        return ResourceGroup;
+    }(xgame.XObject));
+    egretx.ResourceGroup = ResourceGroup;
+    __reflect(ResourceGroup.prototype, "egretx.ResourceGroup");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+/// <reference path="./ResourceGroup.ts" />
+
+(function (egretx) {
+    var DragonBonesResourceGroup = (function (_super) {
+        __extends(DragonBonesResourceGroup, _super);
+        function DragonBonesResourceGroup(manager) {
+            return _super.call(this, manager, egretx.ResourceType.DragonBones) || this;
+        }
+        DragonBonesResourceGroup.prototype.load = function (key, skeleton) {
+            return __awaiter(this, void 0, void 0, function () {
+                var res, texture, list;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            res = egretx.DragonBonesManager.Instance().getRes(key, skeleton);
+                            if (!RES.hasRes(res.json) || !RES.hasRes(res.texture) || !RES.hasRes(res.skeleton)) {
+                                return [2 /*return*/];
+                            }
+                            return [4 /*yield*/, egretx.ResourceManager.Instance().loadResAsync(res.skeleton)];
+                        case 1:
+                            _a.sent();
+                            return [4 /*yield*/, egretx.ResourceManager.Instance().loadResAsync(res.json)];
+                        case 2:
+                            _a.sent();
+                            return [4 /*yield*/, egretx.ResourceManager.Instance().loadResAsync(res.texture)];
+                        case 3:
+                            texture = _a.sent();
+                            if (texture) {
+                                this.addMemory(key, texture.$bitmapWidth, texture.$bitmapHeight);
+                            }
+                            if (!this.keys.containsKey(key)) {
+                                list = [res.json, res.texture, res.skeleton];
+                                this.keys.add(key, list);
+                            }
+                            else {
+                                list = this.keys.get(key);
+                                if (list.indexOf(res.json) == -1) {
+                                    list.push(res.json);
+                                }
+                                if (list.indexOf(res.texture) == -1) {
+                                    list.push(res.texture);
+                                }
+                                if (list.indexOf(res.skeleton) == -1) {
+                                    list.push(res.skeleton);
+                                }
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        return DragonBonesResourceGroup;
+    }(egretx.ResourceGroup));
+    egretx.DragonBonesResourceGroup = DragonBonesResourceGroup;
+    __reflect(DragonBonesResourceGroup.prototype, "egretx.DragonBonesResourceGroup");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+/// <reference path="./ResourceGroup.ts" />
+
+(function (egretx) {
+    var MovieClipResourceGroup = (function (_super) {
+        __extends(MovieClipResourceGroup, _super);
+        function MovieClipResourceGroup(manager) {
+            return _super.call(this, manager, egretx.ResourceType.MovieClip) || this;
+        }
+        MovieClipResourceGroup.prototype.load = function (key) {
+            return __awaiter(this, void 0, void 0, function () {
+                var res, texture, list;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            res = egretx.AnimationManager.Instance().getRes(key);
+                            if (!RES.hasRes(res.json) || !RES.hasRes(res.texture)) {
+                                return [2 /*return*/];
+                            }
+                            return [4 /*yield*/, egretx.ResourceManager.Instance().loadResAsync(res.json)];
+                        case 1:
+                            _a.sent();
+                            return [4 /*yield*/, egretx.ResourceManager.Instance().loadResAsync(res.texture)];
+                        case 2:
+                            texture = _a.sent();
+                            if (texture) {
+                                this.addMemory(key, texture.$bitmapWidth, texture.$bitmapHeight);
+                            }
+                            if (!this.keys.containsKey(key)) {
+                                list = [res.json, res.texture];
+                                this.keys.add(key, list);
+                            }
+                            else {
+                                list = this.keys.get(key);
+                                if (list.indexOf(res.json) == -1) {
+                                    list.push(res.json);
+                                }
+                                if (list.indexOf(res.texture) == -1) {
+                                    list.push(res.texture);
+                                }
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        return MovieClipResourceGroup;
+    }(egretx.ResourceGroup));
+    egretx.MovieClipResourceGroup = MovieClipResourceGroup;
+    __reflect(MovieClipResourceGroup.prototype, "egretx.MovieClipResourceGroup");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+
+(function (egretx) {
+    /**
+     * 资源组类型，可以扩展自己的资源组
+     */
+    var ResourceType;
+    (function (ResourceType) {
+        ResourceType["UI"] = "UI";
+        ResourceType["MovieClip"] = "MovieClip";
+        ResourceType["DragonBones"] = "DragonBones";
+    })(ResourceType = egretx.ResourceType || (egretx.ResourceType = {}));
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+
+(function (egretx) {
+    egretx.IResourceManager = Symbol.for("IResourceManager");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-04
+*************************************************/
+
+(function (egretx) {
+    egretx.IResourceManagerInternal = Symbol.for("IResourceManagerInternal");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+
+(function (egretx) {
+    /**
+     * 时间轴管理器
+     */
+    var TimelineManager = (function (_super) {
+        __extends(TimelineManager, _super);
+        function TimelineManager() {
+            var _this = _super.call(this) || this;
+            _this.timelines = new xgame.Dictionary();
+            return _this;
+        }
+        TimelineManager.prototype.initialize = function () {
+            xgame.SchedulerManager.Instance().registerUpdate(this.advanceTime, this);
+        };
+        TimelineManager.prototype.advanceTime = function () {
+            var deltaTime = xgame.Time.Instance().deltaTime;
+            this.timelines.forValues(function (timeline) {
+                timeline.advanceTime(deltaTime);
+            }, this);
+        };
+        TimelineManager.prototype.getOrCreateTimeline = function (name) {
+            if (name === void 0) { name = egretx.Timeline.MAIN; }
+            if (!this.timelines.containsKey(name)) {
+                this.timelines.add(name, new egretx.Timeline(name));
+            }
+            return this.timelines.get(name);
+        };
+        return TimelineManager;
+    }(xgame.Singleton));
+    egretx.TimelineManager = TimelineManager;
+    __reflect(TimelineManager.prototype, "egretx.TimelineManager", ["egretx.ITimelineManager", "egretx.ITimelineManagerInternal"]);
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+
+(function (egretx) {
+    var Timeline = (function (_super) {
+        __extends(Timeline, _super);
+        function Timeline(name) {
+            var _this = _super.call(this) || this;
+            _this.name = name;
+            _this.animatables = new xgame.Dictionary();
+            _this.$timeScale = 1;
+            _this.$passedTime = 0;
+            _this.$isPaused = false;
+            return _this;
+        }
+        Object.defineProperty(Timeline.prototype, "timeScale", {
+            get: function () {
+                return this.$timeScale;
+            },
+            set: function (value) {
+                this.$timeScale = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Timeline.prototype, "passedTime", {
+            get: function () {
+                return this.$passedTime;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Timeline.prototype.advanceTime = function (time) {
+            var _this = this;
+            var deltaTime = this.timeScale * time;
+            this.$passedTime += deltaTime;
+            if (this.isPaused) {
+                return;
+            }
+            this.simple(function () {
+                _this.animatables.forValues(function (item) {
+                    item.advanceTime(deltaTime);
+                }, _this);
+            }, this);
+        };
+        Timeline.prototype.add = function (animatable) {
+            var _this = this;
+            this.simple(function () {
+                _this.animatables.add(animatable.hashCode, animatable);
+            }, this);
+        };
+        Timeline.prototype.remove = function (animatable) {
+            var _this = this;
+            this.simple(function () {
+                _this.animatables.remove(animatable.hashCode);
+            }, this);
+        };
+        Object.defineProperty(Timeline.prototype, "isPaused", {
+            get: function () {
+                return this.$isPaused;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Timeline.prototype.pause = function () {
+            if (this.isPaused) {
+                return;
+            }
+            this.$isPaused = true;
+        };
+        Timeline.prototype.resume = function () {
+            if (!this.isPaused) {
+                return;
+            }
+            this.$isPaused = false;
+        };
+        Timeline.MAIN = "MAIN";
+        return Timeline;
+    }(xgame.Locker));
+    egretx.Timeline = Timeline;
+    __reflect(Timeline.prototype, "egretx.Timeline");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+
+(function (egretx) {
+    egretx.ITimelineManager = Symbol.for("ITimelineManager");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+
+(function (egretx) {
+    egretx.ITimelineManagerInternal = Symbol.for("ITimelineManagerInternal");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
 /* @date   : 2021-10-19
 *************************************************/
 
@@ -935,10 +3358,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     egretx.TOUCH_LONG_PRESS_TIME = 300;
     egretx.TOUCH_SCALE_RADIO = 0.96;
     egretx.touchClickLastTime = 0;
-    var TouchManager = /** @class */ (function (_super_1) {
-        __extends(TouchManager, _super_1);
+    var TouchManager = (function (_super) {
+        __extends(TouchManager, _super);
         function TouchManager(main) {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.main = main;
             _this.delegates = new xgame.Dictionary();
             _this.stage = main.stage;
@@ -1107,10 +3530,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var LayoutCache = /** @class */ (function (_super_1) {
-        __extends(LayoutCache, _super_1);
+    var LayoutCache = (function (_super) {
+        __extends(LayoutCache, _super);
         function LayoutCache() {
-            var _this = _super_1 !== null && _super_1.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.top = NaN;
             _this.bottom = NaN;
             _this.left = NaN;
@@ -1159,7 +3582,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var TouchBehaviours = /** @class */ (function () {
+    var TouchBehaviours = (function () {
         function TouchBehaviours() {
         }
         TouchBehaviours.prototype.setTouchManager = function (target) {
@@ -1222,11 +3645,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var TouchDelegate = /** @class */ (function (_super_1) {
-        __extends(TouchDelegate, _super_1);
+    var TouchDelegate = (function (_super) {
+        __extends(TouchDelegate, _super);
         function TouchDelegate(target, scale) {
             if (scale === void 0) { scale = false; }
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.clickScaleEnable = false;
             _this.longPressTimeDelta = egretx.TOUCH_LONG_PRESS_TIME;
             _this.repeatPressTimeDelta = egretx.TOUCH_LONG_PRESS_TIME;
@@ -1471,10 +3894,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../interfaces/ITouchManager.ts" />
 
 (function (egretx) {
-    var TouchDisposableGroup = /** @class */ (function (_super_1) {
-        __extends(TouchDisposableGroup, _super_1);
+    var TouchDisposableGroup = (function (_super) {
+        __extends(TouchDisposableGroup, _super);
         function TouchDisposableGroup(displayObject) {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.displayObject = displayObject;
             _this.touches = new xgame.List();
             xgame.injectInstance(_this);
@@ -1598,10 +4021,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var UIManager = /** @class */ (function (_super_1) {
-        __extends(UIManager, _super_1);
+    var UIManager = (function (_super) {
+        __extends(UIManager, _super);
         function UIManager(main) {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.main = main;
             _this.pipelines = [];
             _this.uiMap = new xgame.Dictionary();
@@ -1925,8 +4348,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
          */
         UIManager.prototype.createUIPage = function (options) {
             return __awaiter(this, void 0, void 0, function () {
-                var _a, entity, uiPage_1, layerManager, uiPage, layerManager, layerManager;
                 var _this = this;
+                var entity, uiPage_1, layerManager, uiPage, layerManager, layerManager, _a;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
@@ -2076,13 +4499,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var Group = /** @class */ (function (_super_1) {
-        __extends(Group, _super_1);
+    var Group = (function (_super) {
+        __extends(Group, _super);
         function Group() {
-            return _super_1.call(this) || this;
+            return _super.call(this) || this;
         }
         Group.prototype.childrenCreated = function () {
-            _super_1.prototype.childrenCreated.call(this);
+            _super.prototype.childrenCreated.call(this);
             this.setTouchManager(this);
         };
         Group = __decorate([
@@ -2101,13 +4524,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var ItemRenderer = /** @class */ (function (_super_1) {
-        __extends(ItemRenderer, _super_1);
+    var ItemRenderer = (function (_super) {
+        __extends(ItemRenderer, _super);
         function ItemRenderer() {
-            return _super_1.call(this) || this;
+            return _super.call(this) || this;
         }
         ItemRenderer.prototype.childrenCreated = function () {
-            _super_1.prototype.childrenCreated.call(this);
+            _super.prototype.childrenCreated.call(this);
             this.setTouchManager(this);
         };
         ItemRenderer = __decorate([
@@ -2126,13 +4549,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var UIComponent = /** @class */ (function (_super_1) {
-        __extends(UIComponent, _super_1);
+    var UIComponent = (function (_super) {
+        __extends(UIComponent, _super);
         function UIComponent() {
-            return _super_1.call(this) || this;
+            return _super.call(this) || this;
         }
         UIComponent.prototype.childrenCreated = function () {
-            _super_1.prototype.childrenCreated.call(this);
+            _super.prototype.childrenCreated.call(this);
             this.setTouchManager(this);
         };
         UIComponent = __decorate([
@@ -2186,11 +4609,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../structs/UIDirection.ts" />
 
 (function (egretx) {
-    var UIPage = /** @class */ (function (_super_1) {
-        __extends(UIPage, _super_1);
+    var UIPage = (function (_super) {
+        __extends(UIPage, _super);
         function UIPage(skinPath) {
             if (skinPath === void 0) { skinPath = null; }
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.skinPath = skinPath;
             //UI的类型参数,见UIFlags
             _this.flags = egretx.UIFlags.isStack | egretx.UIFlags.isFullScreen;
@@ -2345,10 +4768,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../structs/UIFlags.ts" />
 
 (function (egretx) {
-    var PluginPage = /** @class */ (function (_super_1) {
-        __extends(PluginPage, _super_1);
+    var PluginPage = (function (_super) {
+        __extends(PluginPage, _super);
         function PluginPage(skinPath) {
-            var _this = _super_1.call(this, skinPath) || this;
+            var _this = _super.call(this, skinPath) || this;
             _this.flags = egretx.UIFlags.isPlugin;
             return _this;
         }
@@ -2366,10 +4789,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../structs/UIFlags.ts" />
 
 (function (egretx) {
-    var Window = /** @class */ (function (_super_1) {
-        __extends(Window, _super_1);
+    var Window = (function (_super) {
+        __extends(Window, _super);
         function Window(skinPath) {
-            var _this = _super_1.call(this, skinPath) || this;
+            var _this = _super.call(this, skinPath) || this;
             _this.flags = egretx.UIFlags.isStack | egretx.UIFlags.useMask | egretx.UIFlags.closeByMask;
             _this.setLayerID(egretx.UILayerID.Layer_8_Window);
             return _this;
@@ -2418,14 +4841,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 (function (egretx) {
     var PropertyNames = ["x", "y", "width", "height", "visible", "scaleX", "scaleY"];
-    var RenderWatcher = /** @class */ (function (_super_1) {
-        __extends(RenderWatcher, _super_1);
+    var RenderWatcher = (function (_super) {
+        __extends(RenderWatcher, _super);
         function RenderWatcher() {
             var views = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 views[_i] = arguments[_i];
             }
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.views = [];
             _this.watchers = [];
             _this.dict = new xgame.Dictionary();
@@ -2460,8 +4883,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             }
             var list = this.dict.get(view.hashCode);
             var len = this.watchers.length;
-            for (var _i = 0, list_1 = list; _i < list_1.length; _i++) {
-                var watcher = list_1[_i];
+            for (var _i = 0, list_2 = list; _i < list_2.length; _i++) {
+                var watcher = list_2[_i];
                 var indexOf = this.watchers.indexOf(watcher);
                 if (indexOf > -1) {
                     this.watchers.splice(indexOf, 1);
@@ -2503,10 +4926,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     }(xgame.XObject));
     egretx.RenderWatcher = RenderWatcher;
     __reflect(RenderWatcher.prototype, "egretx.RenderWatcher");
-    var Popup = /** @class */ (function (_super_1) {
-        __extends(Popup, _super_1);
+    var Popup = (function (_super) {
+        __extends(Popup, _super);
         function Popup(skinPath) {
-            var _this = _super_1.call(this, skinPath) || this;
+            var _this = _super.call(this, skinPath) || this;
             _this.renderWatcher = new RenderWatcher();
             _this.offset = new egret.Point();
             _this.$uiDirection = egretx.UIDirection.ANY;
@@ -2543,7 +4966,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             if (this.renderWatcher) {
                 this.renderWatcher.dispose();
             }
-            _super_1.prototype.onClose.call(this);
+            _super.prototype.onClose.call(this);
         };
         return Popup;
     }(egretx.UIPage));
@@ -2560,10 +4983,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../structs/UIFlags.ts" />
 
 (function (egretx) {
-    var Scene = /** @class */ (function (_super_1) {
-        __extends(Scene, _super_1);
+    var Scene = (function (_super) {
+        __extends(Scene, _super);
         function Scene(skinPath) {
-            var _this = _super_1.call(this, skinPath) || this;
+            var _this = _super.call(this, skinPath) || this;
             _this.flags = egretx.UIFlags.Scene | egretx.UIFlags.isFullScreen;
             _this.setLayerID(egretx.UILayerID.Layer_2_Scene);
             return _this;
@@ -2581,10 +5004,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../interfaces/IUIEntity.ts" />
 
 (function (egretx) {
-    var UIEntity = /** @class */ (function (_super_1) {
-        __extends(UIEntity, _super_1);
+    var UIEntity = (function (_super) {
+        __extends(UIEntity, _super);
         function UIEntity() {
-            return _super_1.call(this) || this;
+            return _super.call(this) || this;
         }
         Object.defineProperty(UIEntity.prototype, "isClosed", {
             get: function () {
@@ -2654,7 +5077,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../structs/UIFlags.ts" />
 
 (function (egretx) {
-    var UIHelper = /** @class */ (function () {
+    var UIHelper = (function () {
         function UIHelper() {
         }
         UIHelper.isFullScreenUI = function (entity) {
@@ -2718,10 +5141,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../utils/UIHelper.ts" />
 
 (function (egretx) {
-    var UIEntityManager = /** @class */ (function (_super_1) {
-        __extends(UIEntityManager, _super_1);
+    var UIEntityManager = (function (_super) {
+        __extends(UIEntityManager, _super);
         function UIEntityManager(manager) {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.manager = manager;
             _this.entityMap = new xgame.Dictionary();
             _this.stackList = new xgame.List();
@@ -2886,10 +5309,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../structs/UILayerID.ts" />
 
 (function (egretx) {
-    var UILayerManager = /** @class */ (function (_super_1) {
-        __extends(UILayerManager, _super_1);
+    var UILayerManager = (function (_super) {
+        __extends(UILayerManager, _super);
         function UILayerManager(manager, id) {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.manager = manager;
             _this.id = id;
             _this.entities = new xgame.List();
@@ -2991,10 +5414,10 @@ function get_timestamp() {
 }
 
 (function (egretx) {
-    var UIResManager = /** @class */ (function (_super_1) {
-        __extends(UIResManager, _super_1);
+    var UIResManager = (function (_super) {
+        __extends(UIResManager, _super);
         function UIResManager() {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.textures = new xgame.Dictionary();
             onDisplayListChanged.add(_this.onDisplayListChanged, _this);
             onDisplayListDisposed.add(_this.onDisplayListDisposed, _this);
@@ -3093,10 +5516,10 @@ function get_timestamp() {
         return options.callback;
     }
     egretx.alert = alert;
-    var Alert = /** @class */ (function (_super_1) {
-        __extends(Alert, _super_1);
+    var Alert = (function (_super) {
+        __extends(Alert, _super);
         function Alert(options) {
-            var _this = _super_1.call(this, options.skinName || Alert.defaultSkinName) || this;
+            var _this = _super.call(this, options.skinName || Alert.defaultSkinName) || this;
             _this.options = options;
             _this.clickButtonIndex = undefined;
             if (!_this.options.closeByMask) {
@@ -3114,7 +5537,7 @@ function get_timestamp() {
             if (this.options.callback) {
                 this.options.callback.dispatch(this.clickButtonIndex);
             }
-            _super_1.prototype.close.call(this);
+            _super.prototype.close.call(this);
         };
         Alert.prototype.onClose = function () {
             if (this.options.callback) {
@@ -3122,7 +5545,7 @@ function get_timestamp() {
             }
             this.options.callback = undefined;
             this.options.buttons = undefined;
-            _super_1.prototype.onClose.call(this);
+            _super.prototype.onClose.call(this);
         };
         Alert.prototype.getButton = function (index) {
             var btn = this["btn_{0}".format(index)];
@@ -3130,7 +5553,7 @@ function get_timestamp() {
         };
         Alert.prototype.onOpen = function () {
             var _this = this;
-            _super_1.prototype.onOpen.call(this);
+            _super.prototype.onOpen.call(this);
             this.addClick(this.btn_close, function () {
                 _this.close();
             }, this);
@@ -3213,10 +5636,10 @@ function get_timestamp() {
         InvalidateFlags[InvalidateFlags["Dispatch"] = 1 << bits++] = "Dispatch";
         InvalidateFlags[InvalidateFlags["ItemRenderSkinName"] = 1 << bits++] = "ItemRenderSkinName";
     })(InvalidateFlags || (InvalidateFlags = {}));
-    var DropdownList = /** @class */ (function (_super_1) {
-        __extends(DropdownList, _super_1);
+    var DropdownList = (function (_super) {
+        __extends(DropdownList, _super);
         function DropdownList() {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.invalidateFlags = InvalidateFlags.Any;
             _this.callback_onSelectChanged = new xgame.Signal3();
             _this.$isOpened = false;
@@ -3248,14 +5671,14 @@ function get_timestamp() {
         };
         DropdownList.prototype.$onRemoveFromStage = function () {
             this.callback_onSelectChanged.removeAll();
-            _super_1.prototype.$onRemoveFromStage.call(this);
+            _super.prototype.$onRemoveFromStage.call(this);
         };
         DropdownList.prototype.dispose = function () {
             this.callback_onSelectChanged.removeAll();
         };
         DropdownList.prototype.childrenCreated = function () {
             var _this = this;
-            _super_1.prototype.childrenCreated.call(this);
+            _super.prototype.childrenCreated.call(this);
             this.touchChildren = false;
             this.lab_title.multiline = false;
             this.lab_title.wordWrap = false;
@@ -3532,10 +5955,10 @@ function get_timestamp() {
         InvalidateFlags[InvalidateFlags["SelectedIndex"] = 1 << bits++] = "SelectedIndex";
         InvalidateFlags[InvalidateFlags["ItemSkinName"] = 1 << bits++] = "ItemSkinName";
     })(InvalidateFlags || (InvalidateFlags = {}));
-    var DropdownListGroup = /** @class */ (function (_super_1) {
-        __extends(DropdownListGroup, _super_1);
+    var DropdownListGroup = (function (_super) {
+        __extends(DropdownListGroup, _super);
         function DropdownListGroup() {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.invalidateFlags = InvalidateFlags.Any;
             _this.callback_onSelectChanged = new xgame.Signal3();
             _this.$textColor = 0x606DA1;
@@ -3753,20 +6176,20 @@ function get_timestamp() {
 /// <reference path="../core/ItemRenderer.ts" />
 
 (function (egretx) {
-    var PopupMenuEvent = /** @class */ (function (_super_1) {
-        __extends(PopupMenuEvent, _super_1);
+    var PopupMenuEvent = (function (_super) {
+        __extends(PopupMenuEvent, _super);
         function PopupMenuEvent() {
-            return _super_1 !== null && _super_1.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         PopupMenuEvent.ITEM_CLICK = "PopupMenuEvent_itemClick";
         return PopupMenuEvent;
     }(egret.Event));
     egretx.PopupMenuEvent = PopupMenuEvent;
     __reflect(PopupMenuEvent.prototype, "egretx.PopupMenuEvent");
-    var PopupMenuItem = /** @class */ (function (_super_1) {
-        __extends(PopupMenuItem, _super_1);
+    var PopupMenuItem = (function (_super) {
+        __extends(PopupMenuItem, _super);
         function PopupMenuItem() {
-            return _super_1 !== null && _super_1.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         Object.defineProperty(PopupMenuItem.prototype, "item", {
             get: function () {
@@ -3776,12 +6199,12 @@ function get_timestamp() {
             configurable: true
         });
         PopupMenuItem.prototype.createChildren = function () {
-            _super_1.prototype.createChildren.call(this);
+            _super.prototype.createChildren.call(this);
             this.left = this.right = 0;
         };
         PopupMenuItem.prototype.childrenCreated = function () {
             var _this = this;
-            _super_1.prototype.childrenCreated.call(this);
+            _super.prototype.childrenCreated.call(this);
             this.addClick(this, function () {
                 if (_this.item) {
                     _this.dispatchEvent(new PopupMenuEvent(PopupMenuEvent.ITEM_CLICK, true, true, _this.item));
@@ -3789,7 +6212,7 @@ function get_timestamp() {
             }, this);
         };
         PopupMenuItem.prototype.dataChanged = function () {
-            _super_1.prototype.dataChanged.call(this);
+            _super.prototype.dataChanged.call(this);
             if (this.item) {
                 this.lab_title.textFlow = new egret.HtmlTextParser().parse("{0}".format(this.item.title));
                 if (this.item.textAlign) {
@@ -3801,10 +6224,10 @@ function get_timestamp() {
     }(egretx.ItemRenderer));
     egretx.PopupMenuItem = PopupMenuItem;
     __reflect(PopupMenuItem.prototype, "egretx.PopupMenuItem");
-    var PopupMenu = /** @class */ (function (_super_1) {
-        __extends(PopupMenu, _super_1);
+    var PopupMenu = (function (_super) {
+        __extends(PopupMenu, _super);
         function PopupMenu(options) {
-            var _this = _super_1.call(this, options.skinName || PopupMenu.defaultSkinName) || this;
+            var _this = _super.call(this, options.skinName || PopupMenu.defaultSkinName) || this;
             _this.options = options;
             _this.callback_onSelect = new xgame.Signal1();
             _this.arrowPadding = 20;
@@ -3867,7 +6290,7 @@ function get_timestamp() {
             if (this.options) {
                 this.options.instance = undefined;
             }
-            _super_1.prototype.onClose.call(this);
+            _super.prototype.onClose.call(this);
         };
         PopupMenu.prototype.onItemClickHandler = function (event) {
             event.stopPropagation();
@@ -3875,7 +6298,7 @@ function get_timestamp() {
             this.close();
         };
         PopupMenu.prototype.onOpen = function () {
-            _super_1.prototype.onOpen.call(this);
+            _super.prototype.onOpen.call(this);
             this.list_item.itemRenderer = this.options.itemRender;
             this.list_item.layout.gap = this.options.itemGap;
             if (this.options.itemRenderSkinName) {
@@ -4032,10 +6455,10 @@ function get_timestamp() {
         TipsState[TipsState["Stay"] = 2] = "Stay";
         TipsState[TipsState["FadeOut"] = 3] = "FadeOut";
     })(TipsState = egretx.TipsState || (egretx.TipsState = {}));
-    var TipsView = /** @class */ (function (_super_1) {
-        __extends(TipsView, _super_1);
+    var TipsView = (function (_super) {
+        __extends(TipsView, _super);
         function TipsView() {
-            var _this = _super_1 !== null && _super_1.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.durationFadeIn = 500;
             _this.durationStay = 1000;
             _this.durationFadeOut = 500;
@@ -4138,10 +6561,10 @@ function get_timestamp() {
     }(eui.Component));
     egretx.TipsView = TipsView;
     __reflect(TipsView.prototype, "egretx.TipsView", ["egretx.ITipsView", "xgame.IPoolable", "xgame.IDisposable", "xgame.IXObject"]);
-    var TipsManager = /** @class */ (function (_super_1) {
-        __extends(TipsManager, _super_1);
+    var TipsManager = (function (_super) {
+        __extends(TipsManager, _super);
         function TipsManager() {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.pools = new xgame.PoolObject(TipsView);
             _this.parallelMax = 5;
             _this.waitQueues = [];
@@ -4228,10 +6651,10 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var UIOptions = /** @class */ (function (_super_1) {
-        __extends(UIOptions, _super_1);
+    var UIOptions = (function (_super) {
+        __extends(UIOptions, _super);
         function UIOptions() {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.gap = 10;
             return _this;
         }
@@ -4258,10 +6681,10 @@ function get_timestamp() {
 /// <reference path="../interfaces/IUIManager.ts" />
 
 (function (egretx) {
-    var SceneTransition = /** @class */ (function (_super_1) {
-        __extends(SceneTransition, _super_1);
+    var SceneTransition = (function (_super) {
+        __extends(SceneTransition, _super);
         function SceneTransition() {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             xgame.injectInstance(_this);
             return _this;
         }
@@ -4293,13 +6716,13 @@ function get_timestamp() {
 /// <reference path="./SceneTransition.ts" />
 
 (function (egretx) {
-    var SceneFadeTransition = /** @class */ (function (_super_1) {
-        __extends(SceneFadeTransition, _super_1);
+    var SceneFadeTransition = (function (_super) {
+        __extends(SceneFadeTransition, _super);
         function SceneFadeTransition(blockSize, duration, style) {
             if (blockSize === void 0) { blockSize = 128; }
             if (duration === void 0) { duration = 500; }
             if (style === void 0) { style = egretx.SceneMotion.RANDOM; }
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.blockSize = blockSize;
             _this.duration = duration;
             _this.style = style;
@@ -4394,12 +6817,12 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var SceneHShuttersTransition = /** @class */ (function (_super_1) {
-        __extends(SceneHShuttersTransition, _super_1);
+    var SceneHShuttersTransition = (function (_super) {
+        __extends(SceneHShuttersTransition, _super);
         function SceneHShuttersTransition(countBlocks, duration) {
             if (countBlocks === void 0) { countBlocks = 8; }
             if (duration === void 0) { duration = 500; }
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.countBlocks = countBlocks;
             _this.duration = duration;
             return _this;
@@ -4480,13 +6903,13 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var SceneRotateTransition = /** @class */ (function (_super_1) {
-        __extends(SceneRotateTransition, _super_1);
+    var SceneRotateTransition = (function (_super) {
+        __extends(SceneRotateTransition, _super);
         function SceneRotateTransition(blockSize, duration, style) {
             if (blockSize === void 0) { blockSize = 128; }
             if (duration === void 0) { duration = 500; }
             if (style === void 0) { style = egretx.SceneMotion.RANDOM; }
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.blockSize = blockSize;
             _this.duration = duration;
             _this.style = style;
@@ -4581,13 +7004,13 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var SceneScaleTransition = /** @class */ (function (_super_1) {
-        __extends(SceneScaleTransition, _super_1);
+    var SceneScaleTransition = (function (_super) {
+        __extends(SceneScaleTransition, _super);
         function SceneScaleTransition(blockSize, duration, style) {
             if (blockSize === void 0) { blockSize = 128; }
             if (duration === void 0) { duration = 500; }
             if (style === void 0) { style = egretx.SceneMotion.RANDOM; }
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.blockSize = blockSize;
             _this.duration = duration;
             _this.style = style;
@@ -4682,12 +7105,12 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var SceneVShuttersTransition = /** @class */ (function (_super_1) {
-        __extends(SceneVShuttersTransition, _super_1);
+    var SceneVShuttersTransition = (function (_super) {
+        __extends(SceneVShuttersTransition, _super);
         function SceneVShuttersTransition(countBlocks, duration) {
             if (countBlocks === void 0) { countBlocks = 8; }
             if (duration === void 0) { duration = 500; }
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.countBlocks = countBlocks;
             _this.duration = duration;
             return _this;
@@ -4749,11 +7172,11 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var UIFadeTransition = /** @class */ (function (_super_1) {
-        __extends(UIFadeTransition, _super_1);
+    var UIFadeTransition = (function (_super) {
+        __extends(UIFadeTransition, _super);
         function UIFadeTransition(duration) {
             if (duration === void 0) { duration = 500; }
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.duration = duration;
             return _this;
         }
@@ -4789,11 +7212,11 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var UIScaleTransition = /** @class */ (function (_super_1) {
-        __extends(UIScaleTransition, _super_1);
+    var UIScaleTransition = (function (_super) {
+        __extends(UIScaleTransition, _super);
         function UIScaleTransition(duration) {
             if (duration === void 0) { duration = 300; }
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.duration = duration;
             return _this;
         }
@@ -4829,10 +7252,10 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var Bitmap = /** @class */ (function (_super_1) {
-        __extends(Bitmap, _super_1);
+    var Bitmap = (function (_super) {
+        __extends(Bitmap, _super);
         function Bitmap() {
-            return _super_1 !== null && _super_1.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         Bitmap.prototype.release = function () {
         };
@@ -4854,10 +7277,10 @@ function get_timestamp() {
     }(egret.Bitmap));
     egretx.Bitmap = Bitmap;
     __reflect(Bitmap.prototype, "egretx.Bitmap", ["xgame.IPoolable", "xgame.IDisposable", "xgame.IXObject"]);
-    var BitmapPools = /** @class */ (function (_super_1) {
-        __extends(BitmapPools, _super_1);
+    var BitmapPools = (function (_super) {
+        __extends(BitmapPools, _super);
         function BitmapPools() {
-            var _this = _super_1.call(this) || this;
+            var _this = _super.call(this) || this;
             _this.pools = new xgame.PoolObject(Bitmap);
             return _this;
         }
@@ -4885,7 +7308,7 @@ function get_timestamp() {
 (function (egretx) {
     var hud_bounds = new egret.Rectangle();
     var tips_bounds = new egret.Rectangle();
-    var TipsHelper = /** @class */ (function () {
+    var TipsHelper = (function () {
         function TipsHelper() {
         }
         TipsHelper.placeTipsWithHUD = function (tips, hud, gap) {
@@ -4920,7 +7343,6 @@ function get_timestamp() {
                 }
                 tips.fixedUIDirection(egretx.UIDirection.BOTTOM);
             }
-            //尝试放置到上边
             else if (tips.allowUIDirection(egretx.UIDirection.TOP) && ((top - 2 * gap >= th && direction == egretx.UIDirection.ANY) || direction == egretx.UIDirection.TOP)) {
                 tips.y = top - gap - th;
                 if (align == egretx.UIAlign.LEFT) {
@@ -4934,7 +7356,6 @@ function get_timestamp() {
                 }
                 tips.fixedUIDirection(egretx.UIDirection.TOP);
             }
-            //尝试放置到右边
             else if (tips.allowUIDirection(egretx.UIDirection.RIGHT) && ((screenWidth - right - 2 * gap >= tw && direction == egretx.UIDirection.ANY) || direction == egretx.UIDirection.RIGHT)) {
                 tips.x = right + gap;
                 if (align == egretx.UIAlign.TOP) {
@@ -4948,7 +7369,6 @@ function get_timestamp() {
                 }
                 tips.fixedUIDirection(egretx.UIDirection.RIGHT);
             }
-            //尝试放置到左边
             else if (tips.allowUIDirection(egretx.UIDirection.LEFT) && ((left - 2 * gap >= tw && direction == egretx.UIDirection.ANY) || direction == egretx.UIDirection.LEFT)) {
                 tips.x = left - gap - tw;
                 if (align == egretx.UIAlign.TOP) {
