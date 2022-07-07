@@ -1255,6 +1255,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         };
         XProvider.prototype.onServiceRegister = function (game) {
             //注册实用类
+            game.singleton(xgame.IDateTimeManager, xgame.DateTimeManager).withInstance(xgame.DateTimeManager.Instance());
+            console.log("[XProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(xgame.DateTimeManager)));
             game.singleton(xgame.IPoolManager, xgame.PoolManager).withInstance(xgame.PoolManager.Instance());
             console.log("[XProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(xgame.PoolManager)));
             game.singleton(xgame.IEventManager, xgame.EventManager).withInstance(xgame.EventManager.Instance());
@@ -2933,6 +2935,463 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }(xgame.Singleton));
     xgame.ServiceContainer = ServiceContainer;
     __reflect(ServiceContainer.prototype, "xgame.ServiceContainer");
+})(xgame || (xgame = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-07
+*************************************************/
+
+(function (xgame) {
+    xgame.DATE_HOUR_TIME = 3600;
+    xgame.DATE_DAY_TIME = 86400;
+    /**
+     * 日期，时间戳管理器
+     */
+    var DateTimeManager = (function (_super) {
+        __extends(DateTimeManager, _super);
+        function DateTimeManager() {
+            var _this = _super.call(this) || this;
+            _this.diffTimestamp = 0;
+            //默认中国时区GMT+8
+            _this.timeZone = 28800;
+            return _this;
+        }
+        /**
+         * 设置当前时间戳和时区偏差，一般是服务器时间和时区
+         * @param timestamp
+         * @param timeZone
+         */
+        DateTimeManager.prototype.setNowTimestamp = function (timestamp, timeZone) {
+            if (timeZone === void 0) { timeZone = 0; }
+            this.diffTimestamp = timestamp - Math.floor(new Date().valueOf() / 1000);
+            this.timeZone = timeZone;
+        };
+        /**
+         * 获得当前时间戳
+         * @returns
+         */
+        DateTimeManager.prototype.getNowTimestamp = function () {
+            return Math.floor(new Date().valueOf() / 1000) + this.diffTimestamp;
+        };
+        /**
+         * 格式化日期和时间
+         * @param formatString
+         * @param timestamp
+         * @returns
+         */
+        DateTimeManager.prototype.formatDateTime = function (formatString, timestamp) {
+            if (formatString == undefined) {
+                formatString = "yyyy-MM-dd hh:mm:ss";
+            }
+            timestamp = timestamp || this.getNowTimestamp();
+            timestamp = this.convertTimestamp(timestamp);
+            timestamp *= 1000;
+            var date = new Date(timestamp);
+            var o = {
+                "M+": date.getMonth() + 1,
+                "d+": date.getDate(),
+                "h+": date.getHours(),
+                "m+": date.getMinutes(),
+                "s+": date.getSeconds(),
+                "S": date.getMilliseconds() //毫秒 
+            };
+            if (/(y+)/.test(formatString)) {
+                formatString = formatString.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+            }
+            for (var k in o) {
+                if (new RegExp("(" + k + ")").test(formatString))
+                    formatString = formatString.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            }
+            return formatString;
+        };
+        /**
+         * 格式化秒数
+         * @param formatString
+         * @param time
+         * @returns
+         */
+        DateTimeManager.prototype.formatSeconds = function (formatString, time) {
+            var day = Math.floor(time / 86400);
+            var hour = Math.floor(time % 86400 / 3600);
+            var min = Math.floor(time % 3600 / 60);
+            var sec = Math.floor(time % 60);
+            if (!new RegExp("(d+)").test(formatString)) {
+                hour += day * 24;
+            }
+            if (!new RegExp("(h+)").test(formatString)) {
+                min += hour * 60;
+            }
+            var o = {
+                "d+": day,
+                "h+": hour,
+                "m+": min,
+                "s+": sec,
+            };
+            for (var k in o) {
+                if (new RegExp("(" + k + ")").test(formatString)) {
+                    formatString = formatString.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : ("" + o[k]).length == 1 ? "0" + o[k] : o[k]);
+                }
+            }
+            return formatString;
+        };
+        /**
+         * 转换时间戳
+         * @param timestamp
+         * @param mode
+         * @returns
+         */
+        DateTimeManager.prototype.convertTimestamp = function (timestamp, mode) {
+            var GMT = new Date().getTimezoneOffset() * 60;
+            if (mode) {
+                return timestamp - this.timeZone - GMT;
+            }
+            else {
+                return timestamp + this.timeZone + GMT;
+            }
+        };
+        /**
+         * 获取当前或指定时间的详情
+         * @param timestamp
+         * @param offset
+         * @returns
+         */
+        DateTimeManager.prototype.getDateInfo = function (timestamp, offset) {
+            timestamp = timestamp || this.getNowTimestamp();
+            if (offset) {
+                timestamp += offset;
+            }
+            timestamp = this.convertTimestamp(timestamp);
+            timestamp *= 1000;
+            var info = {};
+            var date = new Date(timestamp);
+            info.year = date.getFullYear();
+            info.month = date.getMonth() + 1;
+            info.day = date.getDate();
+            info.hour = date.getHours();
+            info.min = date.getMinutes();
+            info.sec = date.getSeconds();
+            info.ms = date.getMilliseconds();
+            info.timestamp = Math.floor(date.valueOf() / 1000);
+            info.timestamp = this.convertTimestamp(info.timestamp, true);
+            info.week = date.getDay();
+            info.string = this.getStringFromDate(info);
+            return info;
+        };
+        DateTimeManager.prototype.getStringFromDate = function (info_or_formatString, formatString) {
+            if (formatString === void 0) { formatString = "yyyy/MM/dd hh:mm:ss"; }
+            var info;
+            if (typeof (info_or_formatString) === "object") {
+                info = info_or_formatString;
+            }
+            else {
+                formatString = info_or_formatString;
+            }
+            if (!info) {
+                info = this.getDateInfo();
+            }
+            var year = info.year;
+            var month = info.month;
+            var day = info.day;
+            var hour = info.hour || 0;
+            var min = info.min || 0;
+            var sec = info.sec || 0;
+            var ms = info.ms || 0;
+            var o = {
+                "M+": month.toString(),
+                "d+": day.toString(),
+                "h+": hour.toString(),
+                "m+": min.toString(),
+                "s+": sec.toString(),
+            };
+            var rets = formatString.match(/(y+)/);
+            if (rets && rets.length) {
+                formatString = formatString.replace(rets[1], (year + "").substr(4 - rets[1].length));
+            }
+            rets = formatString.match(/(S+)/);
+            if (rets && rets.length) {
+                formatString = formatString.replace(rets[1], ms.toString().padLeft(3, "0"));
+            }
+            var reg;
+            for (var k in o) {
+                reg = new RegExp("(" + k + ")");
+                rets = formatString.match(reg);
+                if (rets && rets.length) {
+                    formatString = formatString.replace(rets[1], (rets[1].length == 1) ? (o[k]) : o[k].padLeft(2, "0"));
+                }
+            }
+            return formatString;
+        };
+        /**
+         * 时间字符串转成时间信息
+         * @param text 格式: "yyyy/M/d hh:mm:ss" 或 "yyyy-MM-dd hh:mm" 或 "hh:mm:ss" 或 "mm:ss"
+         * @param timestamp 当时间信息不足时，用来修正的时间戳
+         */
+        DateTimeManager.prototype.getDateFromString = function (text, timestamp) {
+            text = text.replace(/-/g, "/");
+            var list = text.split(" ");
+            var dateString, timeString;
+            var info = this.getDateInfo(timestamp);
+            if (list.length == 1) {
+                if (list[0].indexOf("/") >= 0) {
+                    dateString = list[0];
+                    timeString = "{0}:{1}:{2}".format(info.hour, info.min, info.sec);
+                }
+                else {
+                    dateString = "{0}/{1}/{2}".format(info.year, info.month, info.day);
+                    timeString = list[0];
+                }
+            }
+            else {
+                dateString = list[0];
+                timeString = list[1];
+            }
+            var time_list = timeString.split(":");
+            if (time_list.length < 3) {
+                while (time_list.length < 3) {
+                    time_list.push("00");
+                }
+                timeString = time_list.join(":");
+            }
+            timestamp = Math.floor(Date.parse("{0} {1}".format(dateString, timeString)) / 1000);
+            timestamp = this.convertTimestamp(timestamp, true);
+            return this.getDateInfo(timestamp);
+        };
+        /**
+         * 时间字符串转成时间戳
+         * @param text 格式: "yyyy/M/d hh:mm:ss" 或 "yyyy-MM-dd hh:mm" 或 "hh:mm:ss" 或 "mm:ss"
+         * @param timestamp 当时间信息不足时，用来修正的时间戳
+         */
+        DateTimeManager.prototype.getTimestampFromString = function (text, timestamp) {
+            return this.getDateFromString(text, timestamp).timestamp;
+        };
+        /**
+         * 时间详情转服务器时间戳
+         * @param info 时间详情
+         * @param timestamp 参考修正的服务器时间戳
+         */
+        DateTimeManager.prototype.getTimestampFromDate = function (info, timestamp) {
+            var now = this.getDateInfo(timestamp);
+            if (info.year == undefined) {
+                info.year = now.year;
+            }
+            if (info.month == undefined) {
+                info.month = now.month;
+            }
+            if (info.day == undefined) {
+                info.day = now.day;
+            }
+            if (info.hour == undefined) {
+                info.hour = now.hour;
+            }
+            if (info.min == undefined) {
+                info.min = now.min;
+            }
+            if (info.sec == undefined) {
+                info.sec = now.sec;
+            }
+            return this.getTimestampFromString(this.getStringFromDate(info));
+        };
+        /**
+         * 服务器时间戳对应的日期是否是周几
+         * @param week 周一至周日(1,...,7)
+         * @param timestamp 服务器时间戳(默认当前服务器时间)
+         */
+        DateTimeManager.prototype.isWeekDay = function (week, timestamp) {
+            if (week == 7) {
+                week = 0;
+            }
+            var info = this.getDateInfo(timestamp);
+            if (info.week == week) {
+                return true;
+            }
+            return false;
+        };
+        /**
+         * 获取当前日期或指定日期所在周对应的服务器时间戳
+         * @param week 周一至周日(1,...,7)
+         * @param timestamp 服务器时间戳(默认当前服务器时间)
+         * @fixed 具体时间修正(只参考时分秒)
+         */
+        DateTimeManager.prototype.getTimestampWithWeek = function (week, timestamp, fixed) {
+            fixed = this.fixedDateInfo(fixed);
+            if (week == 7) {
+                week = 0;
+            }
+            var info = this.getDateInfo(timestamp);
+            var diff_days = week - info.week;
+            info = this.getDateInfo(timestamp, diff_days * xgame.DATE_DAY_TIME);
+            info.ms = 0;
+            if (fixed) {
+                if (fixed.hour != undefined) {
+                    info.hour = fixed.hour;
+                }
+                if (fixed.min != undefined) {
+                    info.min = fixed.min;
+                }
+                if (fixed.sec != undefined) {
+                    info.sec = fixed.sec;
+                }
+            }
+            return this.getTimestampFromDate(info);
+        };
+        /**
+         * 获取当前日期或指定日期下一周对应的服务器时间戳
+         * @param week 周一至周日(1,...,7)
+         * @param timestamp 服务器时间戳(默认当前服务器时间)
+         * @param fixed 具体时间修正(只参考时分秒)
+         */
+        DateTimeManager.prototype.getTimestampWithNextWeek = function (week, timestamp, fixed) {
+            var time = this.getTimestampWithWeek(week, timestamp, fixed);
+            return time + 7 * xgame.DATE_DAY_TIME;
+        };
+        /**
+         * 获取当前日期或指定日期所在月份的第一天服务器时间戳
+         * @param timestamp 服务器时间戳(默认当前服务器时间)
+         * @param fixed 具体时间修正(只参考时分秒)
+         */
+        DateTimeManager.prototype.getFirstDayTimestampWithMonth = function (timestamp, fixed) {
+            fixed = this.fixedDateInfo(fixed);
+            var info = this.getDateInfo(timestamp);
+            info.day = 1;
+            info.ms = 0;
+            if (fixed) {
+                if (fixed.hour != undefined) {
+                    info.hour = fixed.hour;
+                }
+                if (fixed.min != undefined) {
+                    info.min = fixed.min;
+                }
+                if (fixed.sec != undefined) {
+                    info.sec = fixed.sec;
+                }
+            }
+            return this.getTimestampFromDate(info);
+        };
+        /**
+         * 获取当前日期或指定日期所在月份下月第一天服务器时间戳
+         * @param timestamp 服务器时间戳(默认当前服务器时间)
+         * @param fixed 具体时间修正(只参考时分秒)
+         */
+        DateTimeManager.prototype.getFirstDayTimestampWithNextMonth = function (timestamp, fixed) {
+            fixed = this.fixedDateInfo(fixed);
+            var info = this.getDateInfo(timestamp);
+            if (info.month == 11) {
+                info.year += 1;
+                info.month = 0;
+            }
+            else {
+                info.month += 1;
+            }
+            info.day = 1;
+            info.ms = 0;
+            if (fixed) {
+                if (fixed.hour != undefined) {
+                    info.hour = fixed.hour;
+                }
+                if (fixed.min != undefined) {
+                    info.min = fixed.min;
+                }
+                if (fixed.sec != undefined) {
+                    info.sec = fixed.sec;
+                }
+            }
+            return this.getTimestampFromDate(info);
+        };
+        /**
+         * 获取当前日期或指定日期所在月份的最后一天服务器时间戳
+         * @param timestamp 服务器时间戳(默认当前服务器时间)
+         * @param fixed 具体时间修正(只参考时分秒)
+         */
+        DateTimeManager.prototype.getLastDayTimestampWithMonth = function (timestamp, fixed) {
+            var time = this.getFirstDayTimestampWithNextMonth(timestamp, fixed);
+            return this.getDateInfo(time, -xgame.DATE_DAY_TIME).timestamp;
+        };
+        /**
+         * 修正服务器时间戳到指定时间
+         * @param timestamp 要修正的服务器时间戳
+         * @param fixed 修正的时间参数(只参考时分秒)
+         */
+        DateTimeManager.prototype.fixedTimestamp = function (timestamp, fixed) {
+            fixed = this.fixedDateInfo(fixed);
+            var info = this.getDateInfo(timestamp);
+            info.ms = 0;
+            if (fixed) {
+                if (fixed.hour != undefined) {
+                    info.hour = fixed.hour;
+                }
+                if (fixed.min != undefined) {
+                    info.min = fixed.min;
+                }
+                if (fixed.sec != undefined) {
+                    info.sec = fixed.sec;
+                }
+            }
+            return this.getTimestampFromDate(info);
+        };
+        /**
+         * 获取明天的服务器时间戳（默认获取明天凌晨0点）
+         * @param timestamp 服务器时间戳
+         * @param fixed 时间修正
+         */
+        DateTimeManager.prototype.getTimestampWithTomorrow = function (timestamp, fixed) {
+            fixed = this.fixedDateInfo(fixed);
+            var info = this.getDateInfo(timestamp, xgame.DATE_DAY_TIME);
+            info.ms = 0;
+            if (fixed) {
+                if (fixed.hour != undefined) {
+                    info.hour = fixed.hour;
+                }
+                if (fixed.min != undefined) {
+                    info.min = fixed.min;
+                }
+                if (fixed.sec != undefined) {
+                    info.sec = fixed.sec;
+                }
+            }
+            return this.getTimestampFromDate(info);
+        };
+        /**
+         * 获取当前时间戳的总天数
+         * @param timestamp
+         * @returns
+         */
+        DateTimeManager.prototype.getDayID = function (timestamp) {
+            timestamp = timestamp || this.getNowTimestamp();
+            var time = timestamp + this.timeZone;
+            return Math.floor(time / xgame.DATE_DAY_TIME);
+        };
+        //================================================
+        // private
+        //================================================
+        DateTimeManager.prototype.fixedDateInfo = function (fixed) {
+            if (!fixed) {
+                fixed = {};
+            }
+            if (fixed.hour == undefined) {
+                fixed.hour = 0;
+            }
+            if (fixed.min == undefined) {
+                fixed.min = 0;
+            }
+            if (fixed.sec == undefined) {
+                fixed.sec = 0;
+            }
+            return fixed;
+        };
+        return DateTimeManager;
+    }(xgame.Singleton));
+    xgame.DateTimeManager = DateTimeManager;
+    __reflect(DateTimeManager.prototype, "xgame.DateTimeManager", ["xgame.IDateTimeManager", "xgame.IXObject"]);
+})(xgame || (xgame = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-07
+*************************************************/
+
+(function (xgame) {
+    xgame.IDateTimeManager = Symbol.for("IDateTimeManager");
 })(xgame || (xgame = {}));
 /*************************************************
 /* @author : rontian

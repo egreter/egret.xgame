@@ -25,6 +25,8 @@ module xgame {
         }
         public onServiceRegister(game: IXGame): void {
             //注册实用类
+            game.singleton(IDateTimeManager, DateTimeManager).withInstance(DateTimeManager.Instance());
+            console.log("[XProvider]: 注册管理器{0}".format(getQualifiedClassName(DateTimeManager)));
             game.singleton(IPoolManager, PoolManager).withInstance(PoolManager.Instance());
             console.log("[XProvider]: 注册管理器{0}".format(getQualifiedClassName(PoolManager)));
             game.singleton(IEventManager, EventManager).withInstance(EventManager.Instance());

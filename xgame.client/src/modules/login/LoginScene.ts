@@ -22,6 +22,8 @@ module ro {
         public http: egretx.IHttpManager;
         @inject(egretx.ISocketManager)
         public socket: egretx.ISocketManager;
+        @inject(xgame.IDateTimeManager)
+        public dateTimeManager: xgame.IDateTimeManager;
         //private net = new pomelo.Pomelo();
         public constructor() {
             super("resource/skins/login/LoginSceneSkin.exml");
@@ -51,7 +53,10 @@ module ro {
                 ["version", "94"]], true).then((ret) => {
                     console.log(ret);
                 });
-
+            //设置服务器时间戳
+            //this.dateTimeManager.setNowTimestamp(Math.floor(new Date().valueOf() / 1000), 28800);
+            let info = this.dateTimeManager.getDateInfo();
+            console.log(info.string, info);
             this.g_username.visible = false;
             this.btn_game.visible = false;
             this.list_server.visible = false;
