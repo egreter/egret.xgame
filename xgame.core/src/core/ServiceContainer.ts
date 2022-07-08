@@ -50,6 +50,27 @@ module xgame {
             let results: IAttribute[] = [
                 ...this.getOwnAttributes(target, identity, metadataKey)
             ];
+            let prototype = Object.getPrototypeOf(target);
+            while (prototype) {
+                let superResults = this.getOwnAttributes(prototype, identity, metadataKey);
+                results = [
+                    ...results,
+                    ...superResults
+                ];
+                prototype = Object.getPrototypeOf(prototype);
+                if (!prototype) {
+                    break;
+                }
+            }
+            let clean = new Dictionary<number, IAttribute>();
+            for (let attr of results) {
+                if (!clean.containsKey(attr.hashCode)) {
+                    clean.add(attr.hashCode, attr);
+                }
+            }
+            results.length = 0;
+            results.push(...clean.values);
+            clean.clear();
             return <T[]>results;
         }
         private getOwnAttributes<T extends IAttribute>(target: any, identity: Symbol, metadataKey?: string): T[] {
@@ -60,20 +81,6 @@ module xgame {
                 for (let attr of attributes) {
                     if (is(attr, identity)) {
                         results.push(attr);
-                    }
-                }
-            }
-            let prototype = target.prototype;
-            if (prototype) {
-                prototype = Object.getPrototypeOf(prototype);
-                if (prototype) {
-                    let superConstructor = Object.getPrototypeOf(prototype).constructor;
-                    if (superConstructor !== Object) {
-                        let superResults = this.getOwnAttributes(superConstructor, identity, metadataKey);
-                        results = [
-                            ...results,
-                            ...superResults
-                        ];
                     }
                 }
             }

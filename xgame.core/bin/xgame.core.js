@@ -2867,6 +2867,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         };
         ServiceContainer.prototype.getAttributes = function (target, identity, metadataKey) {
             var results = this.getOwnAttributes(target, identity, metadataKey).slice();
+            var prototype = Object.getPrototypeOf(target);
+            while (prototype) {
+                var superResults = this.getOwnAttributes(prototype, identity, metadataKey);
+                results = results.concat(superResults);
+                prototype = Object.getPrototypeOf(prototype);
+                if (!prototype) {
+                    break;
+                }
+            }
+            var clean = new xgame.Dictionary();
+            for (var _i = 0, results_1 = results; _i < results_1.length; _i++) {
+                var attr = results_1[_i];
+                if (!clean.containsKey(attr.hashCode)) {
+                    clean.add(attr.hashCode, attr);
+                }
+            }
+            results.length = 0;
+            results.push.apply(results, clean.values);
+            clean.clear();
             return results;
         };
         ServiceContainer.prototype.getOwnAttributes = function (target, identity, metadataKey) {
@@ -2878,17 +2897,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     var attr = attributes_1[_i];
                     if (xgame.is(attr, identity)) {
                         results.push(attr);
-                    }
-                }
-            }
-            var prototype = target.prototype;
-            if (prototype) {
-                prototype = Object.getPrototypeOf(prototype);
-                if (prototype) {
-                    var superConstructor_1 = Object.getPrototypeOf(prototype).constructor;
-                    if (superConstructor_1 !== Object) {
-                        var superResults = this.getOwnAttributes(superConstructor_1, identity, metadataKey);
-                        results = results.concat(superResults);
                     }
                 }
             }
