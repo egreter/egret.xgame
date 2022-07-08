@@ -42,11 +42,18 @@ module ro {
         private selectedIndex: number = 0;
         public onOpen(): void {
             super.onOpen();
+            this.injectGuideValue("main_index", 0);
+            this.injectGuideValue("btn_0", this.btn_0);
+            this.injectGuideValue("btn_1", this.btn_1);
+            this.injectGuideValue("btn_2", this.btn_2);
+            this.injectGuideValue("btn_3", this.btn_3);
             //全局事件监听
             //this.eventManager.addEventListener(EventModule.MAIN, MainEvent.BAG_OPENED, this.onBagOpened, this);
             this.addClick(this.btn_0, () => {
                 //this.audioManager.ui.play("effect_mp3", 1);
                 this.uiManager.openPopup(TipsPage, this.btn_0);
+                this.injectGuideValue("flag_main_btn_0_clicked", true);
+                this.injectGuideValue("main_index", 1);
             }, this);
             this.addClick(this.btn_1, () => {
 
@@ -57,14 +64,19 @@ module ro {
                         this.selectedIndex = v.index;
                     }
                 }, this);
+                this.injectGuideValue("flag_main_btn_1_clicked", true);
+                this.injectGuideValue("main_index", 2);
             }, this);
             this.addClick(this.btn_2, () => {
                 //this.audioManager.effect.play("effect2_mp3", 1);
                 this.uiManager.openUI(BagWindow);
+                this.injectGuideValue("flag_main_btn_2_clicked", true);
+                this.injectGuideValue("main_index", 3);
             }, this);
             this.addClick(this.btn_3, () => {
                 //this.audioManager.effect.play("refine_mp3", 1);
                 this.uiManager.openUI(MainPage);
+                this.injectGuideValue("flag_main_btn_3_clicked", true);
             }, this);
             this.addClick(this.btn_4, () => {
                 this.timelineManager.getOrCreateTimeline().timeScale = 0.5;

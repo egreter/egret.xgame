@@ -11,7 +11,7 @@ declare module egretx {
         H_TAIL = 4,
         V_HEAD = 8,
         V_MID = 16,
-        V_TAIL = 32,
+        V_TAIL = 32
     }
 }
 declare namespace eui {
@@ -36,6 +36,7 @@ declare namespace eui {
 declare module egretx {
     let IUIManager: symbol;
     interface IUIManager extends xgame.IXObject {
+        readonly entityManager: UIEntityManager;
         readonly stage: egret.Stage;
         readonly RES: UIResManager;
         readonly currentScene: IUIEntity;
@@ -118,7 +119,7 @@ declare module egretx {
          * @param key
          */
         release(key: string): void;
-        private _release(id);
+        private _release;
         /**
          * 释放全部可以释放的动画对象及资源
          */
@@ -180,9 +181,9 @@ declare module egretx {
         playWithAutoRemove(actionName?: string): void;
         play(playTimes?: number, actionName?: string): void;
         protected loadMC(is_preload?: boolean): Promise<void>;
-        private onFrameLabelEvent(event);
-        private onLoopCompleteEvent(event);
-        private onCompleteEvent(event);
+        private onFrameLabelEvent;
+        private onLoopCompleteEvent;
+        private onCompleteEvent;
         initMC(mcData: egret.MovieClipData, is_preload?: boolean): void;
         private $playTimes;
         protected _play(): void;
@@ -344,7 +345,7 @@ declare module egretx {
          *
          */
         $init(): void;
-        private fillMovieFrames();
+        private fillMovieFrames;
         /**
          * @private
          *
@@ -354,7 +355,7 @@ declare module egretx {
          * @private
          *
          */
-        private _initFrame();
+        private _initFrame;
         /**
          * @private
          */
@@ -382,20 +383,20 @@ declare module egretx {
          * @param ignoreCase {boolean} 是否忽略大小写，可选参数，默认false
          * @returns {egret.FrameLabel} FrameLabel对象
          */
-        private getFrameLabelByName(labelName, ignoreCase?);
+        private getFrameLabelByName;
         /**
          * @private
          * 根据帧标签，设置开始和结束的帧数
          * @param labelName {string} 帧标签名
          */
-        private getFrameStartEnd(labelName);
+        private getFrameStartEnd;
         /**
          * @private
          * 返回指定序号的帧的FrameLabel对象
          * @param frame {number} 帧序号
          * @returns {egret.FrameLabel} FrameLabel对象
          */
-        private getFrameLabelByFrame(frame);
+        private getFrameLabelByFrame;
         /**
          * @private
          * 返回指定序号的帧对应的FrameLabel对象，如果当前帧没有标签，则返回前面最近的有标签的帧的FrameLabel对象
@@ -403,7 +404,7 @@ declare module egretx {
          * @param frame {number} 帧序号
          * @returns {egret.FrameLabel} FrameLabel对象
          */
-        private getFrameLabelForFrame(frame);
+        private getFrameLabelForFrame;
         /**
          * 继续播放当前动画
          * @param playTimes {number} 播放次数。 参数为整数，可选参数，>=1：设定播放次数，<0：循环播放，默认值 0：不改变播放次数(MovieClip初始播放次数设置为1)，
@@ -449,7 +450,7 @@ declare module egretx {
          *
          * @param frame
          */
-        private gotoFrame(frame);
+        private gotoFrame;
         /**
          * @private
          */
@@ -459,12 +460,12 @@ declare module egretx {
          * @private
          *
          */
-        private advanceFrame();
+        private advanceFrame;
         /**
          * @private
          *
          */
-        private constructFrame();
+        private constructFrame;
         /**
          * @private
          *
@@ -474,7 +475,7 @@ declare module egretx {
          * @private
          *
          */
-        private handlePendingEvent();
+        private handlePendingEvent;
         /**
          * MovieClip 实例中帧的总数
          * @version Egret 2.4
@@ -512,32 +513,32 @@ declare module egretx {
          */
         readonly isPlaying: boolean;
         /**
-         * @version Egret 2.4
-         * @platform Web,Native
-         */
-        /**
          * MovieClip数据源
          */
+        /**
+        * @version Egret 2.4
+        * @platform Web,Native
+        */
         movieClipData: egret.MovieClipData;
         /**
          * @private
          *
          * @param value
          */
-        private setMovieClipData(value, force?);
+        private setMovieClipData;
         /**
          * @private
          *
          * @param value
          */
-        private setPlayTimes(value);
+        private setPlayTimes;
         /**
          * @private
          *
          * @param value
          */
-        private setIsStopped(value);
-        private getActionAt(frame);
+        private setIsStopped;
+        private getActionAt;
         addFrameAction(frame: number, action: Function, thisObject?: any): void;
         removeFrameAction(frame: number, action: Function, thisObject?: any): void;
         removeFrameActions(frame?: number): void;
@@ -639,7 +640,7 @@ declare module egretx {
 declare module egretx {
     enum AudioToggleState {
         OFF = 0,
-        ON = 1,
+        ON = 1
     }
     /**
      * 音频频道
@@ -679,7 +680,7 @@ declare module egretx {
         pause(): void;
         resume(): void;
         stop(): void;
-        private releaseAudio(audio);
+        private releaseAudio;
     }
 }
 /*************************************************
@@ -728,7 +729,7 @@ declare module egretx {
 declare module egretx {
     enum AudioChannelType {
         BACKGORUND = 0,
-        EFFECT = 1,
+        EFFECT = 1
     }
 }
 /*************************************************
@@ -750,7 +751,7 @@ declare module egretx {
         protected soundChannel: egret.SoundChannel;
         private playDeferred;
         play(key: string, startTime?: number, playTimes?: number): Promise<void>;
-        private _play(position);
+        private _play;
         protected onSoundComplete(): void;
         position: number;
         private $isPaused;
@@ -837,7 +838,7 @@ declare module egretx {
         fetch(key: string, armatureName: string, texture?: string): Armature;
         recycle(armature: Armature): void;
         release(key: string): void;
-        private _release(id);
+        private _release;
         releases(): void;
         addClock(armture: Armature): void;
         removeClock(armture: Armature): void;
@@ -856,7 +857,7 @@ declare module egretx {
     class Armature extends xgame.XObject implements xgame.IPoolable {
         key: string;
         armatureName: string;
-        texture: string;
+        texture?: string;
         constructor(key: string, armatureName: string, texture?: string);
         readonly id: string;
         setParent(parent: egret.DisplayObjectContainer): void;
@@ -892,6 +893,390 @@ declare module egretx {
 declare module egretx {
     let IDragonBonesManagerInternal: symbol;
     interface IDragonBonesManagerInternal {
+        initialize(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-08
+*************************************************/
+declare module egretx {
+    class GuideManager extends xgame.Singleton implements IGuideManager, IGuideManagerInternal {
+        guideHelper: IGuideHelper;
+        readonly tasks: xgame.Dictionary<number, GuideTask>;
+        private disposableGroup;
+        private values;
+        private completedIDList;
+        constructor();
+        /**
+         * 初始化
+         */
+        initialize(): void;
+        isCompleted(id: number): boolean;
+        /**
+         * 获取引导任务
+         * @param id
+         */
+        getTask(id: number): GuideTask;
+        /**
+         * 获取引导步骤
+         * @param id
+         * @param index
+         * @returns
+         */
+        getStep(id: number, index: number): GuideStep;
+        /**
+         * 添加引导任务
+         * @param task
+         * @returns
+         */
+        addTask(task: GuideTask): GuideTask;
+        /**
+         * 清除所有注入数据
+         * @param taskID 如果提供了taskID，则只清除该taskID的数据
+         */
+        clearValues(taskID?: number): void;
+        /**
+         * 注入或移除引导数据
+         * @param key
+         * @param value
+         * @param taskID
+         */
+        injectValue<T extends keyof IGuideInjectValue>(key: T, value: IGuideInjectValue[T], taskID?: number): void;
+        /**
+         * 移除注入数据
+         * @param key
+         * @param taskID
+         */
+        removeValue<T extends keyof IGuideInjectValue>(key: T, taskID?: number): void;
+        /**
+         * 获取管理器注入的数据
+         * @param key
+         * @param defaultValue
+         * @param taskID
+         */
+        retrieveValue<T extends keyof IGuideInjectValue>(key: T, defaultValue?: IGuideInjectValue[T], taskID?: number): IGuideInjectValue[T];
+        private isFirstClean;
+        /**
+         * 帧驱动
+         */
+        private advanceTime;
+        private $activityTask;
+        readonly activityTask: GuideTask;
+        setActivityTask(value: GuideTask): void;
+        private $isStarted;
+        readonly isStarted: boolean;
+        /**
+         * 开始引导流程
+         */
+        start(): void;
+        private $isPaused;
+        readonly isPaused: boolean;
+        /**
+         * 暂停，只在当前空闲状态生效
+         * @returns
+         */
+        pause(): void;
+        /**
+         * 恢复，只在当前空闲状态生效
+         * @returns
+         */
+        resume(): void;
+        /**
+         * 强制取消当前引导任务，如果成功，将暂停引导流程
+         */
+        cancelActiveTask(): boolean;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-08
+*************************************************/
+declare module egretx {
+    enum GuideStepState {
+        Ready = 0,
+        Running = 1,
+        Completed = 2
+    }
+    class GuideStep extends xgame.XObject implements xgame.IDisposable {
+        parent: GuideTask;
+        index: number;
+        params: IGuideStepParams;
+        checkBegin: () => boolean;
+        checkComplete: () => boolean;
+        /**
+         * @param parent 所属引导任务
+         * @param index 第几步
+         */
+        constructor(parent: GuideTask, index: number, params: IGuideStepParams);
+        readonly taskID: number;
+        readonly target: keyof IGuideInjectValue;
+        readonly tips: string;
+        private $state;
+        readonly state: GuideStepState;
+        /**
+         * 设置状态
+         * @param value
+         */
+        setState(value: GuideStepState): void;
+        /**
+         * 状态重置
+         */
+        reset(): void;
+        /**
+         * 更新，只要引导未完成，都会调用此方法
+         */
+        advanceTime(): void;
+        /**
+         * 释放
+         */
+        dispose(): void;
+        /**
+         * 当步骤开始时
+         */
+        onBegin(): void;
+        /**
+         * 当步骤完成时
+         */
+        onComplete(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-08
+*************************************************/
+declare module egretx {
+    enum GuideTaskState {
+        Ready = 0,
+        Running = 1,
+        Completed = 2
+    }
+    enum GuideTaskType {
+        Weak = 0,
+        Force = 1
+    }
+    interface IGuideStepParams {
+        target: keyof IGuideInjectValue;
+        checkBegin: () => boolean;
+        checkComplete: () => boolean;
+        tips?: string;
+    }
+    class GuideTask extends xgame.XObject implements xgame.IDisposable {
+        ID: number;
+        taskType: GuideTaskType;
+        frontID?: number;
+        private values;
+        readonly steps: xgame.Dictionary<number, GuideStep>;
+        /**
+         * 构造函数
+         * @param ID 任务id
+         * @param taskType 引导类型
+         * @param frontID 前置引导ID，如果设置刚需要等待前置引导完成才能开始
+         */
+        constructor(ID: number, taskType?: GuideTaskType, frontID?: number);
+        getStep(index: number): GuideStep;
+        addStep(step: GuideStep): void;
+        addStep(params: IGuideStepParams): void;
+        /**
+         * 当前激活的引导步骤
+         */
+        private $activeIndex;
+        readonly activeIndex: number;
+        setActiveIndex(value: number): void;
+        /**
+         * 当任务被添加到队列时
+         */
+        onInit(): void;
+        /**
+         * 检查引导任务是不是已经完成需要移除
+         * @returns
+         */
+        checkRemoveWithCompleted(): boolean;
+        /**
+         * 如果引导未开始，检查是否可以开始引导
+         * @returns
+         */
+        checkBegin(): boolean;
+        /**
+         * 当引导开始时调用
+         */
+        onBegin(): void;
+        /**
+         * 如果引导进行中，检查引导是否完成了
+         * @returns
+         */
+        checkComplete(): boolean;
+        /**
+         * 当引导结束时调用
+         */
+        onComplete(): void;
+        /**
+         * 当被强制取消时
+         */
+        onCancel(): void;
+        /**
+         * 状态重置
+         */
+        reset(): void;
+        /**
+         * 更新
+         */
+        advanceTime(): void;
+        /**
+         * 释放
+         */
+        dispose(): void;
+        private $state;
+        readonly state: GuideTaskState;
+        /**
+         * 设置状态
+         * @param value
+         */
+        setState(value: GuideTaskState): void;
+        /**
+         * 清除所有注入数据
+         */
+        clearValues(): void;
+        /**
+         * 注入或移除引导数据
+         * @param key
+         * @param value
+         * @param taskID
+         */
+        injectValue<T extends keyof IGuideInjectValue>(key: T, value: IGuideInjectValue[T]): void;
+        removeValue<T extends keyof IGuideInjectValue>(key: T): void;
+        /**
+         * 获取管理器注入的数据
+         * @param key
+         * @param defaultValue
+         * @param taskID
+         */
+        retrieveValue<T extends keyof IGuideInjectValue>(key: T, defaultValue?: IGuideInjectValue[T]): IGuideInjectValue[T];
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-08
+*************************************************/
+declare module egretx {
+    interface IGuideHelper {
+        /**
+         * 开始引导
+         * @param taskID
+         * @param index 步骤index
+         */
+        beginGuide(taskID: number, index?: number): void;
+        /**
+         * 结束引导
+         * @param taskID
+         * @param index 步骤index
+         */
+        endGuide(taskID: number, index?: number): void;
+        /**
+         * 强制取消引导
+         * @param taskID
+         */
+        cancelGuide(taskID: number): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-08
+*************************************************/
+declare module egretx {
+    interface IGuideInjectValue {
+        alert_button_0: eui.Button;
+        alert_button_1: eui.Button;
+        alert_button_2: eui.Button;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-08
+*************************************************/
+declare module egretx {
+    let IGuideManager: symbol;
+    interface IGuideManager extends xgame.IXObject {
+        guideHelper: IGuideHelper;
+        readonly isStarted: boolean;
+        readonly isPaused: boolean;
+        readonly activityTask: GuideTask;
+        /**
+         * 获取引导任务
+         * @param id
+         */
+        getTask(id: number): GuideTask;
+        /**
+         * 获取引导步骤
+         * @param id
+         * @param index
+         * @returns
+         */
+        getStep(id: number, index: number): GuideStep;
+        /**
+         * 添加引导任务
+         * @param task
+         */
+        addTask(task: GuideTask): GuideTask;
+        /**
+         * 开始引导流程
+         */
+        start(): void;
+        /**
+         * 清除所有注入数据
+         * @param taskID 如果提供了taskID，则只清除该taskID的数据
+         */
+        clearValues(taskID?: number): void;
+        /**
+         * 注入或移除引导数据
+         * @param key
+         * @param value
+         * @param taskID
+         */
+        injectValue<T extends keyof IGuideInjectValue>(key: T, value: IGuideInjectValue[T], taskID?: number): void;
+        /**
+         * 获取管理器注入的数据
+         * @param key
+         * @param defaultValue
+         * @param taskID
+         */
+        /**
+         * 移除注入数据
+         * @param key
+         * @param taskID
+         */
+        removeValue<T extends keyof IGuideInjectValue>(key: T, taskID?: number): void;
+        retrieveValue<T extends keyof IGuideInjectValue>(key: T, defaultValue?: IGuideInjectValue[T], taskID?: number): IGuideInjectValue[T];
+        /**
+         * 暂停，只在当前空闲状态生效
+         * @returns
+         */
+        pause(): void;
+        /**
+         * 恢复，只在当前空闲状态生效
+         * @returns
+         */
+        resume(): void;
+        /**
+         * 强制取消当前引导任务，如果成功，将暂停引导流程
+         */
+        cancelActiveTask(): boolean;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-08
+*************************************************/
+declare module egretx {
+    let IGuideManagerInternal: symbol;
+    interface IGuideManagerInternal {
         initialize(): void;
     }
 }
@@ -979,8 +1364,8 @@ declare module egretx {
 *************************************************/
 declare module egretx {
     class HttpRequest extends xgame.XObject implements xgame.IPoolable {
-        uri: string;
-        method: string;
+        uri?: string;
+        method?: string;
         reconnectTimes: number;
         protected headers: xgame.Dictionary<string, string>;
         protected values: xgame.Dictionary<string, string | number>;
@@ -1005,12 +1390,12 @@ declare module egretx {
     enum SocketState {
         Closed = 0,
         Connecting = 1,
-        Connected = 2,
+        Connected = 2
     }
     enum SocketCloseCode {
         Close = 0,
         IOError = 1,
-        Failed = 2,
+        Failed = 2
     }
     /**
      * 网络连接实例的实现类
@@ -1021,7 +1406,7 @@ declare module egretx {
         socketHelper: ISocketHelper;
         private uri;
         private guidCount;
-        private generateGUID();
+        private generateGUID;
         private isInited;
         private happendConnected;
         private isReconnect;
@@ -1033,35 +1418,35 @@ declare module egretx {
         private sendTimeoutStamp;
         private lastestRecvStamp;
         private checkHeartBeat;
-        private onAdvanceTime();
-        private _sendPacket(packet);
+        private onAdvanceTime;
+        private _sendPacket;
         private current;
         private sendQueues;
         sendPacket(packet: IPacket): void;
         setURI(host: string, port: number, wss?: boolean): void;
         setURI(uri: string): void;
         private socket;
-        private init();
+        private init;
         private callback_onConnected;
         onConnected(): xgame.Signal0;
-        private onConnectHandler(event);
-        private sendLoginPacket();
+        private onConnectHandler;
+        private sendLoginPacket;
         private callback_onKickOut;
         onKickOut(): xgame.Signal0;
-        private onReceiveHandler(event);
+        private onReceiveHandler;
         private callback_onClosed;
         onClosed(): xgame.Signal1<SocketCloseCode>;
         private reconnectTimerID;
-        private onCloseHandler(event);
-        private onIOErrorHandler(event);
+        private onCloseHandler;
+        private onIOErrorHandler;
         private callback_onConnecting;
         onConnecting(): xgame.Signal1<number>;
         private retryCount;
         connect(): void;
-        private _connect();
-        private cleanQueues(revc?);
+        private _connect;
+        private cleanQueues;
         close(): void;
-        private _close();
+        private _close;
         private callback_onShutdown;
         onShutdown(): xgame.Signal0;
         shutdown(): void;
@@ -1187,7 +1572,7 @@ declare module egretx {
     enum ResourceType {
         UI = "UI",
         MovieClip = "MovieClip",
-        DragonBones = "DragonBones",
+        DragonBones = "DragonBones"
     }
 }
 /*************************************************
@@ -1364,7 +1749,7 @@ declare module egretx {
         constructor(main: egret.DisplayObjectContainer);
         dispose(): void;
         initialize(): void;
-        private onLeaveStage(event);
+        private onLeaveStage;
         removeTouchEvents(target: egret.DisplayObject | number): void;
         addTouchBegin(target: egret.DisplayObject, listener: (event: egret.TouchEvent) => void, thisObject?: any, scale?: boolean): void;
         removeTouchBegin(target: egret.DisplayObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
@@ -1488,11 +1873,11 @@ declare module egretx {
 *************************************************/
 declare module egretx {
     class TouchDisposableGroup extends xgame.XObject implements xgame.IDisposable {
-        private displayObject;
+        private displayObject?;
         private touches;
         manager: TouchManager;
         constructor(displayObject?: egret.DisplayObject);
-        private onRemovedFromStage();
+        private onRemovedFromStage;
         dispose(): void;
         addTouchBegin(target: egret.DisplayObject, listener: (event: egret.TouchEvent) => void, thisObject?: any, scale?: boolean): void;
         removeTouchBegin(target: egret.DisplayObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
@@ -1535,7 +1920,8 @@ declare module egretx {
         readonly uiMap: xgame.Dictionary<string, xgame.TClass<UIPage>>;
         readonly uiLayers: xgame.Dictionary<number, UILayerManager>;
         readonly root: eui.UILayer;
-        private entityManager;
+        private $entityManager;
+        readonly entityManager: UIEntityManager;
         stage: egret.Stage;
         readonly onSceneChanged: xgame.Signal2<IUIEntity, IUIEntity>;
         readonly onUIOpened: xgame.Signal1<IUIEntity>;
@@ -1552,7 +1938,7 @@ declare module egretx {
         clearScene(): void;
         closeUI(uiName: string): void;
         closeUI(entity: UIEntity): void;
-        private _closeUI(entity);
+        private _closeUI;
         private $currentScene;
         readonly currentScene: IUIEntity;
         replaceScene(uiName: string, ...args: any[]): Promise<IUIEntity>;
@@ -1565,25 +1951,25 @@ declare module egretx {
         openUIWithRoot(uiClass: xgame.TClass<UIPage>, uiRoot: egret.DisplayObjectContainer, ...args: any[]): Promise<IUIEntity>;
         openPopup(uiName: string, hud: egret.DisplayObject, ...args: any[]): Promise<IUIEntity>;
         openPopup(uiClass: xgame.TClass<UIPage>, hud: egret.DisplayObject, ...args: any[]): Promise<IUIEntity>;
-        private startPipelines(options);
+        private startPipelines;
         /**
          * 检查UIPage是否存在或可以多开
          * @param options
          * @returns
          */
-        private checkIsOpened(options);
+        private checkIsOpened;
         /**
          * 如果没有存在就创建UIPage
          * @param options
          * @returns
          */
-        private createUIPage(options);
+        private createUIPage;
         /**
          * 如果UIPage创建成功就打开并传递参数
          * @param options
          * @returns
          */
-        private openUIPage(options);
+        private openUIPage;
     }
 }
 /*************************************************
@@ -1678,7 +2064,7 @@ declare module egretx {
         TOP = 1,
         BOTTOM = 2,
         LEFT = 3,
-        RIGHT = 4,
+        RIGHT = 4
     }
 }
 /*************************************************
@@ -1692,7 +2078,7 @@ declare module egretx {
         TOP = 1,
         BOTTOM = 2,
         LEFT = 3,
-        RIGHT = 4,
+        RIGHT = 4
     }
 }
 /*************************************************
@@ -1703,9 +2089,15 @@ declare module egretx {
 declare module egretx {
     class UIPage extends UIComponent {
         skinPath: string;
+        uiManager: egretx.IUIManager;
+        guideManager: egretx.IGuideManager;
+        animationManager: egretx.IAnimationManager;
+        audioManager: egretx.IAudioManager;
         flags: number;
         entity: IUIEntity;
         constructor(skinPath?: string);
+        private guideValues;
+        injectGuideValue<T extends keyof IGuideInjectValue>(key: T, value: IGuideInjectValue[T], taskID?: number): void;
         readonly onComplete: xgame.Signal0;
         private $isLoaded;
         readonly isLoaded: boolean;
@@ -1713,7 +2105,7 @@ declare module egretx {
         readonly isLoading: boolean;
         private deferred;
         load(): Promise<void>;
-        private doComplete();
+        private doComplete;
         protected $maskAlpha: number;
         readonly maskAlpha: number;
         protected $maskColor: number;
@@ -1747,7 +2139,7 @@ declare module egretx {
         closeByMask = 16,
         isPopupMenu = 32,
         isPlugin = 64,
-        Scene = 128,
+        Scene = 128
     }
 }
 /*************************************************
@@ -1787,12 +2179,12 @@ declare module egretx {
         Layer_7_UIFrame = 7,
         Layer_8_Window = 8,
         Layer_9 = 9,
-        Layer_10_Tips = 10,
-        Layer_11_Toast = 11,
-        Layer_12_Loading = 12,
-        Layer_13 = 13,
+        Layer_10_Popup = 10,
+        Layer_11_Guide = 11,
+        Layer_12_Toast = 12,
+        Layer_13_Loading = 13,
         Layer_14 = 14,
-        Layer_15_Top = 15,
+        Layer_15_Top = 15
     }
 }
 /*************************************************
@@ -1809,9 +2201,9 @@ declare module egretx {
         constructor(...views: egret.DisplayObject[]);
         addWatcher(view: egret.DisplayObject): void;
         removeWatcher(view: egret.DisplayObject): void;
-        private onWatcher(value);
+        private onWatcher;
         private isDispatching;
-        private lateDispatch();
+        private lateDispatch;
         onChanged(): xgame.Signal0;
         dispose(): void;
     }
@@ -1871,7 +2263,7 @@ declare module egretx {
         mask: eui.Rect;
         groupName: string;
         createMask(color: number, alpha: number, closeByMask: number): void;
-        private onMaskClose();
+        private onMaskClose;
         onSceneChanging(): void;
         onClose(): void;
         closePage(): void;
@@ -1960,9 +2352,9 @@ declare module egretx {
         private textures;
         constructor();
         gc(force?: boolean): void;
-        private destroyRes(key);
-        private onDisplayListChanged(hashCode);
-        private onDisplayListDisposed(hashCode);
+        private destroyRes;
+        private onDisplayListChanged;
+        private onDisplayListDisposed;
         register(key: string, texture: egret.Texture): void;
     }
 }
@@ -2002,7 +2394,7 @@ declare module egretx {
         onClose(): void;
         protected getButton(index: number): eui.Button;
         onOpen(): void;
-        private onButtonClick(event);
+        private onButtonClick;
     }
 }
 /*************************************************
@@ -2114,7 +2506,7 @@ declare module egretx {
         protected items: DropdownList[];
         protected getItemAt(index: number): DropdownList;
         protected indexOf(dropdown: DropdownList): number;
-        private onSelectChangeHandler(selectedIndex, value, dropdown);
+        private onSelectChangeHandler;
         private pools;
     }
 }
@@ -2179,7 +2571,7 @@ declare module egretx {
         fixedUIDirection(direction: UIDirection): void;
         onClose(): void;
         private selectedItem;
-        private onItemClickHandler(event);
+        private onItemClickHandler;
         onOpen(): void;
         protected updateArrow(direction: UIDirection): void;
     }
@@ -2202,7 +2594,7 @@ declare module egretx {
     enum TipsState {
         FadeIn = 1,
         Stay = 2,
-        FadeOut = 3,
+        FadeOut = 3
     }
     class TipsView extends eui.Component implements ITipsView {
         fromPoolHashCode: number;
@@ -2231,8 +2623,8 @@ declare module egretx {
         constructor();
         protected waitQueues: string[];
         append(message: string): void;
-        private play(message);
-        private endView(view);
+        private play;
+        private endView;
         clear(): void;
         initialize(): void;
     }
@@ -2333,7 +2725,7 @@ declare module egretx {
         TOP_LEFT = 5,
         TOP_RIGHT = 6,
         BOTTOM_LEFT = 7,
-        BOTTOM_RIGHT = 8,
+        BOTTOM_RIGHT = 8
     }
 }
 /*************************************************

@@ -151,7 +151,7 @@ module egretx {
             this.$container.touchThrough = true;
             this.$container.horizontalCenter = 0;
             this.$container.verticalCenter = 0;
-            let parent = xgame.that.getService<egretx.IUIManager>(egretx.IUIManager).getLayerManager(egretx.UILayerID.Layer_11_Toast);
+            let parent = xgame.that.getService<egretx.IUIManager>(egretx.IUIManager).getLayerManager(egretx.UILayerID.Layer_12_Toast);
             parent.addChild(this.$container);
         }
     }

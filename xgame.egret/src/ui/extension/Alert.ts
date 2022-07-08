@@ -104,6 +104,15 @@ module egretx {
                 let btn = this.getButton(index);
                 if (btn) {
                     buttons.push(btn);
+                    if (index == 0) {
+                        this.injectGuideValue("alert_button_0", btn);
+                    }
+                    else if (index == 1) {
+                        this.injectGuideValue("alert_button_1", btn);
+                    }
+                    else if (index == 2) {
+                        this.injectGuideValue("alert_button_2", btn);
+                    }
                 }
                 else {
                     break;

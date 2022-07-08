@@ -25,6 +25,7 @@ module egretx {
             game.getService<ISocketManagerInternal>(ISocketManagerInternal).initialize();
             game.getService<IUIManagerInternal>(IUIManagerInternal).initialize();
             game.getService<ITouchManagerInternal>(ITouchManagerInternal).initialize();
+            game.getService<IGuideManagerInternal>(IGuideManagerInternal).initialize();
             return true;
         }
         public onServiceRegister(game: xgame.IXGame): void {
@@ -46,6 +47,8 @@ module egretx {
             console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(UIManager)));
             game.singleton(ITouchManager, TouchManager).withInstance(new TouchManager(this.main)).setAlias(ITouchManagerInternal);
             console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(TouchManager)));
+            game.singleton(IGuideManager, GuideManager).withInstance(GuideManager.Instance()).setAlias(IGuideManagerInternal);
+            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(GuideManager)));
         }
     }
 }

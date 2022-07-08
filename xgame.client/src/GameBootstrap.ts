@@ -14,6 +14,8 @@ module ro {
             new LoginModule().onRegister(game);
             new MainModule().onRegister(game);
             new NetModule().onRegister(game);
+
+            new GuideModule().onRegister(game);
         }
 
         public onStart(game: xgame.IXGame): void {

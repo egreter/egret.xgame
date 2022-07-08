@@ -6,6 +6,7 @@
 module egretx {
     export let IUIManager = Symbol.for("IUIManager");
     export interface IUIManager extends xgame.IXObject {
+        readonly entityManager: UIEntityManager
         readonly stage: egret.Stage;
         readonly RES: UIResManager;
         readonly currentScene: IUIEntity;

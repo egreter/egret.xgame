@@ -225,6 +225,16 @@
 			"url": "assets/dragonbones/dragon_boy_tex.json",
 			"type": "json",
 			"name": "dragon_boy_tex_json"
+		},
+		{
+			"url": "assets/guide_arrow.png",
+			"type": "image",
+			"name": "guide_arrow_png"
+		},
+		{
+			"url": "assets/guide_frame.png",
+			"type": "image",
+			"name": "guide_frame_png"
 		}
 	]
 }

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<e:Skin class="skins.GuideArrowSkin"
+	 width="300"
+	height="150" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Group id="g_tips" left="0" right="0" top="0" bottom="55" visible="true">
+		<e:Image source="guide_frame_png" scale9Grid="28,26,27,27" left="0" right="0" top="0" bottom="0"/>
+		<e:Label id="lab_tips" text="Label" size="20" left="20" top="20" verticalAlign="middle" textAlign="center"/>
+	</e:Group>
+	<e:Group id="g_arrow" width="55" height="40" anchorOffsetX="55" anchorOffsetY="20" horizontalCenter="0" bottom="0" rotation="90" locked="true">
+		<e:Image id="img_arrow" source="guide_arrow_png" x="0" y="0" locked="true"/>
+	</e:Group>
+</e:Skin>

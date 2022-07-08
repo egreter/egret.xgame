@@ -11,7 +11,10 @@ module egretx {
         public readonly uiMap = new xgame.Dictionary<string, xgame.TClass<UIPage>>();
         public readonly uiLayers = new xgame.Dictionary<number, UILayerManager>();
         public readonly root = new eui.UILayer();
-        private entityManager: UIEntityManager;
+        private $entityManager: UIEntityManager;
+        public get entityManager(): UIEntityManager {
+            return this.$entityManager;
+        }
         public stage: egret.Stage;
         public readonly onSceneChanged = new xgame.Signal2<IUIEntity, IUIEntity>();
         public readonly onUIOpened = new xgame.Signal1<IUIEntity>();
@@ -22,7 +25,7 @@ module egretx {
             this.stage = main.stage;
         }
         public initialize(): void {
-            this.entityManager = new UIEntityManager(this);
+            this.$entityManager = new UIEntityManager(this);
             this.pipelines.push(this.checkIsOpened.bind(this));
             this.pipelines.push(this.createUIPage.bind(this));
             this.pipelines.push(this.openUIPage.bind(this));
@@ -66,7 +69,7 @@ module egretx {
             if (typeof (value) == "string") {
                 let uiName: string = value;
                 let entities: UIEntity[] = [];
-                if (this.entityManager.tryGetEntities(uiName, entities)) {
+                if (this.$entityManager.tryGetEntities(uiName, entities)) {
                     for (let entity of entities) {
                         this._closeUI(entity);
                     }
@@ -82,7 +85,7 @@ module egretx {
             }
             let layerManager = this.uiLayers.get(entity.uiPage.layerID);
             layerManager.removeEntity(entity);
-            this.entityManager.removeEntity(entity);
+            this.$entityManager.removeEntity(entity);
             let uiPage = entity.uiPage;
             await uiPage.doFadeOut();
             if (uiPage.parent) {
@@ -92,7 +95,7 @@ module egretx {
                 entity.mask.parent.removeChild(entity.mask);
             }
             this.onUIClosed.dispatch(entity);
-            this.entityManager.checkEntities();
+            this.$entityManager.checkEntities();
             entity.onClose();
             entity.dispose();
             entity = undefined;
@@ -232,7 +235,7 @@ module egretx {
          */
         private async checkIsOpened(options: UIOptions): Promise<boolean> {
             let results: UIEntity[] = [];
-            if (this.entityManager.tryGetEntities(options.uiClass, results)) {
+            if (this.$entityManager.tryGetEntities(options.uiClass, results)) {
                 let entity = results[0];
                 if (entity.uiPage.flags & UIFlags.allowMultiple) {
 
@@ -259,7 +262,7 @@ module egretx {
                 xgame.injectInstance(uiPage);
                 uiPage.entity = entity;
                 entity.uiPage = uiPage;
-                this.entityManager.addEntity(entity);
+                this.$entityManager.addEntity(entity);
                 uiPage.onInit();
                 uiPage.visible = false;
                 if (options.hud) {
@@ -323,7 +326,7 @@ module egretx {
                     layerManager.orderToFront(entity);
                 }
             }
-            this.entityManager.checkEntities();
+            this.$entityManager.checkEntities();
             return true;
         }
         /**

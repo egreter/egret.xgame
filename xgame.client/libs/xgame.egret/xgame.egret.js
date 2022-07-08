@@ -3,9 +3,12 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
 window.__extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -27,8 +30,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -279,10 +282,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./ui/interfaces/IUIManagerInternal.ts" />
 
 (function (egretx) {
-    var EgretProvider = (function (_super) {
-        __extends(EgretProvider, _super);
+    var EgretProvider = /** @class */ (function (_super_1) {
+        __extends(EgretProvider, _super_1);
         function EgretProvider(main) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.main = main;
             _this.priority = 100;
             return _this;
@@ -306,6 +309,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                     game.getService(egretx.ISocketManagerInternal).initialize();
                     game.getService(egretx.IUIManagerInternal).initialize();
                     game.getService(egretx.ITouchManagerInternal).initialize();
+                    game.getService(egretx.IGuideManagerInternal).initialize();
                     return [2 /*return*/, true];
                 });
             });
@@ -329,6 +333,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(egretx.UIManager)));
             game.singleton(egretx.ITouchManager, egretx.TouchManager).withInstance(new egretx.TouchManager(this.main)).setAlias(egretx.ITouchManagerInternal);
             console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(egretx.TouchManager)));
+            game.singleton(egretx.IGuideManager, egretx.GuideManager).withInstance(egretx.GuideManager.Instance()).setAlias(egretx.IGuideManagerInternal);
+            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(egretx.GuideManager)));
         };
         return EgretProvider;
     }(xgame.XObject));
@@ -345,10 +351,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 帧动画管理器
      */
-    var AnimationManager = (function (_super) {
-        __extends(AnimationManager, _super);
+    var AnimationManager = /** @class */ (function (_super_1) {
+        __extends(AnimationManager, _super_1);
         function AnimationManager() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             //当前正在播放的动画对象集
             _this.playingClips = new xgame.Dictionary();
             _this.pools = new xgame.PoolGroup("AnimationClip");
@@ -460,11 +466,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 帧动画剪辑
      */
-    var AnimationClip = (function (_super) {
-        __extends(AnimationClip, _super);
+    var AnimationClip = /** @class */ (function (_super_1) {
+        __extends(AnimationClip, _super_1);
         function AnimationClip(key, movieClipname, actionName) {
             if (actionName === void 0) { actionName = "mc"; }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.frameActions = [];
             _this.$timeline = egretx.Timeline.MAIN;
             _this.fromPoolHashCode = 0;
@@ -738,7 +744,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var FrameAction = (function () {
+    var FrameAction = /** @class */ (function () {
         function FrameAction(frame) {
             this.name = "FrameAction";
             this.frame = frame;
@@ -829,7 +835,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var FrameActionItem = (function () {
+    var FrameActionItem = /** @class */ (function () {
         function FrameActionItem(action, thisObject, frame) {
             this.action = action;
             this.thisObject = thisObject;
@@ -855,8 +861,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 从egret.MoveClip修改而来
      */
-    var MovieClip = (function (_super) {
-        __extends(MovieClip, _super);
+    var MovieClip = /** @class */ (function (_super_1) {
+        __extends(MovieClip, _super_1);
         //Construct Function
         /**
          * 创建新的 MovieClip 实例。创建 MovieClip 之后，调用舞台上的显示对象容器的addElement方法。
@@ -865,7 +871,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
          * @platform Web,Native
          */
         function MovieClip(movieClipData, invokeActions) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.$actions = new xgame.Dictionary();
             _this.$timeline = egretx.Timeline.MAIN;
             //Render Property
@@ -1115,7 +1121,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
          * @param nestLevel
          */
         MovieClip.prototype.$onAddToStage = function (stage, nestLevel) {
-            _super.prototype.$onAddToStage.call(this, stage, nestLevel);
+            _super_1.prototype.$onAddToStage.call(this, stage, nestLevel);
             if (this.$isPlaying && this.$totalFrames > 1) {
                 this.setIsStopped(false);
             }
@@ -1126,7 +1132,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
          */
         MovieClip.prototype.$onRemoveFromStage = function () {
             this.setIsStopped(true);
-            _super.prototype.$onRemoveFromStage.call(this);
+            _super_1.prototype.$onRemoveFromStage.call(this);
         };
         //Data Function
         /**
@@ -1675,10 +1681,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 音频管理器
      */
-    var AudioManager = (function (_super) {
-        __extends(AudioManager, _super);
+    var AudioManager = /** @class */ (function (_super_1) {
+        __extends(AudioManager, _super_1);
         function AudioManager() {
-            return _super.call(this) || this;
+            return _super_1.call(this) || this;
         }
         AudioManager.prototype.initialize = function () {
             this.background = new egretx.MusicAudioChannel();
@@ -1705,10 +1711,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 音频频道
      */
-    var AudioChannel = (function (_super) {
-        __extends(AudioChannel, _super);
+    var AudioChannel = /** @class */ (function (_super_1) {
+        __extends(AudioChannel, _super_1);
         function AudioChannel(channelType) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.channelType = channelType;
             _this.callback_onPlayCompleted = new xgame.Signal1();
             _this.$toggleState = AudioToggleState.ON;
@@ -1772,10 +1778,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./core/AudioChannel.ts" />
 
 (function (egretx) {
-    var EffectAudioChannel = (function (_super) {
-        __extends(EffectAudioChannel, _super);
+    var EffectAudioChannel = /** @class */ (function (_super_1) {
+        __extends(EffectAudioChannel, _super_1);
         function EffectAudioChannel() {
-            var _this = _super.call(this, egretx.AudioChannelType.EFFECT) || this;
+            var _this = _super_1.call(this, egretx.AudioChannelType.EFFECT) || this;
             _this.freeAudioes = [];
             _this.playAudioes = [];
             for (var i = 0; i < EffectAudioChannel.instanceMax; i++) {
@@ -1842,10 +1848,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./core/AudioChannel.ts" />
 
 (function (egretx) {
-    var MusicAudioChannel = (function (_super) {
-        __extends(MusicAudioChannel, _super);
+    var MusicAudioChannel = /** @class */ (function (_super_1) {
+        __extends(MusicAudioChannel, _super_1);
         function MusicAudioChannel() {
-            var _this = _super.call(this, egretx.AudioChannelType.BACKGORUND) || this;
+            var _this = _super_1.call(this, egretx.AudioChannelType.BACKGORUND) || this;
             if (egretx.AudioManager.Instance().createAudioInstance) {
                 _this.main = egretx.AudioManager.Instance().createAudioInstance("music");
             }
@@ -1880,11 +1886,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var Audio = (function (_super) {
-        __extends(Audio, _super);
+    var Audio = /** @class */ (function (_super_1) {
+        __extends(Audio, _super_1);
         function Audio(type) {
             if (type === void 0) { type = "EFFECT"; }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.type = type;
             _this.$volume = 0.5;
             return _this;
@@ -1950,10 +1956,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 默认的音频播放器
      */
-    var WebAudio = (function (_super) {
-        __extends(WebAudio, _super);
+    var WebAudio = /** @class */ (function (_super_1) {
+        __extends(WebAudio, _super_1);
         function WebAudio(type) {
-            var _this = _super.call(this, type) || this;
+            var _this = _super_1.call(this, type) || this;
             _this.position = 0;
             _this.$isPaused = false;
             return _this;
@@ -2128,10 +2134,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 龙骨动画管理器
      */
-    var DragonBonesManager = (function (_super) {
-        __extends(DragonBonesManager, _super);
+    var DragonBonesManager = /** @class */ (function (_super_1) {
+        __extends(DragonBonesManager, _super_1);
         function DragonBonesManager() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.pools = new xgame.PoolGroup("Armature");
             return _this;
         }
@@ -2245,10 +2251,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var Armature = (function (_super) {
-        __extends(Armature, _super);
+    var Armature = /** @class */ (function (_super_1) {
+        __extends(Armature, _super_1);
         function Armature(key, armatureName, texture) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.key = key;
             _this.armatureName = armatureName;
             _this.texture = texture;
@@ -2350,6 +2356,616 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /*************************************************
 /* @author : rontian
 /* @email  : i@ronpad.com
+/* @date   : 2022-07-08
+*************************************************/
+
+(function (egretx) {
+    var GuideManager = /** @class */ (function (_super_1) {
+        __extends(GuideManager, _super_1);
+        function GuideManager() {
+            var _this = _super_1.call(this) || this;
+            //引导任务集
+            _this.tasks = new xgame.Dictionary();
+            //帧调度
+            _this.disposableGroup = new xgame.DisposableGroup();
+            //注入的引导数据
+            _this.values = new xgame.Dictionary();
+            //已完成的引导ID
+            _this.completedIDList = [];
+            _this.isFirstClean = true;
+            _this.$isStarted = false;
+            _this.$isPaused = false;
+            return _this;
+        }
+        /**
+         * 初始化
+         */
+        GuideManager.prototype.initialize = function () {
+            this.disposableGroup.registerUpdate(this.advanceTime, this);
+        };
+        GuideManager.prototype.isCompleted = function (id) {
+            return this.completedIDList.indexOf(id) >= 0;
+        };
+        /**
+         * 获取引导任务
+         * @param id
+         */
+        GuideManager.prototype.getTask = function (id) {
+            return this.tasks.get(id);
+        };
+        /**
+         * 获取引导步骤
+         * @param id
+         * @param index
+         * @returns
+         */
+        GuideManager.prototype.getStep = function (id, index) {
+            if (this.tasks.containsKey(id)) {
+                return this.tasks.get(id).getStep(index);
+            }
+        };
+        /**
+         * 添加引导任务
+         * @param task
+         * @returns
+         */
+        GuideManager.prototype.addTask = function (task) {
+            if (task.ID && !this.tasks.containsKey(task.ID)) {
+                this.tasks.add(task.ID, task);
+                xgame.injectInstance(task);
+                task.onInit();
+            }
+            else {
+                throw new Error("添加引导任务({0})失败".format(task.ID));
+            }
+            return task;
+        };
+        /**
+         * 清除所有注入数据
+         * @param taskID 如果提供了taskID，则只清除该taskID的数据
+         */
+        GuideManager.prototype.clearValues = function (taskID) {
+            if (taskID) {
+                if (this.tasks.containsKey(taskID)) {
+                    this.tasks.get(taskID).clearValues();
+                }
+            }
+            else {
+                this.values.clear();
+            }
+        };
+        /**
+         * 注入或移除引导数据
+         * @param key
+         * @param value
+         * @param taskID
+         */
+        GuideManager.prototype.injectValue = function (key, value, taskID) {
+            if (taskID) {
+                if (this.tasks.containsKey(taskID)) {
+                    this.tasks.get(taskID).injectValue(key, value);
+                }
+            }
+            else {
+                this.values.set(key, value);
+            }
+        };
+        /**
+         * 移除注入数据
+         * @param key
+         * @param taskID
+         */
+        GuideManager.prototype.removeValue = function (key, taskID) {
+            if (taskID) {
+                if (this.tasks.containsKey(taskID)) {
+                    this.tasks.get(taskID).removeValue(key);
+                }
+            }
+            else {
+                this.values.remove(key);
+            }
+        };
+        /**
+         * 获取管理器注入的数据
+         * @param key
+         * @param defaultValue
+         * @param taskID
+         */
+        GuideManager.prototype.retrieveValue = function (key, defaultValue, taskID) {
+            if (taskID) {
+                if (this.tasks.containsKey(taskID)) {
+                    return this.tasks.get(taskID).retrieveValue(key, defaultValue);
+                }
+            }
+            else {
+                if (this.values.containsKey(key)) {
+                    return this.values.get(key);
+                }
+            }
+            return defaultValue;
+        };
+        /**
+         * 帧驱动
+         */
+        GuideManager.prototype.advanceTime = function () {
+            var _this = this;
+            if (!this.isStarted) {
+                return;
+            }
+            if (this.isPaused) {
+                return;
+            }
+            //如果没有首次清理，把已经完成的引导任务从队列中移除掉
+            if (this.isFirstClean) {
+                this.isFirstClean = false;
+                this.tasks.forValues(function (task) {
+                    if (task.checkRemoveWithCompleted()) {
+                        _this.tasks.remove(task.ID);
+                        if (_this.completedIDList.indexOf(task.ID) == -1) {
+                            _this.completedIDList.push(task.ID);
+                        }
+                        task.dispose();
+                    }
+                }, this, true);
+            }
+            //如果当前正在引导中
+            if (this.activityTask) {
+                //如果当前引导任务已经完成，清理并释放
+                if (this.activityTask.checkComplete()) {
+                    this.activityTask.onComplete();
+                    this.tasks.remove(this.activityTask.ID);
+                    if (this.completedIDList.indexOf(this.activityTask.ID) == -1) {
+                        this.completedIDList.push(this.activityTask.ID);
+                    }
+                    this.activityTask.dispose();
+                    this.$activityTask = undefined;
+                }
+                else {
+                    this.activityTask.advanceTime();
+                }
+                return;
+            }
+            //检查是否有引导可以开始
+            this.tasks.forValues(function (task) {
+                //如果有引导能开始，跳出循环
+                if (task.checkBegin()) {
+                    _this.$activityTask = task;
+                    task.onBegin();
+                    return true;
+                }
+            }, this);
+        };
+        Object.defineProperty(GuideManager.prototype, "activityTask", {
+            get: function () {
+                return this.$activityTask;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        GuideManager.prototype.setActivityTask = function (value) {
+            this.$activityTask = value;
+        };
+        Object.defineProperty(GuideManager.prototype, "isStarted", {
+            get: function () {
+                return this.$isStarted;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * 开始引导流程
+         */
+        GuideManager.prototype.start = function () {
+            if (this.isStarted) {
+                return;
+            }
+            this.$isStarted = true;
+        };
+        Object.defineProperty(GuideManager.prototype, "isPaused", {
+            get: function () {
+                return this.$isPaused;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * 暂停，只在当前空闲状态生效
+         * @returns
+         */
+        GuideManager.prototype.pause = function () {
+            if (!this.isStarted) {
+                return;
+            }
+            if (this.activityTask) {
+                return;
+            }
+            if (this.isPaused) {
+                return;
+            }
+            this.$isPaused = true;
+        };
+        /**
+         * 恢复，只在当前空闲状态生效
+         * @returns
+         */
+        GuideManager.prototype.resume = function () {
+            if (!this.isStarted) {
+                return;
+            }
+            if (this.activityTask) {
+                return;
+            }
+            if (!this.isPaused) {
+                return;
+            }
+            this.$isPaused = false;
+        };
+        /**
+         * 强制取消当前引导任务，如果成功，将暂停引导流程
+         */
+        GuideManager.prototype.cancelActiveTask = function () {
+            if (this.isStarted && this.activityTask && this.activityTask.state != egretx.GuideTaskState.Completed) {
+                this.activityTask.onCancel();
+                this.guideHelper.cancelGuide(this.activityTask.ID);
+                this.$activityTask = undefined;
+                this.pause();
+                return true;
+            }
+            return false;
+        };
+        return GuideManager;
+    }(xgame.Singleton));
+    egretx.GuideManager = GuideManager;
+    __reflect(GuideManager.prototype, "egretx.GuideManager", ["egretx.IGuideManager", "xgame.IXObject", "egretx.IGuideManagerInternal"]);
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-08
+*************************************************/
+
+(function (egretx) {
+    var GuideStepState;
+    (function (GuideStepState) {
+        GuideStepState[GuideStepState["Ready"] = 0] = "Ready";
+        GuideStepState[GuideStepState["Running"] = 1] = "Running";
+        GuideStepState[GuideStepState["Completed"] = 2] = "Completed";
+    })(GuideStepState = egretx.GuideStepState || (egretx.GuideStepState = {}));
+    var GuideStep = /** @class */ (function (_super_1) {
+        __extends(GuideStep, _super_1);
+        /**
+         * @param parent 所属引导任务
+         * @param index 第几步
+         */
+        function GuideStep(parent, index, params) {
+            var _this = _super_1.call(this) || this;
+            _this.parent = parent;
+            _this.index = index;
+            _this.params = params;
+            _this.$state = GuideStepState.Ready;
+            return _this;
+        }
+        Object.defineProperty(GuideStep.prototype, "taskID", {
+            get: function () {
+                return this.parent && this.parent.ID;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(GuideStep.prototype, "target", {
+            get: function () {
+                return this.params.target;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(GuideStep.prototype, "tips", {
+            get: function () {
+                return this.params.tips;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(GuideStep.prototype, "state", {
+            get: function () {
+                return this.$state;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * 设置状态
+         * @param value
+         */
+        GuideStep.prototype.setState = function (value) {
+            this.$state = value;
+        };
+        /**
+         * 状态重置
+         */
+        GuideStep.prototype.reset = function () {
+            this.$state = GuideStepState.Ready;
+        };
+        /**
+         * 更新，只要引导未完成，都会调用此方法
+         */
+        GuideStep.prototype.advanceTime = function () {
+        };
+        /**
+         * 释放
+         */
+        GuideStep.prototype.dispose = function () {
+        };
+        /**
+         * 当步骤开始时
+         */
+        GuideStep.prototype.onBegin = function () {
+            egretx.GuideManager.Instance().guideHelper.beginGuide(this.parent.ID, this.index);
+        };
+        /**
+         * 当步骤完成时
+         */
+        GuideStep.prototype.onComplete = function () {
+            egretx.GuideManager.Instance().guideHelper.endGuide(this.parent.ID, this.index);
+        };
+        return GuideStep;
+    }(xgame.XObject));
+    egretx.GuideStep = GuideStep;
+    __reflect(GuideStep.prototype, "egretx.GuideStep", ["xgame.IDisposable", "xgame.IXObject"]);
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-08
+*************************************************/
+
+(function (egretx) {
+    var GuideTaskState;
+    (function (GuideTaskState) {
+        GuideTaskState[GuideTaskState["Ready"] = 0] = "Ready";
+        GuideTaskState[GuideTaskState["Running"] = 1] = "Running";
+        GuideTaskState[GuideTaskState["Completed"] = 2] = "Completed";
+    })(GuideTaskState = egretx.GuideTaskState || (egretx.GuideTaskState = {}));
+    var GuideTaskType;
+    (function (GuideTaskType) {
+        GuideTaskType[GuideTaskType["Weak"] = 0] = "Weak";
+        GuideTaskType[GuideTaskType["Force"] = 1] = "Force";
+    })(GuideTaskType = egretx.GuideTaskType || (egretx.GuideTaskType = {}));
+    var GuideTask = /** @class */ (function (_super_1) {
+        __extends(GuideTask, _super_1);
+        /**
+         * 构造函数
+         * @param ID 任务id
+         * @param taskType 引导类型
+         * @param frontID 前置引导ID，如果设置刚需要等待前置引导完成才能开始
+         */
+        function GuideTask(ID, taskType, frontID) {
+            if (taskType === void 0) { taskType = GuideTaskType.Weak; }
+            var _this = _super_1.call(this) || this;
+            _this.ID = ID;
+            _this.taskType = taskType;
+            _this.frontID = frontID;
+            _this.values = new xgame.Dictionary();
+            _this.steps = new xgame.Dictionary();
+            /**
+             * 当前激活的引导步骤
+             */
+            _this.$activeIndex = -1;
+            _this.$state = GuideTaskState.Ready;
+            return _this;
+        }
+        GuideTask.prototype.getStep = function (index) {
+            return this.steps.get(index);
+        };
+        GuideTask.prototype.addStep = function (step_or_params) {
+            var step;
+            if (step_or_params instanceof egretx.GuideStep) {
+                step = step_or_params;
+                step.index = this.steps.length;
+                step.parent = this;
+            }
+            else {
+                step = new egretx.GuideStep(this, this.steps.length, step_or_params);
+                step.checkBegin = step_or_params.checkBegin;
+                step.checkComplete = step_or_params.checkComplete;
+            }
+            this.steps.add(step.index, step);
+        };
+        Object.defineProperty(GuideTask.prototype, "activeIndex", {
+            get: function () {
+                return this.$activeIndex;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        GuideTask.prototype.setActiveIndex = function (value) {
+            var _this = this;
+            this.$activeIndex = value;
+            //如果是弱引导，重置其他步骤
+            this.steps.forValues(function (step) {
+                if (step.index != value && _this.taskType == GuideTaskType.Weak) {
+                    step.reset();
+                }
+            }, this, true);
+        };
+        /**
+         * 当任务被添加到队列时
+         */
+        GuideTask.prototype.onInit = function () {
+        };
+        /**
+         * 检查引导任务是不是已经完成需要移除
+         * @returns
+         */
+        GuideTask.prototype.checkRemoveWithCompleted = function () {
+            return false;
+        };
+        /**
+         * 如果引导未开始，检查是否可以开始引导
+         * @returns
+         */
+        GuideTask.prototype.checkBegin = function () {
+            if (this.frontID && !egretx.GuideManager.Instance().isCompleted(this.frontID)) {
+                return false;
+            }
+            return true;
+        };
+        /**
+         * 当引导开始时调用
+         */
+        GuideTask.prototype.onBegin = function () {
+            this.$state = GuideTaskState.Running;
+        };
+        /**
+         * 如果引导进行中，检查引导是否完成了
+         * @returns
+         */
+        GuideTask.prototype.checkComplete = function () {
+            //如果最后一个步骤完成，说明整个引导任务完成了
+            if (this.steps.last().value.state == egretx.GuideStepState.Completed) {
+                return true;
+            }
+            return false;
+        };
+        /**
+         * 当引导结束时调用
+         */
+        GuideTask.prototype.onComplete = function () {
+            this.$state = GuideTaskState.Completed;
+        };
+        /**
+         * 当被强制取消时
+         */
+        GuideTask.prototype.onCancel = function () {
+            this.$activeIndex = -1;
+            this.steps.forValues(function (step) {
+                step.reset();
+            }, this);
+        };
+        /**
+         * 状态重置
+         */
+        GuideTask.prototype.reset = function () {
+            this.$state = GuideTaskState.Ready;
+            this.values.clear();
+            this.$activeIndex = -1;
+        };
+        /**
+         * 更新
+         */
+        GuideTask.prototype.advanceTime = function () {
+            var _this = this;
+            if (this.activeIndex >= 0) {
+                var step = this.getStep(this.activeIndex);
+                if (step.state === egretx.GuideStepState.Ready) {
+                    if (step.checkBegin()) {
+                        step.setState(egretx.GuideStepState.Running);
+                        step.onBegin();
+                    }
+                }
+                else if (step.state === egretx.GuideStepState.Running) {
+                    step.advanceTime();
+                    if (step.checkComplete()) {
+                        step.setState(egretx.GuideStepState.Completed);
+                        step.onComplete();
+                        if (step.index < this.steps.length - 1) {
+                            this.$activeIndex++;
+                        }
+                    }
+                }
+            }
+            else {
+                this.steps.forValues(function (step) {
+                    if (_this.activeIndex == -1) {
+                        if (step.checkBegin()) {
+                            step.setState(egretx.GuideStepState.Running);
+                            step.onBegin();
+                            _this.$activeIndex = step.index;
+                            return true;
+                        }
+                    }
+                }, this, true);
+            }
+        };
+        /**
+         * 释放
+         */
+        GuideTask.prototype.dispose = function () {
+            this.steps.clear(function (step) {
+                step.dispose();
+            });
+            this.values.clear();
+        };
+        Object.defineProperty(GuideTask.prototype, "state", {
+            get: function () {
+                return this.$state;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * 设置状态
+         * @param value
+         */
+        GuideTask.prototype.setState = function (value) {
+            this.$state = value;
+        };
+        /**
+         * 清除所有注入数据
+         */
+        GuideTask.prototype.clearValues = function () {
+            this.values.clear();
+        };
+        /**
+         * 注入或移除引导数据
+         * @param key
+         * @param value
+         * @param taskID
+         */
+        GuideTask.prototype.injectValue = function (key, value) {
+            this.values.set(key, value);
+        };
+        GuideTask.prototype.removeValue = function (key) {
+            this.values.remove(key);
+        };
+        /**
+         * 获取管理器注入的数据
+         * @param key
+         * @param defaultValue
+         * @param taskID
+         */
+        GuideTask.prototype.retrieveValue = function (key, defaultValue) {
+            if (this.values.containsKey(key)) {
+                return this.values.get(key);
+            }
+            return defaultValue;
+        };
+        return GuideTask;
+    }(xgame.XObject));
+    egretx.GuideTask = GuideTask;
+    __reflect(GuideTask.prototype, "egretx.GuideTask", ["xgame.IDisposable", "xgame.IXObject"]);
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-08
+*************************************************/
+
+(function (egretx) {
+    egretx.IGuideManager = Symbol.for("IGuideManager");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-08
+*************************************************/
+
+(function (egretx) {
+    egretx.IGuideManagerInternal = Symbol.for("IGuideManagerInternal");
+})(egretx || (egretx = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
 /* @date   : 2022-07-01
 *************************************************/
 
@@ -2365,10 +2981,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./interfaces/IHttpManager.ts" />
 
 (function (egretx) {
-    var HttpManager = (function (_super) {
-        __extends(HttpManager, _super);
+    var HttpManager = /** @class */ (function (_super_1) {
+        __extends(HttpManager, _super_1);
         function HttpManager() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.pools = new xgame.PoolObject(egretx.HttpRequest);
             return _this;
         }
@@ -2438,10 +3054,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./interfaces/ISocketManager.ts" />
 
 (function (egretx) {
-    var SocketManager = (function (_super) {
-        __extends(SocketManager, _super);
+    var SocketManager = /** @class */ (function (_super_1) {
+        __extends(SocketManager, _super_1);
         function SocketManager() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.defaultInstanceName = "main";
             //失败尝试重连次数
             _this.retryMaxTiems = 3;
@@ -2480,10 +3096,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var HttpRequest = (function (_super) {
-        __extends(HttpRequest, _super);
+    var HttpRequest = /** @class */ (function (_super_1) {
+        __extends(HttpRequest, _super_1);
         function HttpRequest(uri, method) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.uri = uri;
             _this.method = method;
             _this.reconnectTimes = 5;
@@ -2610,10 +3226,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 网络连接实例的实现类
      */
-    var SocketInstance = (function (_super) {
-        __extends(SocketInstance, _super);
+    var SocketInstance = /** @class */ (function (_super_1) {
+        __extends(SocketInstance, _super_1);
         function SocketInstance(manager, name, socketHelper) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.manager = manager;
             _this.name = name;
             _this.socketHelper = socketHelper;
@@ -2904,10 +3520,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 资源管理器
      */
-    var ResourceManager = (function (_super) {
-        __extends(ResourceManager, _super);
+    var ResourceManager = /** @class */ (function (_super_1) {
+        __extends(ResourceManager, _super_1);
         function ResourceManager() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.groups = new xgame.Dictionary();
             _this.loadQueues = new xgame.Dictionary();
             return _this;
@@ -2926,8 +3542,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         };
         ResourceManager.prototype.loadResAsync = function (key) {
             return __awaiter(this, void 0, void 0, function () {
-                var _this = this;
                 var loader;
+                var _this = this;
                 return __generator(this, function (_a) {
                     if (!RES.hasRes(key)) {
                         throw new Error("资源配置:{0}找不到".format(key));
@@ -2975,10 +3591,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 资源组
      */
-    var ResourceGroup = (function (_super) {
-        __extends(ResourceGroup, _super);
+    var ResourceGroup = /** @class */ (function (_super_1) {
+        __extends(ResourceGroup, _super_1);
         function ResourceGroup(manager, resourceType) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.manager = manager;
             _this.resourceType = resourceType;
             _this.keys = new xgame.Dictionary();
@@ -3043,10 +3659,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./ResourceGroup.ts" />
 
 (function (egretx) {
-    var DragonBonesResourceGroup = (function (_super) {
-        __extends(DragonBonesResourceGroup, _super);
+    var DragonBonesResourceGroup = /** @class */ (function (_super_1) {
+        __extends(DragonBonesResourceGroup, _super_1);
         function DragonBonesResourceGroup(manager) {
-            return _super.call(this, manager, egretx.ResourceType.DragonBones) || this;
+            return _super_1.call(this, manager, egretx.ResourceType.DragonBones) || this;
         }
         DragonBonesResourceGroup.prototype.load = function (key, skeleton) {
             return __awaiter(this, void 0, void 0, function () {
@@ -3104,10 +3720,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./ResourceGroup.ts" />
 
 (function (egretx) {
-    var MovieClipResourceGroup = (function (_super) {
-        __extends(MovieClipResourceGroup, _super);
+    var MovieClipResourceGroup = /** @class */ (function (_super_1) {
+        __extends(MovieClipResourceGroup, _super_1);
         function MovieClipResourceGroup(manager) {
-            return _super.call(this, manager, egretx.ResourceType.MovieClip) || this;
+            return _super_1.call(this, manager, egretx.ResourceType.MovieClip) || this;
         }
         MovieClipResourceGroup.prototype.load = function (key) {
             return __awaiter(this, void 0, void 0, function () {
@@ -3196,10 +3812,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 时间轴管理器
      */
-    var TimelineManager = (function (_super) {
-        __extends(TimelineManager, _super);
+    var TimelineManager = /** @class */ (function (_super_1) {
+        __extends(TimelineManager, _super_1);
         function TimelineManager() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.timelines = new xgame.Dictionary();
             return _this;
         }
@@ -3231,10 +3847,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var Timeline = (function (_super) {
-        __extends(Timeline, _super);
+    var Timeline = /** @class */ (function (_super_1) {
+        __extends(Timeline, _super_1);
         function Timeline(name) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.name = name;
             _this.animatables = new xgame.Dictionary();
             _this.$timeScale = 1;
@@ -3358,10 +3974,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     egretx.TOUCH_LONG_PRESS_TIME = 300;
     egretx.TOUCH_SCALE_RADIO = 0.96;
     egretx.touchClickLastTime = 0;
-    var TouchManager = (function (_super) {
-        __extends(TouchManager, _super);
+    var TouchManager = /** @class */ (function (_super_1) {
+        __extends(TouchManager, _super_1);
         function TouchManager(main) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.main = main;
             _this.delegates = new xgame.Dictionary();
             _this.stage = main.stage;
@@ -3530,10 +4146,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var LayoutCache = (function (_super) {
-        __extends(LayoutCache, _super);
+    var LayoutCache = /** @class */ (function (_super_1) {
+        __extends(LayoutCache, _super_1);
         function LayoutCache() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
+            var _this = _super_1 !== null && _super_1.apply(this, arguments) || this;
             _this.top = NaN;
             _this.bottom = NaN;
             _this.left = NaN;
@@ -3582,7 +4198,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var TouchBehaviours = (function () {
+    var TouchBehaviours = /** @class */ (function () {
         function TouchBehaviours() {
         }
         TouchBehaviours.prototype.setTouchManager = function (target) {
@@ -3645,11 +4261,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var TouchDelegate = (function (_super) {
-        __extends(TouchDelegate, _super);
+    var TouchDelegate = /** @class */ (function (_super_1) {
+        __extends(TouchDelegate, _super_1);
         function TouchDelegate(target, scale) {
             if (scale === void 0) { scale = false; }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.clickScaleEnable = false;
             _this.longPressTimeDelta = egretx.TOUCH_LONG_PRESS_TIME;
             _this.repeatPressTimeDelta = egretx.TOUCH_LONG_PRESS_TIME;
@@ -3894,10 +4510,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../interfaces/ITouchManager.ts" />
 
 (function (egretx) {
-    var TouchDisposableGroup = (function (_super) {
-        __extends(TouchDisposableGroup, _super);
+    var TouchDisposableGroup = /** @class */ (function (_super_1) {
+        __extends(TouchDisposableGroup, _super_1);
         function TouchDisposableGroup(displayObject) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.displayObject = displayObject;
             _this.touches = new xgame.List();
             xgame.injectInstance(_this);
@@ -4021,10 +4637,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var UIManager = (function (_super) {
-        __extends(UIManager, _super);
+    var UIManager = /** @class */ (function (_super_1) {
+        __extends(UIManager, _super_1);
         function UIManager(main) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.main = main;
             _this.pipelines = [];
             _this.uiMap = new xgame.Dictionary();
@@ -4037,8 +4653,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             _this.stage = main.stage;
             return _this;
         }
+        Object.defineProperty(UIManager.prototype, "entityManager", {
+            get: function () {
+                return this.$entityManager;
+            },
+            enumerable: true,
+            configurable: true
+        });
         UIManager.prototype.initialize = function () {
-            this.entityManager = new egretx.UIEntityManager(this);
+            this.$entityManager = new egretx.UIEntityManager(this);
             this.pipelines.push(this.checkIsOpened.bind(this));
             this.pipelines.push(this.createUIPage.bind(this));
             this.pipelines.push(this.openUIPage.bind(this));
@@ -4082,7 +4705,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             if (typeof (value) == "string") {
                 var uiName = value;
                 var entities = [];
-                if (this.entityManager.tryGetEntities(uiName, entities)) {
+                if (this.$entityManager.tryGetEntities(uiName, entities)) {
                     for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
                         var entity = entities_1[_i];
                         this._closeUI(entity);
@@ -4104,7 +4727,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                             }
                             layerManager = this.uiLayers.get(entity.uiPage.layerID);
                             layerManager.removeEntity(entity);
-                            this.entityManager.removeEntity(entity);
+                            this.$entityManager.removeEntity(entity);
                             uiPage = entity.uiPage;
                             return [4 /*yield*/, uiPage.doFadeOut()];
                         case 1:
@@ -4116,7 +4739,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                                 entity.mask.parent.removeChild(entity.mask);
                             }
                             this.onUIClosed.dispatch(entity);
-                            this.entityManager.checkEntities();
+                            this.$entityManager.checkEntities();
                             entity.onClose();
                             entity.dispose();
                             entity = undefined;
@@ -4329,7 +4952,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                 var results, entity;
                 return __generator(this, function (_a) {
                     results = [];
-                    if (this.entityManager.tryGetEntities(options.uiClass, results)) {
+                    if (this.$entityManager.tryGetEntities(options.uiClass, results)) {
                         entity = results[0];
                         if (entity.uiPage.flags & egretx.UIFlags.allowMultiple) {
                         }
@@ -4348,8 +4971,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
          */
         UIManager.prototype.createUIPage = function (options) {
             return __awaiter(this, void 0, void 0, function () {
+                var _a, entity, uiPage_1, layerManager, uiPage, layerManager, layerManager;
                 var _this = this;
-                var entity, uiPage_1, layerManager, uiPage, layerManager, layerManager, _a;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
@@ -4363,7 +4986,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                             xgame.injectInstance(uiPage_1);
                             uiPage_1.entity = entity;
                             entity.uiPage = uiPage_1;
-                            this.entityManager.addEntity(entity);
+                            this.$entityManager.addEntity(entity);
                             uiPage_1.onInit();
                             uiPage_1.visible = false;
                             if (options.hud) {
@@ -4431,7 +5054,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                             }
                             _b.label = 4;
                         case 4:
-                            this.entityManager.checkEntities();
+                            this.$entityManager.checkEntities();
                             return [2 /*return*/, true];
                     }
                 });
@@ -4499,13 +5122,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var Group = (function (_super) {
-        __extends(Group, _super);
+    var Group = /** @class */ (function (_super_1) {
+        __extends(Group, _super_1);
         function Group() {
-            return _super.call(this) || this;
+            return _super_1.call(this) || this;
         }
         Group.prototype.childrenCreated = function () {
-            _super.prototype.childrenCreated.call(this);
+            _super_1.prototype.childrenCreated.call(this);
             this.setTouchManager(this);
         };
         Group = __decorate([
@@ -4524,13 +5147,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var ItemRenderer = (function (_super) {
-        __extends(ItemRenderer, _super);
+    var ItemRenderer = /** @class */ (function (_super_1) {
+        __extends(ItemRenderer, _super_1);
         function ItemRenderer() {
-            return _super.call(this) || this;
+            return _super_1.call(this) || this;
         }
         ItemRenderer.prototype.childrenCreated = function () {
-            _super.prototype.childrenCreated.call(this);
+            _super_1.prototype.childrenCreated.call(this);
             this.setTouchManager(this);
         };
         ItemRenderer = __decorate([
@@ -4549,13 +5172,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var UIComponent = (function (_super) {
-        __extends(UIComponent, _super);
+    var UIComponent = /** @class */ (function (_super_1) {
+        __extends(UIComponent, _super_1);
         function UIComponent() {
-            return _super.call(this) || this;
+            return _super_1.call(this) || this;
         }
         UIComponent.prototype.childrenCreated = function () {
-            _super.prototype.childrenCreated.call(this);
+            _super_1.prototype.childrenCreated.call(this);
             this.setTouchManager(this);
         };
         UIComponent = __decorate([
@@ -4609,14 +5232,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../structs/UIDirection.ts" />
 
 (function (egretx) {
-    var UIPage = (function (_super) {
-        __extends(UIPage, _super);
+    var UIPage = /** @class */ (function (_super_1) {
+        __extends(UIPage, _super_1);
         function UIPage(skinPath) {
             if (skinPath === void 0) { skinPath = null; }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.skinPath = skinPath;
             //UI的类型参数,见UIFlags
             _this.flags = egretx.UIFlags.isStack | egretx.UIFlags.isFullScreen;
+            _this.guideValues = new xgame.Dictionary();
             _this.onComplete = new xgame.Signal0();
             _this.$isLoaded = false;
             _this.$isLoading = false;
@@ -4627,6 +5251,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             _this.$layerID = egretx.UILayerID.Layer_5_UI;
             return _this;
         }
+        UIPage.prototype.injectGuideValue = function (key, value, taskID) {
+            this.guideManager.injectValue(key, value, taskID);
+            this.guideValues.add(key, taskID || 0);
+        };
         Object.defineProperty(UIPage.prototype, "isLoaded", {
             get: function () {
                 return this.$isLoaded;
@@ -4702,6 +5330,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         UIPage.prototype.onSceneChanging = function () {
         };
         UIPage.prototype.onClose = function () {
+            var _this = this;
+            if (this.guideValues.length) {
+                this.guideValues.forKeys(function (key) {
+                    var taskID = _this.guideValues.get(key);
+                    _this.guideManager.removeValue(key, taskID);
+                }, this);
+                this.guideValues.clear();
+            }
             var self = this;
             if (self.removeEventObserves) {
                 self.removeEventObserves();
@@ -4734,6 +5370,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                 });
             });
         };
+        __decorate([
+            egretx.inject(egretx.IUIManager),
+            __metadata("design:type", Object)
+        ], UIPage.prototype, "uiManager", void 0);
+        __decorate([
+            egretx.inject(egretx.IGuideManager),
+            __metadata("design:type", Object)
+        ], UIPage.prototype, "guideManager", void 0);
+        __decorate([
+            egretx.inject(egretx.IAnimationManager),
+            __metadata("design:type", Object)
+        ], UIPage.prototype, "animationManager", void 0);
+        __decorate([
+            egretx.inject(egretx.IAudioManager),
+            __metadata("design:type", Object)
+        ], UIPage.prototype, "audioManager", void 0);
         return UIPage;
     }(egretx.UIComponent));
     egretx.UIPage = UIPage;
@@ -4768,10 +5420,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../structs/UIFlags.ts" />
 
 (function (egretx) {
-    var PluginPage = (function (_super) {
-        __extends(PluginPage, _super);
+    var PluginPage = /** @class */ (function (_super_1) {
+        __extends(PluginPage, _super_1);
         function PluginPage(skinPath) {
-            var _this = _super.call(this, skinPath) || this;
+            var _this = _super_1.call(this, skinPath) || this;
             _this.flags = egretx.UIFlags.isPlugin;
             return _this;
         }
@@ -4789,10 +5441,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../structs/UIFlags.ts" />
 
 (function (egretx) {
-    var Window = (function (_super) {
-        __extends(Window, _super);
+    var Window = /** @class */ (function (_super_1) {
+        __extends(Window, _super_1);
         function Window(skinPath) {
-            var _this = _super.call(this, skinPath) || this;
+            var _this = _super_1.call(this, skinPath) || this;
             _this.flags = egretx.UIFlags.isStack | egretx.UIFlags.useMask | egretx.UIFlags.closeByMask;
             _this.setLayerID(egretx.UILayerID.Layer_8_Window);
             return _this;
@@ -4821,10 +5473,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         UILayerID[UILayerID["Layer_7_UIFrame"] = 7] = "Layer_7_UIFrame";
         UILayerID[UILayerID["Layer_8_Window"] = 8] = "Layer_8_Window";
         UILayerID[UILayerID["Layer_9"] = 9] = "Layer_9";
-        UILayerID[UILayerID["Layer_10_Tips"] = 10] = "Layer_10_Tips";
-        UILayerID[UILayerID["Layer_11_Toast"] = 11] = "Layer_11_Toast";
-        UILayerID[UILayerID["Layer_12_Loading"] = 12] = "Layer_12_Loading";
-        UILayerID[UILayerID["Layer_13"] = 13] = "Layer_13";
+        UILayerID[UILayerID["Layer_10_Popup"] = 10] = "Layer_10_Popup";
+        UILayerID[UILayerID["Layer_11_Guide"] = 11] = "Layer_11_Guide";
+        UILayerID[UILayerID["Layer_12_Toast"] = 12] = "Layer_12_Toast";
+        UILayerID[UILayerID["Layer_13_Loading"] = 13] = "Layer_13_Loading";
         UILayerID[UILayerID["Layer_14"] = 14] = "Layer_14";
         UILayerID[UILayerID["Layer_15_Top"] = 15] = "Layer_15_Top";
     })(UILayerID = egretx.UILayerID || (egretx.UILayerID = {}));
@@ -4841,14 +5493,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 (function (egretx) {
     var PropertyNames = ["x", "y", "width", "height", "visible", "scaleX", "scaleY"];
-    var RenderWatcher = (function (_super) {
-        __extends(RenderWatcher, _super);
+    var RenderWatcher = /** @class */ (function (_super_1) {
+        __extends(RenderWatcher, _super_1);
         function RenderWatcher() {
             var views = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 views[_i] = arguments[_i];
             }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.views = [];
             _this.watchers = [];
             _this.dict = new xgame.Dictionary();
@@ -4926,16 +5578,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     }(xgame.XObject));
     egretx.RenderWatcher = RenderWatcher;
     __reflect(RenderWatcher.prototype, "egretx.RenderWatcher");
-    var Popup = (function (_super) {
-        __extends(Popup, _super);
+    var Popup = /** @class */ (function (_super_1) {
+        __extends(Popup, _super_1);
         function Popup(skinPath) {
-            var _this = _super.call(this, skinPath) || this;
+            var _this = _super_1.call(this, skinPath) || this;
             _this.renderWatcher = new RenderWatcher();
             _this.offset = new egret.Point();
             _this.$uiDirection = egretx.UIDirection.ANY;
             _this.$uiAlign = egretx.UIAlign.CENTER;
             _this.flags = egretx.UIFlags.isStack | egretx.UIFlags.isPopupMenu | egretx.UIFlags.useMask | egretx.UIFlags.closeByMask | egretx.UIFlags.allowMultiple;
-            _this.setLayerID(egretx.UILayerID.Layer_10_Tips);
+            _this.setLayerID(egretx.UILayerID.Layer_10_Popup);
             _this.$maskAlpha = 0;
             _this.renderWatcher.addWatcher(_this);
             return _this;
@@ -4966,7 +5618,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             if (this.renderWatcher) {
                 this.renderWatcher.dispose();
             }
-            _super.prototype.onClose.call(this);
+            _super_1.prototype.onClose.call(this);
         };
         return Popup;
     }(egretx.UIPage));
@@ -4983,10 +5635,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../structs/UIFlags.ts" />
 
 (function (egretx) {
-    var Scene = (function (_super) {
-        __extends(Scene, _super);
+    var Scene = /** @class */ (function (_super_1) {
+        __extends(Scene, _super_1);
         function Scene(skinPath) {
-            var _this = _super.call(this, skinPath) || this;
+            var _this = _super_1.call(this, skinPath) || this;
             _this.flags = egretx.UIFlags.Scene | egretx.UIFlags.isFullScreen;
             _this.setLayerID(egretx.UILayerID.Layer_2_Scene);
             return _this;
@@ -5004,10 +5656,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../interfaces/IUIEntity.ts" />
 
 (function (egretx) {
-    var UIEntity = (function (_super) {
-        __extends(UIEntity, _super);
+    var UIEntity = /** @class */ (function (_super_1) {
+        __extends(UIEntity, _super_1);
         function UIEntity() {
-            return _super.call(this) || this;
+            return _super_1.call(this) || this;
         }
         Object.defineProperty(UIEntity.prototype, "isClosed", {
             get: function () {
@@ -5077,7 +5729,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../structs/UIFlags.ts" />
 
 (function (egretx) {
-    var UIHelper = (function () {
+    var UIHelper = /** @class */ (function () {
         function UIHelper() {
         }
         UIHelper.isFullScreenUI = function (entity) {
@@ -5141,10 +5793,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../utils/UIHelper.ts" />
 
 (function (egretx) {
-    var UIEntityManager = (function (_super) {
-        __extends(UIEntityManager, _super);
+    var UIEntityManager = /** @class */ (function (_super_1) {
+        __extends(UIEntityManager, _super_1);
         function UIEntityManager(manager) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.manager = manager;
             _this.entityMap = new xgame.Dictionary();
             _this.stackList = new xgame.List();
@@ -5309,10 +5961,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../structs/UILayerID.ts" />
 
 (function (egretx) {
-    var UILayerManager = (function (_super) {
-        __extends(UILayerManager, _super);
+    var UILayerManager = /** @class */ (function (_super_1) {
+        __extends(UILayerManager, _super_1);
         function UILayerManager(manager, id) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.manager = manager;
             _this.id = id;
             _this.entities = new xgame.List();
@@ -5414,10 +6066,10 @@ function get_timestamp() {
 }
 
 (function (egretx) {
-    var UIResManager = (function (_super) {
-        __extends(UIResManager, _super);
+    var UIResManager = /** @class */ (function (_super_1) {
+        __extends(UIResManager, _super_1);
         function UIResManager() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.textures = new xgame.Dictionary();
             onDisplayListChanged.add(_this.onDisplayListChanged, _this);
             onDisplayListDisposed.add(_this.onDisplayListDisposed, _this);
@@ -5516,10 +6168,10 @@ function get_timestamp() {
         return options.callback;
     }
     egretx.alert = alert;
-    var Alert = (function (_super) {
-        __extends(Alert, _super);
+    var Alert = /** @class */ (function (_super_1) {
+        __extends(Alert, _super_1);
         function Alert(options) {
-            var _this = _super.call(this, options.skinName || Alert.defaultSkinName) || this;
+            var _this = _super_1.call(this, options.skinName || Alert.defaultSkinName) || this;
             _this.options = options;
             _this.clickButtonIndex = undefined;
             if (!_this.options.closeByMask) {
@@ -5537,7 +6189,7 @@ function get_timestamp() {
             if (this.options.callback) {
                 this.options.callback.dispatch(this.clickButtonIndex);
             }
-            _super.prototype.close.call(this);
+            _super_1.prototype.close.call(this);
         };
         Alert.prototype.onClose = function () {
             if (this.options.callback) {
@@ -5545,7 +6197,7 @@ function get_timestamp() {
             }
             this.options.callback = undefined;
             this.options.buttons = undefined;
-            _super.prototype.onClose.call(this);
+            _super_1.prototype.onClose.call(this);
         };
         Alert.prototype.getButton = function (index) {
             var btn = this["btn_{0}".format(index)];
@@ -5553,7 +6205,7 @@ function get_timestamp() {
         };
         Alert.prototype.onOpen = function () {
             var _this = this;
-            _super.prototype.onOpen.call(this);
+            _super_1.prototype.onOpen.call(this);
             this.addClick(this.btn_close, function () {
                 _this.close();
             }, this);
@@ -5570,6 +6222,15 @@ function get_timestamp() {
                 var btn = this.getButton(index);
                 if (btn) {
                     buttons.push(btn);
+                    if (index == 0) {
+                        this.injectGuideValue("alert_button_0", btn);
+                    }
+                    else if (index == 1) {
+                        this.injectGuideValue("alert_button_1", btn);
+                    }
+                    else if (index == 2) {
+                        this.injectGuideValue("alert_button_2", btn);
+                    }
                 }
                 else {
                     break;
@@ -5636,10 +6297,10 @@ function get_timestamp() {
         InvalidateFlags[InvalidateFlags["Dispatch"] = 1 << bits++] = "Dispatch";
         InvalidateFlags[InvalidateFlags["ItemRenderSkinName"] = 1 << bits++] = "ItemRenderSkinName";
     })(InvalidateFlags || (InvalidateFlags = {}));
-    var DropdownList = (function (_super) {
-        __extends(DropdownList, _super);
+    var DropdownList = /** @class */ (function (_super_1) {
+        __extends(DropdownList, _super_1);
         function DropdownList() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.invalidateFlags = InvalidateFlags.Any;
             _this.callback_onSelectChanged = new xgame.Signal3();
             _this.$isOpened = false;
@@ -5671,14 +6332,14 @@ function get_timestamp() {
         };
         DropdownList.prototype.$onRemoveFromStage = function () {
             this.callback_onSelectChanged.removeAll();
-            _super.prototype.$onRemoveFromStage.call(this);
+            _super_1.prototype.$onRemoveFromStage.call(this);
         };
         DropdownList.prototype.dispose = function () {
             this.callback_onSelectChanged.removeAll();
         };
         DropdownList.prototype.childrenCreated = function () {
             var _this = this;
-            _super.prototype.childrenCreated.call(this);
+            _super_1.prototype.childrenCreated.call(this);
             this.touchChildren = false;
             this.lab_title.multiline = false;
             this.lab_title.wordWrap = false;
@@ -5955,10 +6616,10 @@ function get_timestamp() {
         InvalidateFlags[InvalidateFlags["SelectedIndex"] = 1 << bits++] = "SelectedIndex";
         InvalidateFlags[InvalidateFlags["ItemSkinName"] = 1 << bits++] = "ItemSkinName";
     })(InvalidateFlags || (InvalidateFlags = {}));
-    var DropdownListGroup = (function (_super) {
-        __extends(DropdownListGroup, _super);
+    var DropdownListGroup = /** @class */ (function (_super_1) {
+        __extends(DropdownListGroup, _super_1);
         function DropdownListGroup() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.invalidateFlags = InvalidateFlags.Any;
             _this.callback_onSelectChanged = new xgame.Signal3();
             _this.$textColor = 0x606DA1;
@@ -6176,20 +6837,20 @@ function get_timestamp() {
 /// <reference path="../core/ItemRenderer.ts" />
 
 (function (egretx) {
-    var PopupMenuEvent = (function (_super) {
-        __extends(PopupMenuEvent, _super);
+    var PopupMenuEvent = /** @class */ (function (_super_1) {
+        __extends(PopupMenuEvent, _super_1);
         function PopupMenuEvent() {
-            return _super !== null && _super.apply(this, arguments) || this;
+            return _super_1 !== null && _super_1.apply(this, arguments) || this;
         }
         PopupMenuEvent.ITEM_CLICK = "PopupMenuEvent_itemClick";
         return PopupMenuEvent;
     }(egret.Event));
     egretx.PopupMenuEvent = PopupMenuEvent;
     __reflect(PopupMenuEvent.prototype, "egretx.PopupMenuEvent");
-    var PopupMenuItem = (function (_super) {
-        __extends(PopupMenuItem, _super);
+    var PopupMenuItem = /** @class */ (function (_super_1) {
+        __extends(PopupMenuItem, _super_1);
         function PopupMenuItem() {
-            return _super !== null && _super.apply(this, arguments) || this;
+            return _super_1 !== null && _super_1.apply(this, arguments) || this;
         }
         Object.defineProperty(PopupMenuItem.prototype, "item", {
             get: function () {
@@ -6199,12 +6860,12 @@ function get_timestamp() {
             configurable: true
         });
         PopupMenuItem.prototype.createChildren = function () {
-            _super.prototype.createChildren.call(this);
+            _super_1.prototype.createChildren.call(this);
             this.left = this.right = 0;
         };
         PopupMenuItem.prototype.childrenCreated = function () {
             var _this = this;
-            _super.prototype.childrenCreated.call(this);
+            _super_1.prototype.childrenCreated.call(this);
             this.addClick(this, function () {
                 if (_this.item) {
                     _this.dispatchEvent(new PopupMenuEvent(PopupMenuEvent.ITEM_CLICK, true, true, _this.item));
@@ -6212,7 +6873,7 @@ function get_timestamp() {
             }, this);
         };
         PopupMenuItem.prototype.dataChanged = function () {
-            _super.prototype.dataChanged.call(this);
+            _super_1.prototype.dataChanged.call(this);
             if (this.item) {
                 this.lab_title.textFlow = new egret.HtmlTextParser().parse("{0}".format(this.item.title));
                 if (this.item.textAlign) {
@@ -6224,10 +6885,10 @@ function get_timestamp() {
     }(egretx.ItemRenderer));
     egretx.PopupMenuItem = PopupMenuItem;
     __reflect(PopupMenuItem.prototype, "egretx.PopupMenuItem");
-    var PopupMenu = (function (_super) {
-        __extends(PopupMenu, _super);
+    var PopupMenu = /** @class */ (function (_super_1) {
+        __extends(PopupMenu, _super_1);
         function PopupMenu(options) {
-            var _this = _super.call(this, options.skinName || PopupMenu.defaultSkinName) || this;
+            var _this = _super_1.call(this, options.skinName || PopupMenu.defaultSkinName) || this;
             _this.options = options;
             _this.callback_onSelect = new xgame.Signal1();
             _this.arrowPadding = 20;
@@ -6290,7 +6951,7 @@ function get_timestamp() {
             if (this.options) {
                 this.options.instance = undefined;
             }
-            _super.prototype.onClose.call(this);
+            _super_1.prototype.onClose.call(this);
         };
         PopupMenu.prototype.onItemClickHandler = function (event) {
             event.stopPropagation();
@@ -6298,7 +6959,7 @@ function get_timestamp() {
             this.close();
         };
         PopupMenu.prototype.onOpen = function () {
-            _super.prototype.onOpen.call(this);
+            _super_1.prototype.onOpen.call(this);
             this.list_item.itemRenderer = this.options.itemRender;
             this.list_item.layout.gap = this.options.itemGap;
             if (this.options.itemRenderSkinName) {
@@ -6455,10 +7116,10 @@ function get_timestamp() {
         TipsState[TipsState["Stay"] = 2] = "Stay";
         TipsState[TipsState["FadeOut"] = 3] = "FadeOut";
     })(TipsState = egretx.TipsState || (egretx.TipsState = {}));
-    var TipsView = (function (_super) {
-        __extends(TipsView, _super);
+    var TipsView = /** @class */ (function (_super_1) {
+        __extends(TipsView, _super_1);
         function TipsView() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
+            var _this = _super_1 !== null && _super_1.apply(this, arguments) || this;
             _this.durationFadeIn = 500;
             _this.durationStay = 1000;
             _this.durationFadeOut = 500;
@@ -6561,10 +7222,10 @@ function get_timestamp() {
     }(eui.Component));
     egretx.TipsView = TipsView;
     __reflect(TipsView.prototype, "egretx.TipsView", ["egretx.ITipsView", "xgame.IPoolable", "xgame.IDisposable", "xgame.IXObject"]);
-    var TipsManager = (function (_super) {
-        __extends(TipsManager, _super);
+    var TipsManager = /** @class */ (function (_super_1) {
+        __extends(TipsManager, _super_1);
         function TipsManager() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.pools = new xgame.PoolObject(TipsView);
             _this.parallelMax = 5;
             _this.waitQueues = [];
@@ -6632,7 +7293,7 @@ function get_timestamp() {
             this.$container.touchThrough = true;
             this.$container.horizontalCenter = 0;
             this.$container.verticalCenter = 0;
-            var parent = xgame.that.getService(egretx.IUIManager).getLayerManager(egretx.UILayerID.Layer_11_Toast);
+            var parent = xgame.that.getService(egretx.IUIManager).getLayerManager(egretx.UILayerID.Layer_12_Toast);
             parent.addChild(this.$container);
         };
         return TipsManager;
@@ -6651,10 +7312,10 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var UIOptions = (function (_super) {
-        __extends(UIOptions, _super);
+    var UIOptions = /** @class */ (function (_super_1) {
+        __extends(UIOptions, _super_1);
         function UIOptions() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.gap = 10;
             return _this;
         }
@@ -6681,10 +7342,10 @@ function get_timestamp() {
 /// <reference path="../interfaces/IUIManager.ts" />
 
 (function (egretx) {
-    var SceneTransition = (function (_super) {
-        __extends(SceneTransition, _super);
+    var SceneTransition = /** @class */ (function (_super_1) {
+        __extends(SceneTransition, _super_1);
         function SceneTransition() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             xgame.injectInstance(_this);
             return _this;
         }
@@ -6716,13 +7377,13 @@ function get_timestamp() {
 /// <reference path="./SceneTransition.ts" />
 
 (function (egretx) {
-    var SceneFadeTransition = (function (_super) {
-        __extends(SceneFadeTransition, _super);
+    var SceneFadeTransition = /** @class */ (function (_super_1) {
+        __extends(SceneFadeTransition, _super_1);
         function SceneFadeTransition(blockSize, duration, style) {
             if (blockSize === void 0) { blockSize = 128; }
             if (duration === void 0) { duration = 500; }
             if (style === void 0) { style = egretx.SceneMotion.RANDOM; }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.blockSize = blockSize;
             _this.duration = duration;
             _this.style = style;
@@ -6817,12 +7478,12 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var SceneHShuttersTransition = (function (_super) {
-        __extends(SceneHShuttersTransition, _super);
+    var SceneHShuttersTransition = /** @class */ (function (_super_1) {
+        __extends(SceneHShuttersTransition, _super_1);
         function SceneHShuttersTransition(countBlocks, duration) {
             if (countBlocks === void 0) { countBlocks = 8; }
             if (duration === void 0) { duration = 500; }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.countBlocks = countBlocks;
             _this.duration = duration;
             return _this;
@@ -6903,13 +7564,13 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var SceneRotateTransition = (function (_super) {
-        __extends(SceneRotateTransition, _super);
+    var SceneRotateTransition = /** @class */ (function (_super_1) {
+        __extends(SceneRotateTransition, _super_1);
         function SceneRotateTransition(blockSize, duration, style) {
             if (blockSize === void 0) { blockSize = 128; }
             if (duration === void 0) { duration = 500; }
             if (style === void 0) { style = egretx.SceneMotion.RANDOM; }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.blockSize = blockSize;
             _this.duration = duration;
             _this.style = style;
@@ -7004,13 +7665,13 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var SceneScaleTransition = (function (_super) {
-        __extends(SceneScaleTransition, _super);
+    var SceneScaleTransition = /** @class */ (function (_super_1) {
+        __extends(SceneScaleTransition, _super_1);
         function SceneScaleTransition(blockSize, duration, style) {
             if (blockSize === void 0) { blockSize = 128; }
             if (duration === void 0) { duration = 500; }
             if (style === void 0) { style = egretx.SceneMotion.RANDOM; }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.blockSize = blockSize;
             _this.duration = duration;
             _this.style = style;
@@ -7105,12 +7766,12 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var SceneVShuttersTransition = (function (_super) {
-        __extends(SceneVShuttersTransition, _super);
+    var SceneVShuttersTransition = /** @class */ (function (_super_1) {
+        __extends(SceneVShuttersTransition, _super_1);
         function SceneVShuttersTransition(countBlocks, duration) {
             if (countBlocks === void 0) { countBlocks = 8; }
             if (duration === void 0) { duration = 500; }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.countBlocks = countBlocks;
             _this.duration = duration;
             return _this;
@@ -7172,11 +7833,11 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var UIFadeTransition = (function (_super) {
-        __extends(UIFadeTransition, _super);
+    var UIFadeTransition = /** @class */ (function (_super_1) {
+        __extends(UIFadeTransition, _super_1);
         function UIFadeTransition(duration) {
             if (duration === void 0) { duration = 500; }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.duration = duration;
             return _this;
         }
@@ -7212,11 +7873,11 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var UIScaleTransition = (function (_super) {
-        __extends(UIScaleTransition, _super);
+    var UIScaleTransition = /** @class */ (function (_super_1) {
+        __extends(UIScaleTransition, _super_1);
         function UIScaleTransition(duration) {
             if (duration === void 0) { duration = 300; }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.duration = duration;
             return _this;
         }
@@ -7252,10 +7913,10 @@ function get_timestamp() {
 *************************************************/
 
 (function (egretx) {
-    var Bitmap = (function (_super) {
-        __extends(Bitmap, _super);
+    var Bitmap = /** @class */ (function (_super_1) {
+        __extends(Bitmap, _super_1);
         function Bitmap() {
-            return _super !== null && _super.apply(this, arguments) || this;
+            return _super_1 !== null && _super_1.apply(this, arguments) || this;
         }
         Bitmap.prototype.release = function () {
         };
@@ -7277,10 +7938,10 @@ function get_timestamp() {
     }(egret.Bitmap));
     egretx.Bitmap = Bitmap;
     __reflect(Bitmap.prototype, "egretx.Bitmap", ["xgame.IPoolable", "xgame.IDisposable", "xgame.IXObject"]);
-    var BitmapPools = (function (_super) {
-        __extends(BitmapPools, _super);
+    var BitmapPools = /** @class */ (function (_super_1) {
+        __extends(BitmapPools, _super_1);
         function BitmapPools() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.pools = new xgame.PoolObject(Bitmap);
             return _this;
         }
@@ -7308,7 +7969,7 @@ function get_timestamp() {
 (function (egretx) {
     var hud_bounds = new egret.Rectangle();
     var tips_bounds = new egret.Rectangle();
-    var TipsHelper = (function () {
+    var TipsHelper = /** @class */ (function () {
         function TipsHelper() {
         }
         TipsHelper.placeTipsWithHUD = function (tips, hud, gap) {
@@ -7343,6 +8004,7 @@ function get_timestamp() {
                 }
                 tips.fixedUIDirection(egretx.UIDirection.BOTTOM);
             }
+            //尝试放置到上边
             else if (tips.allowUIDirection(egretx.UIDirection.TOP) && ((top - 2 * gap >= th && direction == egretx.UIDirection.ANY) || direction == egretx.UIDirection.TOP)) {
                 tips.y = top - gap - th;
                 if (align == egretx.UIAlign.LEFT) {
@@ -7356,6 +8018,7 @@ function get_timestamp() {
                 }
                 tips.fixedUIDirection(egretx.UIDirection.TOP);
             }
+            //尝试放置到右边
             else if (tips.allowUIDirection(egretx.UIDirection.RIGHT) && ((screenWidth - right - 2 * gap >= tw && direction == egretx.UIDirection.ANY) || direction == egretx.UIDirection.RIGHT)) {
                 tips.x = right + gap;
                 if (align == egretx.UIAlign.TOP) {
@@ -7369,6 +8032,7 @@ function get_timestamp() {
                 }
                 tips.fixedUIDirection(egretx.UIDirection.RIGHT);
             }
+            //尝试放置到左边
             else if (tips.allowUIDirection(egretx.UIDirection.LEFT) && ((left - 2 * gap >= tw && direction == egretx.UIDirection.ANY) || direction == egretx.UIDirection.LEFT)) {
                 tips.x = left - gap - tw;
                 if (align == egretx.UIAlign.TOP) {

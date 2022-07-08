@@ -89,7 +89,7 @@ module egretx {
         public constructor(skinPath?: string) {
             super(skinPath);
             this.flags = UIFlags.isStack | UIFlags.isPopupMenu | UIFlags.useMask | UIFlags.closeByMask | UIFlags.allowMultiple;
-            this.setLayerID(UILayerID.Layer_10_Tips);
+            this.setLayerID(UILayerID.Layer_10_Popup);
             this.$maskAlpha = 0;
             this.renderWatcher.addWatcher(this);
         }

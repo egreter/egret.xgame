@@ -8,8 +8,6 @@ module ro {
         public static NAME: string = "LoginPage";
         public btn_login: eui.Button;
         public com_input: eui.TextInput;
-        @xgame.inject(egretx.IUIManager)
-        public uiManager: egretx.IUIManager;
         public constructor(private loginDeferred: xgame.Deferred<IPlatUser>) {
             super("resource/skins/login/LoginPageSkin.exml");
             this.flags &= ~egretx.UIFlags.closeByMask;

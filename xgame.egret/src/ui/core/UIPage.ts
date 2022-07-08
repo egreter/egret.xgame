@@ -9,13 +9,25 @@
 
 
 module egretx {
-
     export class UIPage extends UIComponent {
+        @inject(egretx.IUIManager)
+        public uiManager: egretx.IUIManager;
+        @inject(egretx.IGuideManager)
+        public guideManager: egretx.IGuideManager;
+        @inject(egretx.IAnimationManager)
+        public animationManager: egretx.IAnimationManager;
+        @inject(egretx.IAudioManager)
+        public audioManager: egretx.IAudioManager;
         //UI的类型参数,见UIFlags
         public flags: number = UIFlags.isStack | UIFlags.isFullScreen;
         public entity: IUIEntity;
         public constructor(public skinPath: string = null) {
             super();
+        }
+        private guideValues = new xgame.Dictionary<keyof egretx.IGuideInjectValue, number>();
+        public injectGuideValue<T extends keyof IGuideInjectValue>(key: T, value: IGuideInjectValue[T], taskID?: number): void {
+            this.guideManager.injectValue(key, value, taskID);
+            this.guideValues.add(key, taskID || 0);
         }
         public readonly onComplete = new xgame.Signal0();
         private $isLoaded: boolean = false;
@@ -77,6 +89,13 @@ module egretx {
 
         }
         public onClose(): void {
+            if (this.guideValues.length) {
+                this.guideValues.forKeys((key) => {
+                    let taskID: number = this.guideValues.get(key);
+                    this.guideManager.removeValue(key, taskID);
+                }, this);
+                this.guideValues.clear();
+            }
             let self: UIPage & xgame.IEventSubject = this;
             if (self.removeEventObserves) {
                 self.removeEventObserves();

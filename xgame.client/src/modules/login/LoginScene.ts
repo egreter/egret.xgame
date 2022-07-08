@@ -10,8 +10,6 @@
 
 module ro {
     export class LoginScene extends egretx.Scene {
-        @xgame.inject(egretx.IUIManager)
-        public uiManager: egretx.IUIManager;
         public btn_game: eui.Button;
         public lab_username: eui.Label;
         public g_username: eui.Label;
@@ -30,6 +28,7 @@ module ro {
         }
         public onOpen(): void {
             super.onOpen();
+            this.injectGuideValue("loginScene", this);
             /*
             this.net.init(<pomelo.IOptions>{ host: "127.0.0.1", port: 3010 }, () => {
                 this.net.request("connector.entryHandler.entry", "hello!!!", (resp: any) => {
@@ -59,8 +58,10 @@ module ro {
             console.log(info.string, info);
             this.g_username.visible = false;
             this.btn_game.visible = false;
+            this.injectGuideValue("btn_game", this.btn_game);
             this.list_server.visible = false;
             this.addClick(this.btn_game, () => {
+                this.injectGuideValue("flag_btn_game_clicked", true);
                 let req = new ro3.LoginReq();
                 req.uid = this.user.platUsername;
                 req.platform = 2;

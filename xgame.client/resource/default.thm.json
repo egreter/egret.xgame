@@ -14,7 +14,8 @@
 		"eui.VSlider": "resource/eui_skins/VSliderSkin.exml",
 		"eui.ItemRenderer": "resource/eui_skins/ItemRendererSkin.exml",
 		"ro.TipsView": "resource/skins/common/TipsViewSkin.exml",
-		"ro.DropdownList": "resource/skins/common/DropdownListSkin.exml"
+		"ro.DropdownList": "resource/skins/common/DropdownListSkin.exml",
+		"ro.GuideArrow": "resource/skins/guide/GuideArrowSkin.exml"
 	},
 	"autoGenerateExmlsList": true,
 	"exmls": [
@@ -37,6 +38,8 @@
 		"resource/skins/common/PopupMenuItemSkin.exml",
 		"resource/skins/common/PopupMenuSkin.exml",
 		"resource/skins/common/TipsViewSkin.exml",
+		"resource/skins/guide/GuideArrowSkin.exml",
+		"resource/skins/guide/GuidePageSkin.exml",
 		"resource/skins/login/LoginPageSkin.exml",
 		"resource/skins/login/LoginSceneSkin.exml",
 		"resource/skins/main/BagWindowSkin.exml",

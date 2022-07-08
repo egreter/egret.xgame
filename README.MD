@@ -78,7 +78,7 @@ let callback = new xgame.Singals<number>();
 callback.addOnce((value)=>console.log(value);this);
 callback.dispatch(100);
 ```
-
+- 日期和时间管理器(xgame.IDateTimeManager)
 - 多任务链流程驱动
 - 简易状态机
 - 其他一些实用类
@@ -237,6 +237,8 @@ this.animationManager.release("888888");
     }
 }
 ```
+
+- 引导任务管理器(egretx.IGuideManager)
 
 ## xgame.client 示例项目
 

@@ -63,10 +63,13 @@ module ro {
             }
         }
 
-        @xgame.inject(egretx.IUIManager)
+        @inject(egretx.IUIManager)
         public uiManager: egretx.IUIManager;
+        @inject(egretx.IGuideManager)
+        public guideManager: egretx.IGuideManager;
         public async startGame(): Promise<void> {
             console.log("启动游戏");
+            this.guideManager.start();
             this.uiManager.replaceScene(LoginScene);
         }
     }

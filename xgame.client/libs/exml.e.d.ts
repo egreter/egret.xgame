@@ -75,6 +75,14 @@ declare module skins{
 	}
 }
 declare module skins{
+	class GuideArrowSkin extends eui.Skin{
+	}
+}
+declare module skins{
+	class GuidePageSkin extends eui.Skin{
+	}
+}
+declare module skins{
 	class LoginPageSkin extends eui.Skin{
 	}
 }
