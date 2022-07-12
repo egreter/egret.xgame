@@ -1,26 +1,78 @@
 # Egret.XGame游戏框架
-> 以前空闲时间写的一个基于egret的游戏框架，抽时间整理了出来，完成了一些基础的功能封装。
-
-> EgretEngien版本: 5.2.33 (其他版本未测试)
-
-> 简单实现依赖注入，框架部分参考TinaX框架
-
+> 以前空闲时间写的一个基于egret接口化的游戏框架，抽时间整理了出来，完成了一些基础的功能封装。
+>
+> 简单实现依赖注入，框架一部分参考TinaX框架
+>
 > 所有模块源码都已经提供，如果对基础库有特殊需求，修改对应库源码进行gulp编译即可。
-
+>
 > 后续会慢慢把一些常用的功能模块整理出来，让框架变得更完整，致力方便能轻松上手专注于游戏逻辑开发。
 
-## 在线查看演示项目
-[https://demo.ronpad.com/index.html](https://demo.ronpad.com/index.html)
+## EgretEngine版本说明
+
+> 已升级至最新版本`EgretEngine v5.4.1`
+> 
+> 客户端启用ES6模块,使用新的`WebpackBundlePlugin`并启用`modern`模式
+
+## 已知BUG
+
+> 由于从Launcher下载的`EgretEngine V5.4.1`的eui库Group的touch有BUG
+>
+> 需要自己前往 : [https://github.com/egret-labs/egret-core](https://github.com/egret-labs/egret-core)
+>
+>下载最新的版本来替换`libs/modules/eui`进行修复
+
+## 在线查看示例
+> 基于eui的在线演示地址 : [https://demo.ronpad.com/index.html](https://demo.ronpad.com/index.html)
+
+---
+
+## 版本更新日志
+
+### [2022-07-12]
+
+- 将基于`eui`的UI管理器从`xgame.egret`中分离至`xgame.eui`，方便接入自定义的UI管理器，比如基于(`FairyGUI`)
+- 升级`EgretEngine`引擎至最新版本: v5.4.1
+- 将基于`xgame.eui`的演示项目独立至`client.eui`，并基于ES6重写示例代码，使用`webpack`插件`modern`模式提升代码编译速度
+
+### [2022-07-10]
+
+- 提供项目演示在线地址
+
+### [2022-07-09]
+
+- 修复对象注入的原型链获取
+- 新手引导任务管理器
+
+### [2022-07-07]
+
+- 增加日期和时间管理器
+
+### [2022-07-06]
+
+- 增加资源管理器
+- 增加帧动画管理器
+- 增加龙骨动画管理器
+- 增加音频管理器
+
+### [2022-07-03]
+
+- 增加网络模块
+
+### [2022-06-30]
+
+- 整理出了基础的框架代码
+
+---
 
 ## 相关库gulp编译说明
-> 为了能顺利使用gulp编译相关库代码，请使用以下环境配置
-
+> 为了能顺利使用`gulp`编译相关库代码，请使用以下环境配置
+>
 > node版本11.15.0
-
+>
 > npm 7.22.0
-
+>
 > gulp 4.0.2
-
+>
 > ts使用typescript-plus编译器
 
 
@@ -30,12 +82,25 @@
 
 ### 主要功能列表
 - decorators
-    - injectable
-    - inject
-    - impl
-    - event
+    - `injectable`
+    - `inject`
+    - `impl`
+    - `event`
 - 数据绑定
-- 全局事件管理器
+
+- 时间轴管理器(`xgame.ITimelineManager`)
+
+```typescript
+export interface IAnimatable extends xgame.IXObject {
+    advanceTime(time: number): void;
+}
+TimelineManager.Instance().getOrCreateTimeline().add(this);
+TimelineManager.Instance().getOrCreateTimeline().remove(this);
+//2倍整播放动画
+TimelineManager.Instance().getOrCreateTimeline().timeScale = 2;
+
+```
+- 全局事件管理器(`xgame.IEventManager`)
 
 ```typescript
 @inject(xgame.IEventManager)
@@ -54,7 +119,7 @@ public onBagOpened(event: MainEvent): void {
 
 ```
 
-- 帧调度管理器
+- 帧调度管理器(`xgame.ISchedulerManager`)
 
 ```typescript
 xgame.SchedulerManager.Instance().registerUpdate(this.advanceTime, this);
@@ -64,7 +129,7 @@ this.disposableGroup.registerUpdate(this.onAdvanceTime, this);
 this.disposableGroup.dispose();
 ```
 
-- 对象池管理器
+- 对象池管理器(`xgame.IPoolManager`)
 
 ```typescript
 this.pools = new xgame.PoolGroup<AnimationClip>("AnimationClip");
@@ -74,17 +139,17 @@ this.pools.release(id, AnimationClip);
 this.pools.releases();
 ```
 
-- Signals
+- `Signals`
 
 ```typescript
 let callback = new xgame.Singals<number>();
 callback.addOnce((value)=>console.log(value);this);
 callback.dispatch(100);
 ```
-- 日期和时间管理器(xgame.IDateTimeManager)
-- 多任务链流程驱动
+- 日期和时间管理器(`xgame.IDateTimeManager`)
+- 多任务链流程驱动(`xgame.IXTaskManager`)
 - 简易状态机
-- 其他一些实用类
+- 其他一些实用类(`AsyncLock,Awaiter,Deferred,Dictionary,Singleton`)
 
 ### 主要API
 ```typescript
@@ -107,7 +172,7 @@ xgame.createInstance<T>(Clazz: new (...args: any[]) => T, ...args: any[]): T;
 
 ### 主要功能列表
 - 网络管理器
-    - HttpManager
+    - `egretx.IHttpManager`
 
     ```typescript
     this.http.sendRequest("http://10.10.0.88/serverlist/",
@@ -121,7 +186,7 @@ xgame.createInstance<T>(Clazz: new (...args: any[]) => T, ...args: any[]): T;
         });
     ```
 
-    - SocketManager
+    - `egretx.ISocketManager`
 
     ```typescript
     NetManager.Instance().main.setURI("ws://10.10.0.88:83/s99130/{0}".format(this.user.platUsername));
@@ -134,6 +199,49 @@ xgame.createInstance<T>(Clazz: new (...args: any[]) => T, ...args: any[]): T;
     //使用主网络实例进行连接，连接成功后，会自动发送登录请求(由SocketHelper决定)
     NetManager.Instance().main.connect();
     ```
+
+
+- `egretx.IAudioManager`
+
+```typescript
+ //循环播放背景音乐
+this.audioManager.background.play("music_mp3", 0);
+
+this.audioManager.ui.play("refine_mp3", 1);
+
+this.audioManager.effect.play("effect_mp3", 1);
+```
+
+- `egretx.IAnimationManager`
+
+```typescript
+let mc = this.animationManager.fetch("chunli", "test");
+mc.horizontalCenter = 0;
+mc.verticalCenter = 0;
+this.addChild(mc);
+mc.play(-1, "attack");
+
+this.animationManager.recycle(mc);
+this.animationManager.release("888888");
+```
+
+- `egretx.IDragonBonesManager`
+
+```typescript
+ private async createDragonBones(): Promise<void> {
+    this.dragonBody = this.dragonBonesManager.fetch("dragon_boy", "DragonBoy");
+    await this.dragonBody.createArmature();
+    if (this.dragonBody.display) {
+        this.dragonBody.display.x = this.dragonBody.display.y = 480;
+        this.dragonBody.setParent(this);
+        this.dragonBody.armature.animation.play("walk");
+    }
+}
+```
+
+- 引导任务管理器(`egretx.IGuideManager`)
+
+## xgame.eui 基于eui的UI界面管理器
 
 - 触摸点击管理器
     - addTouchBegin
@@ -148,12 +256,12 @@ xgame.createInstance<T>(Clazz: new (...args: any[]) => T, ...args: any[]): T;
 
     - addLongPress
     - addRepeatPress
-- 基于eui的界面管理器
+- 基于eui的界面管理器(`euix.IUIManager`)
     - 场景
 
     ```typescript
-    xgame.inject(egretx.IUIManager)
-    public uiManager: egretx.IUIManager;
+    xgame.inject(euix.IUIManager)
+    public uiManager: euix.IUIManager;
     this.uiManager.replaceScene(MainScene);
     ```
 
@@ -190,62 +298,10 @@ xgame.createInstance<T>(Clazz: new (...args: any[]) => T, ...args: any[]): T;
 
     egretx.tips("UI音频只能同时播放一个声音，多个播放后者会替换前者！");
     ```
-- TimelineManager
 
-```typescript
-export interface IAnimatable extends xgame.IXObject {
-    advanceTime(time: number): void;
-}
-TimelineManager.Instance().getOrCreateTimeline().add(this);
-TimelineManager.Instance().getOrCreateTimeline().remove(this);
-//2倍整播放动画
-TimelineManager.Instance().getOrCreateTimeline().timeScale = 2;
+## client.eui 基于eui的示例项目
 
-```
-
-- AudioManager
-
-```typescript
- //循环播放背景音乐
-this.audioManager.background.play("music_mp3", 0);
-
-this.audioManager.ui.play("refine_mp3", 1);
-
-this.audioManager.effect.play("effect_mp3", 1);
-```
-
-- AnimationManager
-
-```typescript
-let mc = this.animationManager.fetch("chunli", "test");
-mc.horizontalCenter = 0;
-mc.verticalCenter = 0;
-this.addChild(mc);
-mc.play(-1, "attack");
-
-this.animationManager.recycle(mc);
-this.animationManager.release("888888");
-```
-
-- DragonBonesManager
-
-```typescript
- private async createDragonBones(): Promise<void> {
-    this.dragonBody = this.dragonBonesManager.fetch("dragon_boy", "DragonBoy");
-    await this.dragonBody.createArmature();
-    if (this.dragonBody.display) {
-        this.dragonBody.display.x = this.dragonBody.display.y = 480;
-        this.dragonBody.setParent(this);
-        this.dragonBody.armature.animation.play("walk");
-    }
-}
-```
-
-- 引导任务管理器(egretx.IGuideManager)
-
-## xgame.client 示例项目
-
-> 提供框架基础功能的使用案例，可运行后查看代码详情。
+> 提供基于eui的框架基础功能的使用案例，可运行后查看代码详情。
 
 ### tools
 > 一个基于Commander.js的工具库，用于生成protobuf-bundles.js,导出excel成json文件等
@@ -260,6 +316,8 @@ npm install
 > 命令列表
 - npm run proto     编译proto文件生成protobuf-bundles.js
 - npm run config    将Excel转换为json文件并生成接口声明
+
+---
 
 ### 框架启动
 ```typescript

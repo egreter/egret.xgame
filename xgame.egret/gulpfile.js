@@ -28,10 +28,14 @@ gulp.task("copy", ["buildDts"], () => {
     return gulp.src('typings/xgame.core.d.ts').pipe(gulp.dest('./bin'));
 });
 
-gulp.task("build", ["copy"], () => {
+gulp.task("build", ["buildDts"], () => {
     return merge([
         gulp.src('bin/**/*')
-            .pipe(gulp.dest('../xgame.client/libs/xgame.egret/'))
+            .pipe(gulp.dest('../client.eui/libs/xgame.egret/')),
+        gulp.src('bin/*.ts')
+            .pipe(gulp.dest('../xgame.eui/libs')),
+        gulp.src('bin/*.ts')
+            .pipe(gulp.dest('../xgame.fui/libs'))
     ]);
 });
 gulp.task('default', ['build'])

@@ -7,7 +7,7 @@ module egretx {
     /**
      * 龙骨动画管理器
      */
-    export class DragonBonesManager extends xgame.Singleton implements IDragonBonesManager, IDragonBonesManagerInternal, IAnimatable {
+    export class DragonBonesManager extends xgame.Singleton implements IDragonBonesManager, IDragonBonesManagerInternal, xgame.IAnimatable {
         public factory: dragonBones.EgretFactory;
         public constructor() {
             super();
@@ -19,7 +19,7 @@ module egretx {
             this.factory.clock.advanceTime(time / 1000);
         }
         public initialize(): void {
-            TimelineManager.Instance().getOrCreateTimeline().add(this);
+            xgame.TimelineManager.Instance().getOrCreateTimeline().add(this);
         }
         public readonly pools = new xgame.PoolGroup<Armature>("Armature");
         public fetch(key: string, armatureName: string, texture?: string): Armature {

@@ -25,7 +25,7 @@ gulp.task("buildDts", ["buildJs"], () => {
 gulp.task("build", ["buildDts"], () => {
     return merge([
         gulp.src('bin/**/*')
-            .pipe(gulp.dest('../xgame.client/libs/xgame.reflect/')),
+            .pipe(gulp.dest('../client.eui/libs/xgame.reflect/')),
         gulp.src('bin/*.ts')
             .pipe(gulp.dest('../xgame.core/libs')),
         gulp.src('bin/*.ts')

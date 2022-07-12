@@ -7,11 +7,11 @@ module egretx {
     /**
      * 从egret.MoveClip修改而来
      */
-    export class MovieClip extends egret.DisplayObject implements IAnimatable {
+    export class MovieClip extends egret.DisplayObject implements xgame.IAnimatable {
         public static DISPATCH_ENABLE: boolean = false;
         private $actions = new xgame.Dictionary<number, FrameAction>();
         public frameAction: FrameAction;
-        private $timeline: string = Timeline.MAIN;
+        private $timeline: string = xgame.Timeline.MAIN;
         public get timeline(): string {
             return this.$timeline;
         }
@@ -778,12 +778,12 @@ module egretx {
             }
             this.isStopped = value;
             if (value) {
-                TimelineManager.Instance().getOrCreateTimeline(this.timeline).remove(this);
+                xgame.TimelineManager.Instance().getOrCreateTimeline(this.timeline).remove(this);
             }
             else {
                 this.playTimes = this.playTimes == 0 ? 1 : this.playTimes;
                 this.lastTime = egret.getTimer();
-                TimelineManager.Instance().getOrCreateTimeline(this.timeline).add(this);
+                xgame.TimelineManager.Instance().getOrCreateTimeline(this.timeline).add(this);
             }
         }
 

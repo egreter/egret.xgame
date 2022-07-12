@@ -1,17 +1,23 @@
 {
 	"folders": [
-		{
-			"path": "xgame.client"
-		},
-		{
-			"path": "xgame.core"
-		},
-		{
-			"path": "xgame.egret"
-		},
-		{
-			"path": "xgame.reflect"
-		}
-	],
+        {
+            "path": "xgame.core"
+        },
+        {
+            "path": "xgame.egret"
+        },
+        {
+            "path": "xgame.reflect"
+        },
+        {
+            "path": "xgame.fui"
+        },
+        {
+            "path": "xgame.eui"
+        },
+        {
+            "path": "client.eui"
+        }
+    ],
     "settings": {}
 }

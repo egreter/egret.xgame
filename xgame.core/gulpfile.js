@@ -28,9 +28,13 @@ gulp.task("buildDts", ["buildJs"], () => {
 gulp.task("build", ["buildDts"], () => {
     return merge([
         gulp.src('bin/**/*')
-            .pipe(gulp.dest('../xgame.client/libs/xgame.core/')),
+            .pipe(gulp.dest('../client.eui/libs/xgame.core/')),
         gulp.src('bin/*.ts')
-            .pipe(gulp.dest('../xgame.egret/libs'))
+            .pipe(gulp.dest('../xgame.egret/libs')),
+        gulp.src('bin/*.ts')
+            .pipe(gulp.dest('../xgame.eui/libs')),
+        gulp.src('bin/*.ts')
+            .pipe(gulp.dest('../xgame.fui/libs'))
     ]);
 });
 gulp.task('default', ['build'])

@@ -21,6 +21,7 @@ module xgame {
         public async onStart(game: IXGame): Promise<boolean> {
             game.getService<IXTaskManagerInternal>(IXTaskManagerInternal).initialize();
             game.getService<IPlayableManagerInternal>(IPlayableManagerInternal).initialize();
+            game.getService<ITimelineManagerInternal>(ITimelineManagerInternal).initialize();
             return true;
         }
         public onServiceRegister(game: IXGame): void {
@@ -37,6 +38,8 @@ module xgame {
             console.log("[XProvider]: 注册管理器{0}".format(getQualifiedClassName(XTaskManager)));
             game.singleton(IPlayableManager, PlayableManager).withInstance(PlayableManager.Instance()).setAlias(IPlayableManagerInternal);
             console.log("[XProvider]: 注册管理器{0}".format(getQualifiedClassName(PlayableManager)));
+            game.singleton(ITimelineManager, TimelineManager).withInstance(TimelineManager.Instance()).setAlias(ITimelineManagerInternal);
+            console.log("[XProvider]: 注册管理器{0}".format(getQualifiedClassName(TimelineManager)));
         }
     }
 }

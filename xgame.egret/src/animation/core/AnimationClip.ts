@@ -27,7 +27,7 @@ module egretx {
             this.touchChildren = false;
             this.touchEnabled = false;
         }
-        private $timeline: string = Timeline.MAIN;
+        private $timeline: string = xgame.Timeline.MAIN;
         public get timeline(): string {
             return this.$timeline;
         }

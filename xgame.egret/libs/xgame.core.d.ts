@@ -3231,6 +3231,82 @@ declare module xgame {
 /*************************************************
 /* @author : rontian
 /* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module xgame {
+    /**
+     * 时间轴管理器
+     */
+    class TimelineManager extends xgame.Singleton implements ITimelineManager, ITimelineManagerInternal {
+        constructor();
+        initialize(): void;
+        protected advanceTime(): void;
+        private timelines;
+        getOrCreateTimeline(name?: string): Timeline;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module xgame {
+    class Timeline extends xgame.Locker {
+        name: string;
+        static MAIN: string;
+        private animatables;
+        private $timeScale;
+        timeScale: number;
+        private $passedTime;
+        readonly passedTime: number;
+        constructor(name: string);
+        advanceTime(time: number): void;
+        add(animatable: IAnimatable): void;
+        remove(animatable: IAnimatable): void;
+        private $isPaused;
+        readonly isPaused: boolean;
+        pause(): void;
+        resume(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module xgame {
+    /**
+     * 播放动画接口
+     */
+    interface IAnimatable extends xgame.IXObject {
+        advanceTime(time: number): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module xgame {
+    let ITimelineManager: symbol;
+    interface ITimelineManager {
+        getOrCreateTimeline(name?: string): Timeline;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2022-07-05
+*************************************************/
+declare module xgame {
+    let ITimelineManagerInternal: symbol;
+    interface ITimelineManagerInternal {
+        initialize(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
 /* @date   : 2021-08-23
 *************************************************/
 declare module xgame {
