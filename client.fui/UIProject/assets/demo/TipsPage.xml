@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="200,300">
+  <displayList>
+    <image id="n0_h8ma" name="n0" src="n5pv4d" fileName="images/eui/Panel/border.png" xy="0,0" size="200,300">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n1_h8ma" name="n1" src="n5pv4f" fileName="images/eui/Panel/header.png" xy="5,5" size="190,290">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n2_h8ma" name="n2" src="n5pv4c" fileName="images/egret_icon.png" xy="42,64">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+  </displayList>
+</component>

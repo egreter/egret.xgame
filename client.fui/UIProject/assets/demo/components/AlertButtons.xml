@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="335,42">
+  <controller name="buttonsState" pages="2,,3,,4," selected="2"/>
+  <displayList>
+    <component id="n4_n5pv" name="btn_2" src="n5pv4x" fileName="components/Button1.xml" xy="233,2" size="100,40">
+      <gearXY controller="buttonsState" pages="4" values="233,2" default="233,0"/>
+      <gearDisplay2 controller="buttonsState" pages="4" condition="0"/>
+      <Button title="帮助"/>
+    </component>
+    <component id="n1_n5pv" name="btn_0" src="n5pv4x" fileName="components/Button1.xml" xy="0,2" size="100,40">
+      <gearXY controller="buttonsState" pages="2,3,4" values="116,2|58,2|0,2"/>
+      <gearDisplay2 controller="buttonsState" pages="2,3,4" condition="0"/>
+      <Button title="确定"/>
+    </component>
+    <component id="n3_n5pv" name="btn_1" src="n5pv4x" fileName="components/Button1.xml" xy="117,2" size="100,40">
+      <gearXY controller="buttonsState" pages="3" values="175,2" default="117,2"/>
+      <gearDisplay2 controller="buttonsState" pages="3,4" condition="0"/>
+      <Button title="取消"/>
+    </component>
+  </displayList>
+</component>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="150,300">
+  <controller name="arrowState" pages="0,,1,,2,,3," selected="0"/>
+  <displayList>
+    <image id="n1_h8ma" name="n1" src="n5pv40" fileName="images/frame.png" xy="0,0" size="150,300">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n2_h8ma" name="arrow_down" src="n5pv46" fileName="images/pop_arrow.png" xy="65,-5">
+      <gearDisplay2 controller="arrowState" pages="0" condition="0"/>
+      <relation target="" sidePair="center-center,top-top"/>
+    </image>
+    <image id="n3_h8ma" name="arrow_up" src="n5pv46" fileName="images/pop_arrow.png" xy="65,305" scale="1,-1">
+      <gearDisplay2 controller="arrowState" pages="1" condition="0"/>
+      <relation target="" sidePair="center-center,bottom-bottom"/>
+    </image>
+    <image id="n4_h8ma" name="arrow_right" src="n5pv46" fileName="images/pop_arrow.png" xy="-5,144" skew="-175,0" rotation="90">
+      <gearDisplay2 controller="arrowState" pages="2" condition="0"/>
+      <relation target="" sidePair="middle-middle,left-left"/>
+    </image>
+    <image id="n5_h8ma" name="arrow_left" src="n5pv46" fileName="images/pop_arrow.png" xy="205,144" rotation="90">
+      <gearDisplay2 controller="arrowState" pages="3" condition="0"/>
+    </image>
+    <list id="n6_h8ma" name="list_item" xy="15,15" size="120,269" defaultItem="ui://nmchl51lh8ma5e" autoClearItems="true">
+      <relation target="" sidePair="width-width,height-height"/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+      <item/>
+    </list>
+  </displayList>
+</component>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="640,1136" restrictSize="100,0,100,0">
+  <displayList>
+    <image id="n0_h8ma" name="n0" src="n5pv3p" fileName="images/bg.jpg" xy="0,0">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n1_h8ma" name="n1" src="n5pv4c" fileName="images/egret_icon.png" xy="262,482">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <text id="n2_h8ma" name="n2" xy="222,83" size="196,64" fontSize="48" color="#ffffff" text="全屏界面">
+      <relation target="" sidePair="center-center,top-top"/>
+    </text>
+    <text id="n3_h8ma" name="n3" xy="81,166" size="478,64" fontSize="48" color="#ffffff" text="会隐藏之下的UI和场景">
+      <relation target="" sidePair="center-center,top-top"/>
+    </text>
+    <component id="n4_h8ma" name="btn_back" src="n5pv4x" fileName="components/Button1.xml" xy="0,1036" size="100,100">
+      <relation target="" sidePair="left-left,bottom-bottom"/>
+      <Button title="返回"/>
+    </component>
+  </displayList>
+</component>

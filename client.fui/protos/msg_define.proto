@@ -1,0 +1,16 @@
+syntax = "proto2"; package ro3;
+
+message Notify
+{
+	optional string type = 1;		//通知类型
+	optional bytes buffer = 2;		//通知内容
+}
+
+message NetMsg
+{
+    required uint32 cmd = 1;
+    required int32 cmd_no = 2;
+    required string uid = 3;
+    required bytes buffer = 4;
+	repeated Notify notifies = 5;
+};

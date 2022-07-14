@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="nmchl51l">
+  <resources>
+    <image id="n5pv3p" name="bg.jpg" path="/images/"/>
+    <image id="n5pv3q" name="track.png" path="/images/eui/Slider/"/>
+    <image id="n5pv3r" name="thumb.png" path="/images/eui/Slider/"/>
+    <image id="n5pv3s" name="tracklight.png" path="/images/eui/Slider/"/>
+    <image id="n5pv3t" name="thumb_pb.png" path="/images/eui/ProgressBar/"/>
+    <image id="n5pv3u" name="track_pb.png" path="/images/eui/ProgressBar/"/>
+    <image id="n5pv3v" name="button_down.png" path="/images/eui/Button/" scale="9grid" scale9grid="4,4,8,8"/>
+    <image id="n5pv3w" name="button_up.png" path="/images/eui/Button/" scale="9grid" scale9grid="4,4,8,8"/>
+    <image id="n5pv3x" name="track_sb.png" path="/images/eui/ScrollBar/"/>
+    <image id="n5pv3y" name="roundthumb.png" path="/images/eui/ScrollBar/"/>
+    <image id="n5pv3z" name="selected.png" path="/images/eui/ItemRenderer/"/>
+    <image id="n5pv40" name="frame.png" path="/images/" scale="9grid" scale9grid="18,21,12,9"/>
+    <image id="n5pv41" name="guide_arrow.png" path="/images/"/>
+    <image id="n5pv42" name="guide_frame.png" path="/images/"/>
+    <image id="n5pv43" name="item.png" path="/images/"/>
+    <image id="n5pv44" name="map.jpg" path="/images/"/>
+    <image id="n5pv45" name="checkbox_select_down.png" path="/images/eui/CheckBox/"/>
+    <image id="n5pv46" name="pop_arrow.png" path="/images/"/>
+    <image id="n5pv47" name="checkbox_select_up.png" path="/images/eui/CheckBox/"/>
+    <image id="n5pv48" name="checkbox_unselect.png" path="/images/eui/CheckBox/"/>
+    <image id="n5pv49" name="btn_ar_diban.png" path="/images/"/>
+    <image id="n5pv4a" name="btn_ar_select01.png" path="/images/"/>
+    <image id="n5pv4c" name="egret_icon.png" path="/images/"/>
+    <image id="n5pv4d" name="border.png" path="/images/eui/Panel/" scale="9grid" scale9grid="44,11,88,22"/>
+    <image id="n5pv4e" name="checkbox_select_disabled.png" path="/images/eui/CheckBox/"/>
+    <image id="n5pv4f" name="header.png" path="/images/eui/Panel/" scale="9grid" scale9grid="4,4,8,8"/>
+    <image id="n5pv4g" name="radiobutton_select_disabled.png" path="/images/eui/RadioButton/"/>
+    <image id="n5pv4h" name="radiobutton_select_down.png" path="/images/eui/RadioButton/"/>
+    <image id="n5pv4i" name="radiobutton_select_up.png" path="/images/eui/RadioButton/"/>
+    <image id="n5pv4j" name="on.png" path="/images/eui/ToggleSwitch/"/>
+    <image id="n5pv4k" name="off.png" path="/images/eui/ToggleSwitch/"/>
+    <image id="n5pv4l" name="handle.png" path="/images/eui/ToggleSwitch/"/>
+    <image id="n5pv4m" name="radiobutton_unselect.png" path="/images/eui/RadioButton/"/>
+    <image id="n5pv4n" name="PropBox_099.png" path="/images/"/>
+    <sound id="n5pv4s" name="effect2.mp3" path="/sounds/"/>
+    <sound id="n5pv4t" name="killed.mp3" path="/sounds/"/>
+    <sound id="n5pv4u" name="effect.mp3" path="/sounds/"/>
+    <sound id="n5pv4v" name="music.mp3" path="/sounds/"/>
+    <sound id="n5pv4w" name="refine.mp3" path="/sounds/"/>
+    <component id="n5pv4x" name="Button1.xml" path="/components/"/>
+    <component id="n5pv4y" name="LoginScene.xml" path="/" exported="true"/>
+    <component id="n5pv4z" name="LoginWindow.xml" path="/" exported="true"/>
+    <component id="n5pv50" name="PopupFrame.xml" path="/components/" exported="true"/>
+    <component id="n5pv51" name="MainScene.xml" path="/" exported="true"/>
+    <component id="n5pv52" name="MainMenuPluginUI.xml" path="/" exported="true"/>
+    <component id="n5pv53" name="TipsView.xml" path="/" exported="true"/>
+    <component id="n5pv54" name="TipsPage.xml" path="/" exported="true"/>
+    <component id="n5pv55" name="BagWindow.xml" path="/" exported="true"/>
+    <component id="n5pv56" name="MainPage.xml" path="/" exported="true"/>
+    <component id="n5pv57" name="GuidePage.xml" path="/" exported="true"/>
+    <component id="n5pv58" name="GuideArrow.xml" path="/components/" exported="true"/>
+    <component id="n5pv59" name="ItemIcon.xml" path="/components/" exported="true"/>
+    <component id="n5pv5a" name="Alert.xml" path="/" exported="true"/>
+    <component id="h8ma5b" name="TipsItem.xml" path="/components/" exported="true"/>
+    <component id="h8ma5c" name="BagList.xml" path="/components/"/>
+    <component id="h8ma5d" name="PopupMenu.xml" path="/" exported="true"/>
+    <component id="h8ma5e" name="PopupMenuItem.xml" path="/components/" exported="true"/>
+    <component id="h8ma5f" name="AlertButtons.xml" path="/components/"/>
+    <component id="k9dg5g" name="Button2.xml" path="/components/"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>

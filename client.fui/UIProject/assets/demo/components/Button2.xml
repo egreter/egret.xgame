@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="30,30" restrictSize="30,0,30,0" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <image id="n0_n5pv" name="n0" src="n5pv3w" fileName="images/eui/Button/button_up.png" xy="0,0" size="30,30">
+      <gearDisplay controller="button" pages="0,2"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n1_n5pv" name="n1" src="n5pv3v" fileName="images/eui/Button/button_down.png" xy="0,0" size="30,30">
+      <gearDisplay controller="button" pages="1,3"/>
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <text id="n2_n5pv" name="title" xy="5,3" size="20,24" fontSize="16" color="#ffffff" align="center" vAlign="middle" singleLine="true" text="关">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </text>
+  </displayList>
+  <Button/>
+  <relation target="n2_n5pv" sidePair="width-width"/>
+</component>

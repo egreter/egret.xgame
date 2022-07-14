@@ -284,8 +284,12 @@ module euix {
                         entity.createMask(uiPage.maskColor, uiPage.maskAlpha, uiPage.flags & UIFlags.closeByMask);
                         layerManager.addChild(entity.mask);
                     }
-                    if (options.hud || (uiPage.flags & UIFlags.isPlugin)) {
+                    if (options.hud || (uiPage.flags & UIFlags.isPlugin || uiPage.flags & UIFlags.isPopupMenu)) {
 
+                    }
+                    else if (uiPage.flags & UIFlags.isWindow) {
+                        uiPage.horizontalCenter = 0;
+                        uiPage.verticalCenter = 0;
                     }
                     else {
                         uiPage.left = uiPage.right = uiPage.top = uiPage.bottom = 0;
@@ -345,7 +349,7 @@ module euix {
                 options.errorMessage = "UIPage:{0}还没有加载完成".format(options.name);
                 return false;
             }
-            if (uiPage.flags & UIFlags.Scene) {
+            if (uiPage.flags & UIFlags.isScene) {
                 if (this.currentScene) {
                     if (this.sceneTransition) {
                         await this.sceneTransition.start(this.currentScene.uiPage);

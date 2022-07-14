@@ -11,7 +11,7 @@ module euix {
     export class Window extends UIPage {
         public constructor(skinPath?: string) {
             super(skinPath);
-            this.flags = UIFlags.isStack | UIFlags.useMask | UIFlags.closeByMask;
+            this.flags = UIFlags.isStack | UIFlags.isWindow | UIFlags.useMask | UIFlags.closeByMask;
             this.setLayerID(UILayerID.Layer_8_Window);
         }
     }

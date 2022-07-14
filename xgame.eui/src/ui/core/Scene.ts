@@ -12,7 +12,7 @@ module euix {
     export class Scene extends UIPage {
         public constructor(skinPath?: string) {
             super(skinPath);
-            this.flags = UIFlags.Scene | UIFlags.isFullScreen;
+            this.flags = UIFlags.isScene | UIFlags.isFullScreen;
             this.setLayerID(UILayerID.Layer_2_Scene);
         }
     }

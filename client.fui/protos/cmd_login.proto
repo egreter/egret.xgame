@@ -1,0 +1,23 @@
+syntax = "proto2"; package ro3;
+message LoginReq
+{
+    required string uid = 1;
+	optional string password = 2;		// 密码
+    optional string account = 3;       // 平台账号
+    optional int32 platform = 4;       // 渠道号
+	optional int32 version = 5;       // 客户端版本号 如1.0.0
+	optional int32 reconnect = 6;		//重连标记
+};
+message LoginResp
+{
+    enum LoginRet
+    {
+        OK = 0;
+        FAIL = -1;
+    };
+	required LoginRet result = 1;
+	optional string uid = 2;
+    optional int64 nowtime = 8;
+    optional int32 version = 10;
+    optional int32 reconnect = 11;
+};

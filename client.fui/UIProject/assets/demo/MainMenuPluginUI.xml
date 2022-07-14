@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="640,1136">
+  <displayList>
+    <component id="n0_n5pv" name="btn_0" src="n5pv4x" fileName="components/Button1.xml" xy="0,0" size="132,40" restrictSize="100,0,40,0">
+      <Button title="查看详情"/>
+    </component>
+    <component id="n1_h8ma" name="btn_1" src="n5pv4x" fileName="components/Button1.xml" xy="152,0" size="132,40" restrictSize="100,0,40,0">
+      <Button title="打开菜单"/>
+    </component>
+    <component id="n3_h8ma" name="btn_2" src="n5pv4x" fileName="components/Button1.xml" xy="304,0" size="132,40" restrictSize="100,0,40,0">
+      <Button title="打开背包"/>
+    </component>
+    <component id="n4_h8ma" name="btn_3" src="n5pv4x" fileName="components/Button1.xml" xy="456,0" size="164,40" restrictSize="100,0,40,0">
+      <Button title="打开全屏界面"/>
+    </component>
+    <component id="n5_h8ma" name="btn_6" src="n5pv4x" fileName="components/Button1.xml" xy="640,0" size="146,40" restrictSize="100,0,40,0">
+      <Button title="打开UI音效"/>
+    </component>
+    <component id="n6_h8ma" name="btn_7" src="n5pv4x" fileName="components/Button1.xml" xy="806,0" size="164,40" restrictSize="100,0,40,0">
+      <Button title="打开普通音效"/>
+    </component>
+    <component id="n7_h8ma" name="btn_8" src="n5pv4x" fileName="components/Button1.xml" xy="0,62" size="196,40" restrictSize="100,0,40,0">
+      <Button title="播放一个动画特效"/>
+    </component>
+    <component id="n8_h8ma" name="btn_9" src="n5pv4x" fileName="components/Button1.xml" xy="216,62" size="212,40" restrictSize="100,0,40,0">
+      <Button title="释放动画特效及资源"/>
+    </component>
+    <component id="n9_h8ma" name="btn_4" src="n5pv4x" fileName="components/Button1.xml" xy="448,62" size="218,40" restrictSize="100,0,40,0">
+      <Button title="主动画时间轴0.5倍速"/>
+    </component>
+    <component id="n10_h8ma" name="btn_5" src="n5pv4x" fileName="components/Button1.xml" xy="686,62" size="205,40" restrictSize="100,0,40,0">
+      <Button title="主动画时间轴3倍速"/>
+    </component>
+    <component id="n11_h8ma" name="btn_10" src="n5pv4x" fileName="components/Button1.xml" xy="911,62" size="202,40" restrictSize="100,0,40,0">
+      <Button title="主动画时间轴1倍速"/>
+    </component>
+    <component id="n12_h8ma" name="btn_11" src="n5pv4x" fileName="components/Button1.xml" xy="0,125" size="146,40" restrictSize="100,0,40,0">
+      <Button title="龙骨(stand)"/>
+    </component>
+    <component id="n13_h8ma" name="btn_12" src="n5pv4x" fileName="components/Button1.xml" xy="166,125" size="139,40" restrictSize="100,0,40,0">
+      <Button title="龙骨(walk)"/>
+    </component>
+    <component id="n14_h8ma" name="btn_13" src="n5pv4x" fileName="components/Button1.xml" xy="325,125" size="142,40" restrictSize="100,0,40,0">
+      <Button title="龙骨(jump)"/>
+    </component>
+    <component id="n15_h8ma" name="btn_14" src="n5pv4x" fileName="components/Button1.xml" xy="487,125" size="127,40" restrictSize="100,0,40,0">
+      <Button title="龙骨(fall)"/>
+    </component>
+    <component id="n16_h8ma" name="btn_15" src="n5pv4x" fileName="components/Button1.xml" xy="634,125" size="244,40" restrictSize="100,0,40,0">
+      <Button title="移除并回收龙骨对象资源"/>
+    </component>
+  </displayList>
+</component>

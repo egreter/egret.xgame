@@ -1,15 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
 <e:Skin class="skins.LoginPageSkin"
-	 width="640"
-	height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
-	<e:Group width="400" height="200" horizontalCenter="0" verticalCenter="0">
-		<e:Image left="0" right="0" bottom="0" top="0" source="border_png" scale9Grid="2,2,12,12" x="-220" y="-468" scaleX="1" scaleY="1"/>
-		<e:Group id="moveArea" left="0" right="0" top="0" height="45" x="-220" y="-468" scaleX="1" scaleY="1">
-			<e:Image left="0" right="0" bottom="0" top="0" source="header_png"/>
-			<e:Label size="20" fontFamily="Tahoma" textColor="0xFFFFFF" wordWrap="false" left="15" right="5" verticalCenter="0" text="账号登录" textAlign="center"/>
-		</e:Group>
-		<e:Button id="btn_login" label="登  录" width="150" height="40" horizontalCenter="0" bottom="20"/>
-		<e:Label text="账号：" size="22" textColor="0x000000" left="69" top="87"/>
-		<e:TextInput id="com_input" text="rontian" width="200" height="22" left="135" top="87" prompt="输入账号"/>
+	 width="400"
+	height="200" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image left="0" right="0" bottom="0" top="0" source="border_png" scale9Grid="2,2,12,12" x="0" y="0" scaleX="1" scaleY="1"/>
+	<e:Group id="moveArea" left="0" right="0" top="0" height="45" x="0" y="0" scaleX="1" scaleY="1">
+		<e:Image left="0" right="0" bottom="0" top="0" source="header_png"/>
+		<e:Label size="20" fontFamily="Tahoma" textColor="0xFFFFFF" wordWrap="false" left="15" right="5" verticalCenter="0" text="账号登录" textAlign="center"/>
 	</e:Group>
+	<e:Button id="btn_login" label="登  录" width="150" height="40" horizontalCenter="0" bottom="20" x="125" y="140"/>
+	<e:Label text="账号：" size="22" textColor="0x000000" left="69" top="87" x="69" y="87"/>
+	<e:TextInput id="com_input" text="rontian" width="200" height="22" left="135" top="87" prompt="输入账号" x="135" y="87"/>
 </e:Skin>

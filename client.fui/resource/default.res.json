@@ -1,0 +1,205 @@
+{
+	"groups": [
+		{
+			"keys": "bg_jpg,egret_icon_png",
+			"name": "preload"
+		}
+	],
+	"resources": [
+		{
+			"url": "assets/bg.jpg",
+			"type": "image",
+			"name": "bg_jpg"
+		},
+		{
+			"url": "assets/egret_icon.png",
+			"type": "image",
+			"name": "egret_icon_png"
+		},
+		{
+			"url": "assets/eui/Button/button_down.png",
+			"type": "image",
+			"name": "button_down_png"
+		},
+		{
+			"url": "assets/eui/Button/button_up.png",
+			"type": "image",
+			"name": "button_up_png"
+		},
+		{
+			"url": "assets/eui/CheckBox/checkbox_select_disabled.png",
+			"type": "image",
+			"name": "checkbox_select_disabled_png"
+		},
+		{
+			"url": "assets/eui/CheckBox/checkbox_select_down.png",
+			"type": "image",
+			"name": "checkbox_select_down_png"
+		},
+		{
+			"url": "assets/eui/CheckBox/checkbox_select_up.png",
+			"type": "image",
+			"name": "checkbox_select_up_png"
+		},
+		{
+			"url": "assets/eui/CheckBox/checkbox_unselect.png",
+			"type": "image",
+			"name": "checkbox_unselect_png"
+		},
+		{
+			"url": "assets/eui/ItemRenderer/selected.png",
+			"type": "image",
+			"name": "selected_png"
+		},
+		{
+			"url": "assets/eui/Panel/border.png",
+			"type": "image",
+			"name": "border_png"
+		},
+		{
+			"url": "assets/eui/Panel/header.png",
+			"type": "image",
+			"name": "header_png"
+		},
+		{
+			"url": "assets/eui/ProgressBar/thumb_pb.png",
+			"type": "image",
+			"name": "thumb_pb_png"
+		},
+		{
+			"url": "assets/eui/ProgressBar/track_pb.png",
+			"type": "image",
+			"name": "track_pb_png"
+		},
+		{
+			"url": "assets/eui/RadioButton/radiobutton_select_disabled.png",
+			"type": "image",
+			"name": "radiobutton_select_disabled_png"
+		},
+		{
+			"url": "assets/eui/RadioButton/radiobutton_select_down.png",
+			"type": "image",
+			"name": "radiobutton_select_down_png"
+		},
+		{
+			"url": "assets/eui/RadioButton/radiobutton_select_up.png",
+			"type": "image",
+			"name": "radiobutton_select_up_png"
+		},
+		{
+			"url": "assets/eui/RadioButton/radiobutton_unselect.png",
+			"type": "image",
+			"name": "radiobutton_unselect_png"
+		},
+		{
+			"url": "assets/eui/ScrollBar/roundthumb.png",
+			"type": "image",
+			"name": "roundthumb_png"
+		},
+		{
+			"url": "assets/eui/ScrollBar/track_sb.png",
+			"type": "image",
+			"name": "track_sb_png"
+		},
+		{
+			"url": "assets/eui/Slider/thumb.png",
+			"type": "image",
+			"name": "thumb_png"
+		},
+		{
+			"url": "assets/eui/Slider/track.png",
+			"type": "image",
+			"name": "track_png"
+		},
+		{
+			"url": "assets/eui/Slider/tracklight.png",
+			"type": "image",
+			"name": "tracklight_png"
+		},
+		{
+			"url": "assets/eui/ToggleSwitch/handle.png",
+			"type": "image",
+			"name": "handle_png"
+		},
+		{
+			"url": "assets/eui/ToggleSwitch/off.png",
+			"type": "image",
+			"name": "off_png"
+		},
+		{
+			"url": "assets/eui/ToggleSwitch/on.png",
+			"type": "image",
+			"name": "on_png"
+		},
+		{
+			"url": "assets/sounds/effect.mp3",
+			"type": "sound",
+			"name": "effect_mp3"
+		},
+		{
+			"url": "assets/sounds/music.mp3",
+			"type": "sound",
+			"name": "music_mp3"
+		},
+		{
+			"url": "assets/sounds/effect2.mp3",
+			"type": "sound",
+			"name": "effect2_mp3"
+		},
+		{
+			"url": "assets/sounds/killed.mp3",
+			"type": "sound",
+			"name": "killed_mp3"
+		},
+		{
+			"url": "assets/sounds/refine.mp3",
+			"type": "sound",
+			"name": "refine_mp3"
+		},
+		{
+			"url": "assets/animations/888888.png",
+			"type": "image",
+			"name": "888888_png"
+		},
+		{
+			"url": "assets/animations/888888.json",
+			"type": "json",
+			"name": "888888_json"
+		},
+		{
+			"url": "assets/animations/chunli.png",
+			"type": "image",
+			"name": "chunli_png"
+		},
+		{
+			"url": "assets/animations/chunli.json",
+			"type": "json",
+			"name": "chunli_json"
+		},
+		{
+			"url": "assets/dragonbones/dragon_boy_tex.png",
+			"type": "image",
+			"name": "dragon_boy_tex_png"
+		},
+		{
+			"url": "assets/dragonbones/dragon_boy_ske.json",
+			"type": "json",
+			"name": "dragon_boy_ske_json"
+		},
+		{
+			"url": "assets/dragonbones/dragon_boy_tex.json",
+			"type": "json",
+			"name": "dragon_boy_tex_json"
+		},
+		{
+			"url": "assets/fairygui/demo.fui",
+			"type": "bin",
+			"name": "demo_fui"
+		},
+		{
+			"url": "assets/fairygui/demo_atlas0.png",
+			"type": "image",
+			"name": "demo_atlas0"
+		}
+	]
+}

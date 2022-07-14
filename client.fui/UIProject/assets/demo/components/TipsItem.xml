@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="120,60" initName="com_tips">
+  <displayList>
+    <image id="n0_h8ma" name="n0" src="n5pv40" fileName="images/frame.png" xy="0,0" size="120,60">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <richtext id="n1_h8ma" name="lab_message" xy="40,14" size="52,32" fontSize="22" align="center" vAlign="middle" ubb="true" text="Label">
+      <relation target="" sidePair="middle-middle,left-left"/>
+    </richtext>
+  </displayList>
+</component>

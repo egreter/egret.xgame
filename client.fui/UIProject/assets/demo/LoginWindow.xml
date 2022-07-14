@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="400,200">
+  <displayList>
+    <component id="n0_n5pv" name="n0" src="n5pv50" fileName="components/PopupFrame.xml" xy="0,0" size="400,200">
+      <relation target="" sidePair=""/>
+      <property target="lab_title" propertyId="0" value="账号登录"/>
+    </component>
+    <text id="n3_n5pv" name="n3" xy="94,76" size="52,24" fontSize="16" text="账号："/>
+    <text id="n4_n5pv" name="com_input" xy="149,76" size="200,25" fontSize="16" autoSize="none" text="rontian" input="true"/>
+    <component id="n5_k9dg" name="btn_login" src="n5pv4x" fileName="components/Button1.xml" xy="150,130">
+      <Button title="登录"/>
+    </component>
+  </displayList>
+</component>

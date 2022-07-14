@@ -1226,7 +1226,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                                     entity.createMask(uiPage_1.maskColor, uiPage_1.maskAlpha, uiPage_1.flags & euix.UIFlags.closeByMask);
                                     layerManager.addChild(entity.mask);
                                 }
-                                if (options.hud || (uiPage_1.flags & euix.UIFlags.isPlugin)) {
+                                if (options.hud || (uiPage_1.flags & euix.UIFlags.isPlugin || uiPage_1.flags & euix.UIFlags.isPopupMenu)) {
+                                }
+                                else if (uiPage_1.flags & euix.UIFlags.isWindow) {
+                                    uiPage_1.horizontalCenter = 0;
+                                    uiPage_1.verticalCenter = 0;
                                 }
                                 else {
                                     uiPage_1.left = uiPage_1.right = uiPage_1.top = uiPage_1.bottom = 0;
@@ -1299,7 +1303,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                                 options.errorMessage = "UIPage:{0}还没有加载完成".format(options.name);
                                 return [2 /*return*/, false];
                             }
-                            if (!(uiPage.flags & euix.UIFlags.Scene)) return [3 /*break*/, 5];
+                            if (!(uiPage.flags & euix.UIFlags.isScene)) return [3 /*break*/, 5];
                             if (!this.currentScene) return [3 /*break*/, 4];
                             if (!this.sceneTransition) return [3 /*break*/, 2];
                             return [4 /*yield*/, this.sceneTransition.start(this.currentScene.uiPage)];
@@ -1626,7 +1630,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         UIFlags[UIFlags["closeByMask"] = 16] = "closeByMask";
         UIFlags[UIFlags["isPopupMenu"] = 32] = "isPopupMenu";
         UIFlags[UIFlags["isPlugin"] = 64] = "isPlugin";
-        UIFlags[UIFlags["Scene"] = 128] = "Scene";
+        UIFlags[UIFlags["isScene"] = 128] = "isScene";
+        UIFlags[UIFlags["isWindow"] = 256] = "isWindow";
     })(UIFlags = euix.UIFlags || (euix.UIFlags = {}));
 })(euix || (euix = {}));
 /*************************************************
@@ -1663,7 +1668,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         __extends(Window, _super);
         function Window(skinPath) {
             var _this = _super.call(this, skinPath) || this;
-            _this.flags = euix.UIFlags.isStack | euix.UIFlags.useMask | euix.UIFlags.closeByMask;
+            _this.flags = euix.UIFlags.isStack | euix.UIFlags.isWindow | euix.UIFlags.useMask | euix.UIFlags.closeByMask;
             _this.setLayerID(euix.UILayerID.Layer_8_Window);
             return _this;
         }
@@ -1857,7 +1862,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         __extends(Scene, _super);
         function Scene(skinPath) {
             var _this = _super.call(this, skinPath) || this;
-            _this.flags = euix.UIFlags.Scene | euix.UIFlags.isFullScreen;
+            _this.flags = euix.UIFlags.isScene | euix.UIFlags.isFullScreen;
             _this.setLayerID(euix.UILayerID.Layer_2_Scene);
             return _this;
         }
@@ -1992,7 +1997,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         };
         UIHelper.isSceneUI = function (entity) {
             var flags = entity.uiPage.flags;
-            if (flags & euix.UIFlags.Scene) {
+            if (flags & euix.UIFlags.isScene) {
                 return true;
             }
             return false;

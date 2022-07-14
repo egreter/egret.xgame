@@ -28,6 +28,11 @@
 
 ## 版本更新日志
 
+### [2022-07-14]
+
+- 增加基于FairyGUI的界面管理器(完善中...)
+- 提示基于FairyGUI的演示项目
+
 ### [2022-07-12]
 
 - 将基于`eui`的UI管理器从`xgame.egret`中分离至`xgame.eui`，方便接入自定义的UI管理器，比如基于(`FairyGUI`)
@@ -299,9 +304,17 @@ this.animationManager.release("888888");
     egretx.tips("UI音频只能同时播放一个声音，多个播放后者会替换前者！");
     ```
 
+## xgame.fui 基于FairyGUI的UI界面管理器
+
+- 还在努力完善中
+
 ## client.eui 基于eui的示例项目
 
 > 提供基于eui的框架基础功能的使用案例，可运行后查看代码详情。
+
+## client.fui 基于FairyGUI的示例项目
+
+> 提供基于fairyGUI的框架基础功能的使用案例，可运行后查看代码详情。
 
 ### tools
 > 一个基于Commander.js的工具库，用于生成protobuf-bundles.js,导出excel成json文件等

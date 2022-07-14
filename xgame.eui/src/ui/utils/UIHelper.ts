@@ -51,7 +51,7 @@ module euix {
         }
         public static isSceneUI(entity: IUIEntity): boolean {
             let flags = entity.uiPage.flags;
-            if (flags & UIFlags.Scene) {
+            if (flags & UIFlags.isScene) {
                 return true;
             }
             return false;

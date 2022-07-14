@@ -14,9 +14,6 @@
         },
         {
             "path": "xgame.eui"
-        },
-        {
-            "path": "client.eui"
         }
     ],
     "settings": {}

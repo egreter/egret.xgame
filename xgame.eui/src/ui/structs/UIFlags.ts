@@ -13,6 +13,7 @@ module euix {
         closeByMask = 16,
         isPopupMenu = 32,
         isPlugin = 64,
-        Scene = 128
+        isScene = 128,
+        isWindow = 256,
     }
 }

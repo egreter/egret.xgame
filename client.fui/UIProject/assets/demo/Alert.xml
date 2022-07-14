@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="400,300">
+  <controller name="buttonsState" pages="" selected="-1"/>
+  <displayList>
+    <component id="n0_n5pv" name="com_frame" src="n5pv50" fileName="components/PopupFrame.xml" xy="0,0" size="400,300">
+      <relation target="" sidePair="width-width,height-height"/>
+      <property target="lab_title" propertyId="0" value="提示"/>
+    </component>
+    <richtext id="n2_n5pv" name="lab_content" xy="30,66" size="339,153" fontSize="16" align="center" vAlign="middle" autoSize="none" text="">
+      <relation target="" sidePair="width-width,height-height"/>
+    </richtext>
+    <component id="n1_n5pv" name="com_btns" src="h8ma5f" fileName="components/AlertButtons.xml" xy="32,235" size="335,42">
+      <relation target="" sidePair="center-center,bottomext-bottom"/>
+    </component>
+    <component id="n8_k9dg" name="btn_close" src="k9dg5g" fileName="components/Button2.xml" xy="368,7" size="21,30">
+      <Button title="x"/>
+    </component>
+  </displayList>
+</component>

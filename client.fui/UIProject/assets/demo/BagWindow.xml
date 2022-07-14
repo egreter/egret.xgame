@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="540,480">
+  <displayList>
+    <component id="n0_h8ma" name="com_frame" src="n5pv50" fileName="components/PopupFrame.xml" xy="0,0" size="540,480">
+      <property target="lab_title" propertyId="0" value="背包"/>
+    </component>
+    <component id="n1_h8ma" name="com_list" src="h8ma5c" fileName="components/BagList.xml" xy="22,58"/>
+  </displayList>
+</component>

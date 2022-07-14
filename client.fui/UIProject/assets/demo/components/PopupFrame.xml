@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="400,300" initName="com_frame">
+  <displayList>
+    <image id="n0_n5pv" name="n0" src="n5pv4d" fileName="images/eui/Panel/border.png" xy="0,0" size="400,300">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n1_n5pv" name="n1" src="n5pv4f" fileName="images/eui/Panel/header.png" xy="0,0" size="400,40">
+      <relation target="" sidePair="width-width"/>
+    </image>
+    <richtext id="n2_n5pv" name="lab_title" xy="0,7" size="400,34" fontSize="24" color="#ffffff" align="center" ubb="true" autoSize="none" text="Title">
+      <relation target="" sidePair="width-width"/>
+    </richtext>
+  </displayList>
+  <customProperty target="lab_title" propertyId="0"/>
+</component>

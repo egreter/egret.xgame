@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="640,1136">
+  <controller name="loginState" pages="0,,1," selected="1"/>
+  <displayList>
+    <image id="n0_n5pv" name="n0" src="n5pv3p" fileName="images/bg.jpg" xy="0,0">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <image id="n1_n5pv" name="n1" src="n5pv4c" fileName="images/egret_icon.png" xy="50,50"/>
+    <image id="n2_n5pv" name="n2" src="n5pv40" fileName="images/frame.png" xy="193,474" size="258,48" group="n4_n5pv"/>
+    <text id="n3_n5pv" name="lab_username" xy="240,490" size="164,24" group="n4_n5pv" fontSize="16" text="当前登录账号：rontian">
+      <relation target="n2_n5pv" sidePair="center-center"/>
+    </text>
+    <group id="n4_n5pv" name="n4" xy="193,474" size="258,48" advanced="true">
+      <gearDisplay2 controller="loginState" pages="1" condition="0"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </group>
+    <component id="n6_n5pv" name="btn_game" src="n5pv4x" fileName="components/Button1.xml" xy="220,530" size="200,76">
+      <gearDisplay2 controller="loginState" pages="1" condition="0"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="开始游戏"/>
+    </component>
+  </displayList>
+</component>

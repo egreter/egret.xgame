@@ -3,9 +3,12 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
 window.__extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -27,8 +30,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -254,10 +257,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var EgretProvider = (function (_super) {
-        __extends(EgretProvider, _super);
+    var EgretProvider = /** @class */ (function (_super_1) {
+        __extends(EgretProvider, _super_1);
         function EgretProvider(main) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.main = main;
             _this.priority = 100;
             return _this;
@@ -314,10 +317,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 帧动画管理器
      */
-    var AnimationManager = (function (_super) {
-        __extends(AnimationManager, _super);
+    var AnimationManager = /** @class */ (function (_super_1) {
+        __extends(AnimationManager, _super_1);
         function AnimationManager() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             //当前正在播放的动画对象集
             _this.playingClips = new xgame.Dictionary();
             _this.pools = new xgame.PoolGroup("AnimationClip");
@@ -429,11 +432,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 帧动画剪辑
      */
-    var AnimationClip = (function (_super) {
-        __extends(AnimationClip, _super);
+    var AnimationClip = /** @class */ (function (_super_1) {
+        __extends(AnimationClip, _super_1);
         function AnimationClip(key, movieClipname, actionName) {
             if (actionName === void 0) { actionName = "mc"; }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.frameActions = [];
             _this.$timeline = xgame.Timeline.MAIN;
             _this.fromPoolHashCode = 0;
@@ -707,7 +710,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var FrameAction = (function () {
+    var FrameAction = /** @class */ (function () {
         function FrameAction(frame) {
             this.name = "FrameAction";
             this.frame = frame;
@@ -798,7 +801,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var FrameActionItem = (function () {
+    var FrameActionItem = /** @class */ (function () {
         function FrameActionItem(action, thisObject, frame) {
             this.action = action;
             this.thisObject = thisObject;
@@ -824,8 +827,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 从egret.MoveClip修改而来
      */
-    var MovieClip = (function (_super) {
-        __extends(MovieClip, _super);
+    var MovieClip = /** @class */ (function (_super_1) {
+        __extends(MovieClip, _super_1);
         //Construct Function
         /**
          * 创建新的 MovieClip 实例。创建 MovieClip 之后，调用舞台上的显示对象容器的addElement方法。
@@ -834,7 +837,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
          * @platform Web,Native
          */
         function MovieClip(movieClipData, invokeActions) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.$actions = new xgame.Dictionary();
             _this.$timeline = xgame.Timeline.MAIN;
             //Render Property
@@ -1084,7 +1087,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
          * @param nestLevel
          */
         MovieClip.prototype.$onAddToStage = function (stage, nestLevel) {
-            _super.prototype.$onAddToStage.call(this, stage, nestLevel);
+            _super_1.prototype.$onAddToStage.call(this, stage, nestLevel);
             if (this.$isPlaying && this.$totalFrames > 1) {
                 this.setIsStopped(false);
             }
@@ -1095,7 +1098,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
          */
         MovieClip.prototype.$onRemoveFromStage = function () {
             this.setIsStopped(true);
-            _super.prototype.$onRemoveFromStage.call(this);
+            _super_1.prototype.$onRemoveFromStage.call(this);
         };
         //Data Function
         /**
@@ -1644,10 +1647,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 音频管理器
      */
-    var AudioManager = (function (_super) {
-        __extends(AudioManager, _super);
+    var AudioManager = /** @class */ (function (_super_1) {
+        __extends(AudioManager, _super_1);
         function AudioManager() {
-            return _super.call(this) || this;
+            return _super_1.call(this) || this;
         }
         AudioManager.prototype.initialize = function () {
             this.background = new egretx.MusicAudioChannel();
@@ -1674,10 +1677,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 音频频道
      */
-    var AudioChannel = (function (_super) {
-        __extends(AudioChannel, _super);
+    var AudioChannel = /** @class */ (function (_super_1) {
+        __extends(AudioChannel, _super_1);
         function AudioChannel(channelType) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.channelType = channelType;
             _this.callback_onPlayCompleted = new xgame.Signal1();
             _this.$toggleState = AudioToggleState.ON;
@@ -1741,10 +1744,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./core/AudioChannel.ts" />
 
 (function (egretx) {
-    var EffectAudioChannel = (function (_super) {
-        __extends(EffectAudioChannel, _super);
+    var EffectAudioChannel = /** @class */ (function (_super_1) {
+        __extends(EffectAudioChannel, _super_1);
         function EffectAudioChannel() {
-            var _this = _super.call(this, egretx.AudioChannelType.EFFECT) || this;
+            var _this = _super_1.call(this, egretx.AudioChannelType.EFFECT) || this;
             _this.freeAudioes = [];
             _this.playAudioes = [];
             for (var i = 0; i < EffectAudioChannel.instanceMax; i++) {
@@ -1811,10 +1814,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./core/AudioChannel.ts" />
 
 (function (egretx) {
-    var MusicAudioChannel = (function (_super) {
-        __extends(MusicAudioChannel, _super);
+    var MusicAudioChannel = /** @class */ (function (_super_1) {
+        __extends(MusicAudioChannel, _super_1);
         function MusicAudioChannel() {
-            var _this = _super.call(this, egretx.AudioChannelType.BACKGORUND) || this;
+            var _this = _super_1.call(this, egretx.AudioChannelType.BACKGORUND) || this;
             if (egretx.AudioManager.Instance().createAudioInstance) {
                 _this.main = egretx.AudioManager.Instance().createAudioInstance("music");
             }
@@ -1849,11 +1852,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var Audio = (function (_super) {
-        __extends(Audio, _super);
+    var Audio = /** @class */ (function (_super_1) {
+        __extends(Audio, _super_1);
         function Audio(type) {
             if (type === void 0) { type = "EFFECT"; }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.type = type;
             _this.$volume = 0.5;
             return _this;
@@ -1919,10 +1922,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 默认的音频播放器
      */
-    var WebAudio = (function (_super) {
-        __extends(WebAudio, _super);
+    var WebAudio = /** @class */ (function (_super_1) {
+        __extends(WebAudio, _super_1);
         function WebAudio(type) {
-            var _this = _super.call(this, type) || this;
+            var _this = _super_1.call(this, type) || this;
             _this.position = 0;
             _this.$isPaused = false;
             return _this;
@@ -2097,10 +2100,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 龙骨动画管理器
      */
-    var DragonBonesManager = (function (_super) {
-        __extends(DragonBonesManager, _super);
+    var DragonBonesManager = /** @class */ (function (_super_1) {
+        __extends(DragonBonesManager, _super_1);
         function DragonBonesManager() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.pools = new xgame.PoolGroup("Armature");
             return _this;
         }
@@ -2214,10 +2217,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var Armature = (function (_super) {
-        __extends(Armature, _super);
+    var Armature = /** @class */ (function (_super_1) {
+        __extends(Armature, _super_1);
         function Armature(key, armatureName, texture) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.key = key;
             _this.armatureName = armatureName;
             _this.texture = texture;
@@ -2323,10 +2326,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var GuideManager = (function (_super) {
-        __extends(GuideManager, _super);
+    var GuideManager = /** @class */ (function (_super_1) {
+        __extends(GuideManager, _super_1);
         function GuideManager() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             //引导任务集
             _this.tasks = new xgame.Dictionary();
             //帧调度
@@ -2594,14 +2597,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         GuideStepState[GuideStepState["Running"] = 1] = "Running";
         GuideStepState[GuideStepState["Completed"] = 2] = "Completed";
     })(GuideStepState = egretx.GuideStepState || (egretx.GuideStepState = {}));
-    var GuideStep = (function (_super) {
-        __extends(GuideStep, _super);
+    var GuideStep = /** @class */ (function (_super_1) {
+        __extends(GuideStep, _super_1);
         /**
          * @param parent 所属引导任务
          * @param index 第几步
          */
         function GuideStep(parent, index, params) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.parent = parent;
             _this.index = index;
             _this.params = params;
@@ -2694,8 +2697,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         GuideTaskType[GuideTaskType["Weak"] = 0] = "Weak";
         GuideTaskType[GuideTaskType["Force"] = 1] = "Force";
     })(GuideTaskType = egretx.GuideTaskType || (egretx.GuideTaskType = {}));
-    var GuideTask = (function (_super) {
-        __extends(GuideTask, _super);
+    var GuideTask = /** @class */ (function (_super_1) {
+        __extends(GuideTask, _super_1);
         /**
          * 构造函数
          * @param ID 任务id
@@ -2704,7 +2707,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
          */
         function GuideTask(ID, taskType, frontID) {
             if (taskType === void 0) { taskType = GuideTaskType.Weak; }
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.ID = ID;
             _this.taskType = taskType;
             _this.frontID = frontID;
@@ -2944,10 +2947,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./interfaces/IHttpManager.ts" />
 
 (function (egretx) {
-    var HttpManager = (function (_super) {
-        __extends(HttpManager, _super);
+    var HttpManager = /** @class */ (function (_super_1) {
+        __extends(HttpManager, _super_1);
         function HttpManager() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.pools = new xgame.PoolObject(egretx.HttpRequest);
             return _this;
         }
@@ -3017,10 +3020,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./interfaces/ISocketManager.ts" />
 
 (function (egretx) {
-    var SocketManager = (function (_super) {
-        __extends(SocketManager, _super);
+    var SocketManager = /** @class */ (function (_super_1) {
+        __extends(SocketManager, _super_1);
         function SocketManager() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.defaultInstanceName = "main";
             //失败尝试重连次数
             _this.retryMaxTiems = 3;
@@ -3059,10 +3062,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 *************************************************/
 
 (function (egretx) {
-    var HttpRequest = (function (_super) {
-        __extends(HttpRequest, _super);
+    var HttpRequest = /** @class */ (function (_super_1) {
+        __extends(HttpRequest, _super_1);
         function HttpRequest(uri, method) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.uri = uri;
             _this.method = method;
             _this.reconnectTimes = 5;
@@ -3189,10 +3192,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 网络连接实例的实现类
      */
-    var SocketInstance = (function (_super) {
-        __extends(SocketInstance, _super);
+    var SocketInstance = /** @class */ (function (_super_1) {
+        __extends(SocketInstance, _super_1);
         function SocketInstance(manager, name, socketHelper) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.manager = manager;
             _this.name = name;
             _this.socketHelper = socketHelper;
@@ -3483,10 +3486,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 资源管理器
      */
-    var ResourceManager = (function (_super) {
-        __extends(ResourceManager, _super);
+    var ResourceManager = /** @class */ (function (_super_1) {
+        __extends(ResourceManager, _super_1);
         function ResourceManager() {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.groups = new xgame.Dictionary();
             _this.loadQueues = new xgame.Dictionary();
             return _this;
@@ -3505,8 +3508,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         };
         ResourceManager.prototype.loadResAsync = function (key) {
             return __awaiter(this, void 0, void 0, function () {
-                var _this = this;
                 var loader;
+                var _this = this;
                 return __generator(this, function (_a) {
                     if (!RES.hasRes(key)) {
                         throw new Error("资源配置:{0}找不到".format(key));
@@ -3554,10 +3557,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     /**
      * 资源组
      */
-    var ResourceGroup = (function (_super) {
-        __extends(ResourceGroup, _super);
+    var ResourceGroup = /** @class */ (function (_super_1) {
+        __extends(ResourceGroup, _super_1);
         function ResourceGroup(manager, resourceType) {
-            var _this = _super.call(this) || this;
+            var _this = _super_1.call(this) || this;
             _this.manager = manager;
             _this.resourceType = resourceType;
             _this.keys = new xgame.Dictionary();
@@ -3622,10 +3625,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./ResourceGroup.ts" />
 
 (function (egretx) {
-    var DragonBonesResourceGroup = (function (_super) {
-        __extends(DragonBonesResourceGroup, _super);
+    var DragonBonesResourceGroup = /** @class */ (function (_super_1) {
+        __extends(DragonBonesResourceGroup, _super_1);
         function DragonBonesResourceGroup(manager) {
-            return _super.call(this, manager, egretx.ResourceType.DragonBones) || this;
+            return _super_1.call(this, manager, egretx.ResourceType.DragonBones) || this;
         }
         DragonBonesResourceGroup.prototype.load = function (key, skeleton) {
             return __awaiter(this, void 0, void 0, function () {
@@ -3683,10 +3686,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="./ResourceGroup.ts" />
 
 (function (egretx) {
-    var MovieClipResourceGroup = (function (_super) {
-        __extends(MovieClipResourceGroup, _super);
+    var MovieClipResourceGroup = /** @class */ (function (_super_1) {
+        __extends(MovieClipResourceGroup, _super_1);
         function MovieClipResourceGroup(manager) {
-            return _super.call(this, manager, egretx.ResourceType.MovieClip) || this;
+            return _super_1.call(this, manager, egretx.ResourceType.MovieClip) || this;
         }
         MovieClipResourceGroup.prototype.load = function (key) {
             return __awaiter(this, void 0, void 0, function () {
