@@ -10,6 +10,7 @@
 
 
 module fui {
+    @xgame.mixin(TouchBehaviours)
     export class UIPage<T extends fairygui.GObject> extends xgame.XObject {
         @inject(fui.IUIManager)
         public uiManager: fui.IUIManager;
@@ -24,9 +25,6 @@ module fui {
         }
         public constructor(public packageName?: string, public comName?: string, public userClass?: xgame.TClass<T>) {
             super();
-        }
-        public addClick(target: fairygui.GObject, listener: Function, thisObject?: any): void {
-            target.addClickListener(listener, thisObject);
         }
         private guideValues = new xgame.Dictionary<keyof egretx.IGuideInjectValue, number>();
         public injectGuideValue<T extends keyof egretx.IGuideInjectValue>(key: T, value: egretx.IGuideInjectValue[T], taskID?: number): void {
@@ -64,6 +62,7 @@ module fui {
             if (!this.$view) {
                 this.$view = <any>(new fairygui.GComponent());
             }
+            this.setTouchManager(this.view);
             egret.callLater(() => {
                 this.$isLoaded = true;
                 this.onComplete.dispatch();
@@ -133,5 +132,24 @@ module fui {
         public async doFadeOut(): Promise<void> {
 
         }
+        //================================================
+        //Mixin TouchBehaviours
+        //================================================
+        public setTouchManager: (target: fairygui.GObject) => void;
+        public removeTouchEvents: (target: fairygui.GObject | number) => void;
+        public addTouchBegin: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        public removeTouchBegin: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        public addTouchMove: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        public removeTouchMove: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        public addTouchEnd: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        public removeTouchEnd: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        public addReleaseOutSide: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        public removeReleaseOutSide: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        public addClick: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        public removeClick: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        public addLongPress: (target: fairygui.GObject, listener: Function, thisObject?: any, time?: number) => void;
+        public removeLongPress: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        public addRepeatPress: (target: fairygui.GObject, listener: Function, thisObject?: any, time?: number) => void;
+        public removeRepeatPress: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
     }
 }

@@ -282,6 +282,7 @@ module fui {
                     let layerManager = this.uiLayers.get(uiPage.layerID);
                     if (uiPage.flags & UIFlags.useMask) {
                         entity.createMask(uiPage.maskColor, uiPage.maskAlpha, uiPage.flags & UIFlags.closeByMask);
+                        entity.mask.addRelation(layerManager, fairygui.RelationType.Size);
                         layerManager.addChild(entity.mask);
                     }
                     if (options.hud || (uiPage.flags & UIFlags.isPlugin) || (uiPage.flags & UIFlags.isPopupMenu)) {

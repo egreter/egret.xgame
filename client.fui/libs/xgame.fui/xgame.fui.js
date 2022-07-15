@@ -93,14 +93,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         FGUIProvider.prototype.onStart = function (game) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
+                    game.getService(fui.ITouchManagerInternal).initialize();
                     game.getService(fui.IUIManagerInternal).initialize();
                     return [2 /*return*/, true];
                 });
             });
         };
         FGUIProvider.prototype.onServiceRegister = function (game) {
+            game.singleton(fui.ITouchManager, fui.TouchManager).withInstance(new fui.TouchManager(this.main)).setAlias(fui.ITouchManagerInternal);
+            console.log("[FGUIProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(fui.TouchManager)));
             game.singleton(fui.IUIManager, fui.UIManager).withInstance(new fui.UIManager(this.main)).setAlias(fui.IUIManagerInternal);
-            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(fui.UIManager)));
+            console.log("[FGUIProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(fui.UIManager)));
         };
         return FGUIProvider;
     }(xgame.XObject));
@@ -218,6 +221,562 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 (function (fui) {
     fui.injectable = xgame.injectable;
+})(fui || (fui = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2021-10-19
+*************************************************/
+
+(function (fui) {
+    fui.ITouchManager = Symbol.for("fui.ITouchManager");
+})(fui || (fui = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2021-10-19
+*************************************************/
+
+(function (fui) {
+    fui.ITouchManagerInternal = Symbol.for("fui.ITouchManagerInternal");
+})(fui || (fui = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2021-10-19
+*************************************************/
+/// <reference path="./interfaces/ITouchManager.ts" />
+/// <reference path="./interfaces/ITouchManagerInternal.ts" />
+
+(function (fui) {
+    fui.TOUCH_TAP_BETWEEN_TIME = 300;
+    fui.TOUCH_LONG_PRESS_TIME = 300;
+    fui.TOUCH_SCALE_RADIO = 0.96;
+    fui.touchClickLastTime = 0;
+    var TouchManager = (function (_super) {
+        __extends(TouchManager, _super);
+        function TouchManager(main) {
+            var _this = _super.call(this) || this;
+            _this.main = main;
+            _this.delegates = new xgame.Dictionary();
+            _this.stage = main.stage;
+            return _this;
+        }
+        TouchManager.prototype.dispose = function () {
+            this.delegates.clear(function (delegate) {
+                delegate.dispose();
+            });
+            fui.touchClickLastTime = 0;
+        };
+        TouchManager.prototype.initialize = function () {
+            this.stage.addEventListener(egret.TouchEvent.LEAVE_STAGE, this.onLeaveStage, this);
+        };
+        TouchManager.prototype.onLeaveStage = function (event) {
+            this.delegates.forValues(function (delegate) {
+                delegate.onLeaveStage(event);
+            }, this);
+        };
+        TouchManager.prototype.removeTouchEvents = function (target) {
+            var guid = 0;
+            if (typeof (target) === "number") {
+                guid = target;
+            }
+            else {
+                guid = target.hashCode;
+            }
+            if (!this.delegates.containsKey(guid)) {
+                return;
+            }
+            var delegate = this.delegates.remove(guid);
+            delegate.dispose();
+        };
+        TouchManager.prototype.addTouchBegin = function (target, listener, thisObject) {
+            var guid = target.hashCode;
+            var delegate = this.delegates.allocf(guid, function () {
+                return new fui.TouchDelegate(target);
+            });
+            delegate.addTouchBegin(listener, thisObject);
+        };
+        TouchManager.prototype.removeTouchBegin = function (target, listener, thisObject) {
+            var guid = target.hashCode;
+            if (!this.delegates.containsKey(guid)) {
+                return;
+            }
+            var delegate = this.delegates.allocf(guid, function () {
+                return new fui.TouchDelegate(target);
+            });
+            delegate.removeTouchBegin(listener, thisObject);
+        };
+        TouchManager.prototype.addTouchMove = function (target, listener, thisObject) {
+            var guid = target.hashCode;
+            var delegate = this.delegates.allocf(guid, function () {
+                return new fui.TouchDelegate(target);
+            });
+            delegate.addTouchMove(listener, thisObject);
+        };
+        TouchManager.prototype.removeTouchMove = function (target, listener, thisObject) {
+            var guid = target.hashCode;
+            if (!this.delegates.containsKey(guid)) {
+                return;
+            }
+            var delegate = this.delegates.allocf(guid, function () {
+                return new fui.TouchDelegate(target);
+            });
+            delegate.removeTouchMove(listener, thisObject);
+        };
+        TouchManager.prototype.addTouchEnd = function (target, listener, thisObject) {
+            var guid = target.hashCode;
+            var delegate = this.delegates.allocf(guid, function () {
+                return new fui.TouchDelegate(target);
+            });
+            delegate.addTouchEnd(listener, thisObject);
+        };
+        TouchManager.prototype.removeTouchEnd = function (target, listener, thisObject) {
+            var guid = target.hashCode;
+            if (!this.delegates.containsKey(guid)) {
+                return;
+            }
+            var delegate = this.delegates.allocf(guid, function () {
+                return new fui.TouchDelegate(target);
+            });
+            delegate.removeTouchEnd(listener, thisObject);
+        };
+        TouchManager.prototype.addReleaseOutSide = function (target, listener, thisObject) {
+            var guid = target.hashCode;
+            var delegate = this.delegates.allocf(guid, function () {
+                return new fui.TouchDelegate(target);
+            });
+            delegate.addReleaseOutSide(listener, thisObject);
+        };
+        TouchManager.prototype.removeReleaseOutSide = function (target, listener, thisObject) {
+            var guid = target.hashCode;
+            if (!this.delegates.containsKey(guid)) {
+                return;
+            }
+            var delegate = this.delegates.allocf(guid, function () {
+                return new fui.TouchDelegate(target);
+            });
+            delegate.removeReleaseOutSide(listener, thisObject);
+        };
+        TouchManager.prototype.addClick = function (target, listener, thisObject) {
+            var guid = target.hashCode;
+            var delegate = this.delegates.allocf(guid, function () {
+                return new fui.TouchDelegate(target);
+            });
+            delegate.addClick(listener, thisObject);
+        };
+        TouchManager.prototype.removeClick = function (target, listener, thisObject) {
+            var guid = target.hashCode;
+            if (!this.delegates.containsKey(guid)) {
+                return;
+            }
+            var delegate = this.delegates.allocf(guid, function () {
+                return new fui.TouchDelegate(target);
+            });
+            delegate.removeClick(listener, thisObject);
+        };
+        TouchManager.prototype.addLongPress = function (target, listener, thisObject, time) {
+            var guid = target.hashCode;
+            var delegate = this.delegates.allocf(guid, function () {
+                return new fui.TouchDelegate(target);
+            });
+            delegate.addLongPress(listener, thisObject, time);
+        };
+        TouchManager.prototype.removeLongPress = function (target, listener, thisObject) {
+            var guid = target.hashCode;
+            if (!this.delegates.containsKey(guid)) {
+                return;
+            }
+            var delegate = this.delegates.allocf(guid, function () {
+                return new fui.TouchDelegate(target);
+            });
+            delegate.removeLongPress(listener, thisObject);
+        };
+        TouchManager.prototype.addRepeatPress = function (target, listener, thisObject, time) {
+            var guid = target.hashCode;
+            var delegate = this.delegates.allocf(guid, function () {
+                return new fui.TouchDelegate(target);
+            });
+            delegate.addRepeatPress(listener, thisObject, time);
+        };
+        TouchManager.prototype.removeRepeatPress = function (target, listener, thisObject) {
+            var guid = target.hashCode;
+            if (!this.delegates.containsKey(guid)) {
+                return;
+            }
+            var delegate = this.delegates.allocf(guid, function () {
+                return new fui.TouchDelegate(target);
+            });
+            delegate.removeRepeatPress(listener, thisObject);
+        };
+        TouchManager = __decorate([
+            xgame.impl(xgame.IDisposable, fui.ITouchManager, fui.ITouchManagerInternal),
+            __metadata("design:paramtypes", [egret.DisplayObjectContainer])
+        ], TouchManager);
+        return TouchManager;
+    }(xgame.XObject));
+    fui.TouchManager = TouchManager;
+    __reflect(TouchManager.prototype, "fui.TouchManager", ["xgame.IDisposable", "xgame.IXObject", "fui.ITouchManager", "fui.ITouchManagerInternal"]);
+})(fui || (fui = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2021-10-19
+*************************************************/
+
+(function (fui) {
+    var TouchBehaviours = (function () {
+        function TouchBehaviours() {
+        }
+        TouchBehaviours.prototype.setTouchManager = function (target) {
+            if (this.disposableGroup) {
+                return;
+            }
+            this.disposableGroup = new fui.TouchDisposableGroup(target);
+        };
+        TouchBehaviours.prototype.addTouchBegin = function (target, listener, thisObject) {
+            this.disposableGroup.addTouchBegin(target, listener, thisObject);
+        };
+        TouchBehaviours.prototype.removeTouchBegin = function (target, listener, thisObject) {
+            this.disposableGroup.removeTouchBegin(target, listener, thisObject);
+        };
+        TouchBehaviours.prototype.addTouchMove = function (target, listener, thisObject) {
+            this.disposableGroup.addTouchMove(target, listener, thisObject);
+        };
+        TouchBehaviours.prototype.removeTouchMove = function (target, listener, thisObject) {
+            this.disposableGroup.removeTouchMove(target, listener, thisObject);
+        };
+        TouchBehaviours.prototype.addTouchEnd = function (target, listener, thisObject) {
+            this.disposableGroup.addTouchEnd(target, listener, thisObject);
+        };
+        TouchBehaviours.prototype.removeTouchEnd = function (target, listener, thisObject) {
+            this.disposableGroup.removeTouchEnd(target, listener, thisObject);
+        };
+        TouchBehaviours.prototype.addReleaseOutSide = function (target, listener, thisObject) {
+            this.disposableGroup.addReleaseOutSide(target, listener, thisObject);
+        };
+        TouchBehaviours.prototype.removeReleaseOutSide = function (target, listener, thisObject) {
+            this.disposableGroup.removeReleaseOutSide(target, listener, thisObject);
+        };
+        TouchBehaviours.prototype.addClick = function (target, listener, thisObject) {
+            this.disposableGroup.addClick(target, listener, thisObject);
+        };
+        TouchBehaviours.prototype.removeClick = function (target, listener, thisObject) {
+            this.disposableGroup.removeClick(target, listener, thisObject);
+        };
+        TouchBehaviours.prototype.addLongPress = function (target, listener, thisObject, time) {
+            this.disposableGroup.addLongPress(target, listener, thisObject, time);
+        };
+        TouchBehaviours.prototype.removeLongPress = function (target, listener, thisObject) {
+            this.disposableGroup.removeLongPress(target, listener, thisObject);
+        };
+        TouchBehaviours.prototype.addRepeatPress = function (target, listener, thisObject, time) {
+            this.disposableGroup.addRepeatPress(target, listener, thisObject, time);
+        };
+        TouchBehaviours.prototype.removeRepeatPress = function (target, listener, thisObject) {
+            this.disposableGroup.removeRepeatPress(target, listener, thisObject);
+        };
+        return TouchBehaviours;
+    }());
+    fui.TouchBehaviours = TouchBehaviours;
+    __reflect(TouchBehaviours.prototype, "fui.TouchBehaviours");
+})(fui || (fui = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2021-10-19
+*************************************************/
+
+(function (fui) {
+    var TouchDelegate = (function (_super) {
+        __extends(TouchDelegate, _super);
+        function TouchDelegate(target) {
+            var _this = _super.call(this) || this;
+            _this.longPressTimeDelta = fui.TOUCH_LONG_PRESS_TIME;
+            _this.repeatPressTimeDelta = fui.TOUCH_LONG_PRESS_TIME;
+            _this.repeat_timer_id = 0;
+            _this.target = target;
+            _this.initTouchEvents();
+            return _this;
+        }
+        TouchDelegate.prototype.onLeaveStage = function (event) {
+            this.onTouchEnd(event);
+        };
+        TouchDelegate.prototype.addTouchBegin = function (listener, thisObject) {
+            this.beginHandler.listeners.add(listener, thisObject);
+        };
+        TouchDelegate.prototype.removeTouchBegin = function (listener, thisObject) {
+            this.beginHandler.listeners.remove(listener);
+        };
+        TouchDelegate.prototype.addTouchMove = function (listener, thisObject) {
+            this.moveHandler.listeners.add(listener, thisObject);
+        };
+        TouchDelegate.prototype.removeTouchMove = function (listener, thisObject) {
+            this.moveHandler.listeners.remove(listener);
+        };
+        TouchDelegate.prototype.addTouchEnd = function (listener, thisObject) {
+            this.endHandler.listeners.add(listener, thisObject);
+        };
+        TouchDelegate.prototype.removeTouchEnd = function (listener, thisObject) {
+            this.endHandler.listeners.remove(listener);
+        };
+        TouchDelegate.prototype.addReleaseOutSide = function (listener, thisObject) {
+            this.releaseOutsideHandler.listeners.add(listener, thisObject);
+        };
+        TouchDelegate.prototype.removeReleaseOutSide = function (listener, thisObject) {
+            this.releaseOutsideHandler.listeners.remove(listener);
+        };
+        TouchDelegate.prototype.addClick = function (listener, thisObject) {
+            this.clickHandler.listeners.add(listener, thisObject);
+        };
+        TouchDelegate.prototype.removeClick = function (listener, thisObject) {
+            this.clickHandler.listeners.remove(listener);
+        };
+        TouchDelegate.prototype.addLongPress = function (listener, thisObject, time) {
+            if (time === void 0) { time = 300; }
+            this.longPressTimeDelta = time;
+            this.longPressHandler.listeners.add(listener, thisObject);
+        };
+        TouchDelegate.prototype.removeLongPress = function (listener, thisObject) {
+            this.longPressHandler.listeners.remove(listener);
+        };
+        TouchDelegate.prototype.addRepeatPress = function (listener, thisObject, time) {
+            if (time === void 0) { time = 300; }
+            this.repeatPressTimeDelta = time;
+            this.repeatPressHandler.listeners.add(listener, thisObject);
+        };
+        TouchDelegate.prototype.removeRepeatPress = function (listener, thisObject) {
+            this.repeatPressHandler.listeners.remove(listener);
+        };
+        TouchDelegate.prototype.initTouchEvents = function () {
+            this.inited = true;
+            this.clickHandler = { listeners: new xgame.Signal1(), happend: false };
+            this.longPressHandler = { listeners: new xgame.Signal1(), happend: false };
+            this.repeatPressHandler = { listeners: new xgame.Signal1(), happend: false };
+            this.releaseOutsideHandler = { listeners: new xgame.Signal1(), happend: false };
+            this.beginHandler = { listeners: new xgame.Signal1(), happend: false };
+            this.moveHandler = { listeners: new xgame.Signal1(), happend: false };
+            this.endHandler = { listeners: new xgame.Signal1(), happend: false };
+            this.target.displayObject.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+            this.target.displayObject.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.target.displayObject.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            this.target.displayObject.addEventListener(egret.TouchEvent.TOUCH_RELEASE_OUTSIDE, this.onTouchEnd, this);
+        };
+        TouchDelegate.prototype.setRepeatTimer = function () {
+            var _this = this;
+            this.clearRepeatTimer();
+            this.repeat_timer_id = egret.setInterval(function () {
+                _this.repeatPressHandler.happend = true;
+                _this.repeatPressHandler.listeners.dispatch(null);
+            }, this, this.repeatPressTimeDelta);
+        };
+        TouchDelegate.prototype.clearRepeatTimer = function () {
+            if (this.repeat_timer_id) {
+                egret.clearInterval(this.repeat_timer_id);
+            }
+            this.repeat_timer_id = 0;
+        };
+        TouchDelegate.prototype.onTouchBegin = function (event) {
+            this.beginHandler.happend = true;
+            this.beginHandler.time = egret.getTimer();
+            this.beginHandler.identifier = event.touchPointID;
+            this.beginHandler.listeners.dispatch(event);
+            if (this.repeatPressHandler.listeners.numListeners) {
+                this.setRepeatTimer();
+            }
+        };
+        TouchDelegate.prototype.onTouchMove = function (event) {
+            if (!this.beginHandler.happend) {
+                return;
+            }
+            this.moveHandler.listeners.dispatch(event);
+        };
+        TouchDelegate.prototype.onTouchEnd = function (event) {
+            if (!this.beginHandler.happend) {
+                return;
+            }
+            if (event.type == egret.TouchEvent.TOUCH_RELEASE_OUTSIDE) {
+                this.releaseOutsideHandler.listeners.dispatch(event);
+            }
+            else {
+                this.endHandler.listeners.dispatch(event);
+                var end_time = egret.getTimer();
+                if (!this.repeatPressHandler.happend && this.longPressHandler.listeners.numListeners && end_time - this.beginHandler.time >= this.longPressTimeDelta) {
+                    this.longPressHandler.happend = true;
+                    this.longPressHandler.listeners.dispatch(event);
+                }
+                if (!this.longPressHandler.happend && !this.repeatPressHandler.happend) {
+                    if (end_time - fui.touchClickLastTime > fui.TOUCH_TAP_BETWEEN_TIME) {
+                        fui.touchClickLastTime = end_time;
+                        this.clickHandler.listeners.dispatch(event);
+                    }
+                }
+            }
+            this.clearRepeatTimer();
+            this.beginHandler.happend = false;
+            this.endHandler.happend = false;
+            this.moveHandler.happend = false;
+            this.releaseOutsideHandler.happend = false;
+            this.longPressHandler.happend = false;
+            this.repeatPressHandler.happend = false;
+        };
+        TouchDelegate.prototype.dispose = function () {
+            if (this.target) {
+                this.target.displayObject.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+                this.target.displayObject.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+                this.target.displayObject.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+                this.target.displayObject.removeEventListener(egret.TouchEvent.TOUCH_RELEASE_OUTSIDE, this.onTouchEnd, this);
+            }
+            this.clickHandler.listeners.removeAll();
+            this.clickHandler.happend = false;
+            this.longPressHandler.listeners.removeAll();
+            this.longPressHandler.happend = false;
+            this.repeatPressHandler.listeners.removeAll();
+            this.repeatPressHandler.happend = false;
+            this.releaseOutsideHandler.listeners.removeAll();
+            this.releaseOutsideHandler.happend = false;
+            this.beginHandler.listeners.removeAll();
+            this.beginHandler.happend = false;
+            this.moveHandler.listeners.removeAll();
+            this.moveHandler.happend = false;
+            this.endHandler.listeners.removeAll();
+            this.endHandler.happend = false;
+            this.target = undefined;
+            this.inited = false;
+        };
+        return TouchDelegate;
+    }(xgame.XObject));
+    fui.TouchDelegate = TouchDelegate;
+    __reflect(TouchDelegate.prototype, "fui.TouchDelegate", ["xgame.IDisposable", "xgame.IXObject"]);
+})(fui || (fui = {}));
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2021-10-19
+*************************************************/
+/// <reference path="../TouchManager.ts" />
+/// <reference path="../interfaces/ITouchManager.ts" />
+
+(function (fui) {
+    var TouchDisposableGroup = (function (_super) {
+        __extends(TouchDisposableGroup, _super);
+        function TouchDisposableGroup(displayObject) {
+            var _this = _super.call(this) || this;
+            _this.displayObject = displayObject;
+            _this.touches = new xgame.List();
+            xgame.injectInstance(_this);
+            if (_this.displayObject && _this.displayObject.displayObject) {
+                _this.displayObject.displayObject.addEventListener(egret.Event.REMOVED_FROM_STAGE, _this.onRemovedFromStage, _this);
+            }
+            return _this;
+        }
+        TouchDisposableGroup.prototype.onRemovedFromStage = function () {
+            this.dispose();
+        };
+        TouchDisposableGroup.prototype.dispose = function () {
+            var _this = this;
+            this.touches.forEach(function (guid) {
+                _this.manager.removeTouchEvents(guid);
+            });
+            this.touches.clear();
+            if (this.displayObject) {
+                this.displayObject.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemovedFromStage, this);
+            }
+            this.manager = undefined;
+            this.displayObject = undefined;
+        };
+        TouchDisposableGroup.prototype.addTouchBegin = function (target, listener, thisObject) {
+            this.manager.addTouchBegin(target, listener, thisObject);
+            if (!this.touches.contains(target.hashCode)) {
+                this.touches.add(target.hashCode);
+            }
+        };
+        TouchDisposableGroup.prototype.removeTouchBegin = function (target, listener, thisObject) {
+            this.manager.removeTouchBegin(target, listener, thisObject);
+            if (!this.touches.contains(target.hashCode)) {
+                this.touches.add(target.hashCode);
+            }
+        };
+        TouchDisposableGroup.prototype.addTouchMove = function (target, listener, thisObject) {
+            this.manager.addTouchMove(target, listener, thisObject);
+            if (!this.touches.contains(target.hashCode)) {
+                this.touches.add(target.hashCode);
+            }
+        };
+        TouchDisposableGroup.prototype.removeTouchMove = function (target, listener, thisObject) {
+            this.manager.removeTouchMove(target, listener, thisObject);
+            if (!this.touches.contains(target.hashCode)) {
+                this.touches.add(target.hashCode);
+            }
+        };
+        TouchDisposableGroup.prototype.addTouchEnd = function (target, listener, thisObject) {
+            this.manager.addTouchEnd(target, listener, thisObject);
+            if (!this.touches.contains(target.hashCode)) {
+                this.touches.add(target.hashCode);
+            }
+        };
+        TouchDisposableGroup.prototype.removeTouchEnd = function (target, listener, thisObject) {
+            this.manager.removeTouchEnd(target, listener, thisObject);
+            if (!this.touches.contains(target.hashCode)) {
+                this.touches.add(target.hashCode);
+            }
+        };
+        TouchDisposableGroup.prototype.addReleaseOutSide = function (target, listener, thisObject) {
+            this.manager.addReleaseOutSide(target, listener, thisObject);
+            if (!this.touches.contains(target.hashCode)) {
+                this.touches.add(target.hashCode);
+            }
+        };
+        TouchDisposableGroup.prototype.removeReleaseOutSide = function (target, listener, thisObject) {
+            this.manager.removeReleaseOutSide(target, listener, thisObject);
+            if (!this.touches.contains(target.hashCode)) {
+                this.touches.add(target.hashCode);
+            }
+        };
+        TouchDisposableGroup.prototype.addClick = function (target, listener, thisObject) {
+            this.manager.addClick(target, listener, thisObject);
+            if (!this.touches.contains(target.hashCode)) {
+                this.touches.add(target.hashCode);
+            }
+        };
+        TouchDisposableGroup.prototype.removeClick = function (target, listener, thisObject) {
+            this.manager.removeClick(target, listener, thisObject);
+            if (!this.touches.contains(target.hashCode)) {
+                this.touches.add(target.hashCode);
+            }
+        };
+        TouchDisposableGroup.prototype.addLongPress = function (target, listener, thisObject, time) {
+            this.manager.addLongPress(target, listener, thisObject, time);
+            if (!this.touches.contains(target.hashCode)) {
+                this.touches.add(target.hashCode);
+            }
+        };
+        TouchDisposableGroup.prototype.removeLongPress = function (target, listener, thisObject) {
+            this.manager.removeLongPress(target, listener, thisObject);
+            if (!this.touches.contains(target.hashCode)) {
+                this.touches.add(target.hashCode);
+            }
+        };
+        TouchDisposableGroup.prototype.addRepeatPress = function (target, listener, thisObject, time) {
+            this.manager.addRepeatPress(target, listener, thisObject, time);
+            if (!this.touches.contains(target.hashCode)) {
+                this.touches.add(target.hashCode);
+            }
+        };
+        TouchDisposableGroup.prototype.removeRepeatPress = function (target, listener, thisObject) {
+            this.manager.removeRepeatPress(target, listener, thisObject);
+            if (!this.touches.contains(target.hashCode)) {
+                this.touches.add(target.hashCode);
+            }
+        };
+        __decorate([
+            xgame.inject(fui.ITouchManager),
+            __metadata("design:type", fui.TouchManager)
+        ], TouchDisposableGroup.prototype, "manager", void 0);
+        return TouchDisposableGroup;
+    }(xgame.XObject));
+    fui.TouchDisposableGroup = TouchDisposableGroup;
+    __reflect(TouchDisposableGroup.prototype, "fui.TouchDisposableGroup", ["xgame.IDisposable", "xgame.IXObject"]);
 })(fui || (fui = {}));
 /*************************************************
 /* @author : rontian
@@ -615,6 +1174,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                                 layerManager = this.uiLayers.get(uiPage_1.layerID);
                                 if (uiPage_1.flags & fui.UIFlags.useMask) {
                                     entity.createMask(uiPage_1.maskColor, uiPage_1.maskAlpha, uiPage_1.flags & fui.UIFlags.closeByMask);
+                                    entity.mask.addRelation(layerManager, fairygui.RelationType.Size);
                                     layerManager.addChild(entity.mask);
                                 }
                                 if (options.hud || (uiPage_1.flags & fui.UIFlags.isPlugin) || (uiPage_1.flags & fui.UIFlags.isPopupMenu)) {
@@ -828,9 +1388,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             enumerable: true,
             configurable: true
         });
-        UIPage.prototype.addClick = function (target, listener, thisObject) {
-            target.addClickListener(listener, thisObject);
-        };
         UIPage.prototype.injectGuideValue = function (key, value, taskID) {
             this.guideManager.injectValue(key, value, taskID);
             this.guideValues.add(key, taskID || 0);
@@ -884,6 +1441,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             if (!this.$view) {
                 this.$view = (new fairygui.GComponent());
             }
+            this.setTouchManager(this.view);
             egret.callLater(function () {
                 _this.$isLoaded = true;
                 _this.onComplete.dispatch();
@@ -973,6 +1531,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             fui.inject(egretx.IGuideManager),
             __metadata("design:type", Object)
         ], UIPage.prototype, "guideManager", void 0);
+        UIPage = __decorate([
+            xgame.mixin(fui.TouchBehaviours),
+            __metadata("design:paramtypes", [String, String, Object])
+        ], UIPage);
         return UIPage;
     }(xgame.XObject));
     fui.UIPage = UIPage;

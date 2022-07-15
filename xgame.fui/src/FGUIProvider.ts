@@ -14,12 +14,15 @@ module fui {
             return true;
         }
         public async onStart(game: xgame.IXGame): Promise<boolean> {
+            game.getService<ITouchManagerInternal>(ITouchManagerInternal).initialize();
             game.getService<IUIManagerInternal>(IUIManagerInternal).initialize();
             return true;
         }
         public onServiceRegister(game: xgame.IXGame): void {
+            game.singleton(ITouchManager, TouchManager).withInstance(new TouchManager(this.main)).setAlias(ITouchManagerInternal);
+            console.log("[FGUIProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(TouchManager)));
             game.singleton(IUIManager, UIManager).withInstance(new UIManager(this.main)).setAlias(IUIManagerInternal);
-            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(UIManager)));
+            console.log("[FGUIProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(UIManager)));
         }
     }
 }

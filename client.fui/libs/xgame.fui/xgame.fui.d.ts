@@ -70,6 +70,188 @@ declare module fui {
 /*************************************************
 /* @author : rontian
 /* @email  : i@ronpad.com
+/* @date   : 2021-10-19
+*************************************************/
+declare module fui {
+    let ITouchManager: symbol;
+    interface ITouchManager extends xgame.IDisposable {
+        removeTouchEvents(target: fairygui.GObject | number): void;
+        addTouchBegin(target: fairygui.GObject, listener: Function, thisObject?: any, scale?: boolean): void;
+        removeTouchBegin(target: fairygui.GObject, listener: Function, thisObject?: any): void;
+        addTouchMove(target: fairygui.GObject, listener: Function, thisObject?: any): void;
+        removeTouchMove(target: fairygui.GObject, listener: Function, thisObject?: any): void;
+        addTouchEnd(target: fairygui.GObject, listener: Function, thisObject?: any): void;
+        removeTouchEnd(target: fairygui.GObject, listener: Function, thisObject?: any): void;
+        addReleaseOutSide(target: fairygui.GObject, listener: Function, thisObject?: any): void;
+        removeReleaseOutSide(target: fairygui.GObject, listener: Function, thisObject?: any): void;
+        addClick(target: fairygui.GObject, listener: Function, thisObject?: any, scale?: boolean): void;
+        removeClick(target: fairygui.GObject, listener: Function, thisObject?: any): void;
+        addLongPress(target: fairygui.GObject, listener: Function, thisObject?: any, time?: number, scale?: boolean): void;
+        removeLongPress(target: fairygui.GObject, listener: Function, thisObject?: any): void;
+        addRepeatPress(target: fairygui.GObject, listener: Function, thisObject?: any, time?: number, scale?: boolean): void;
+        removeRepeatPress(target: fairygui.GObject, listener: Function, thisObject?: any): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2021-10-19
+*************************************************/
+declare module fui {
+    let ITouchManagerInternal: symbol;
+    interface ITouchManagerInternal {
+        initialize(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2021-10-19
+*************************************************/
+declare module fui {
+    const TOUCH_TAP_BETWEEN_TIME: number;
+    const TOUCH_LONG_PRESS_TIME: number;
+    const TOUCH_SCALE_RADIO: number;
+    let touchClickLastTime: number;
+    class TouchManager extends xgame.XObject implements xgame.IDisposable, ITouchManager, ITouchManagerInternal {
+        main: egret.DisplayObjectContainer;
+        stage: egret.Stage;
+        private delegates;
+        constructor(main: egret.DisplayObjectContainer);
+        dispose(): void;
+        initialize(): void;
+        private onLeaveStage(event);
+        removeTouchEvents(target: fairygui.GObject | number): void;
+        addTouchBegin(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeTouchBegin(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addTouchMove(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeTouchMove(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addTouchEnd(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeTouchEnd(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addReleaseOutSide(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeReleaseOutSide(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addClick(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeClick(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addLongPress(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any, time?: number): void;
+        removeLongPress(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addRepeatPress(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any, time?: number): void;
+        removeRepeatPress(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2021-10-19
+*************************************************/
+declare module fui {
+    class TouchBehaviours {
+        private disposableGroup;
+        setTouchManager(target: fairygui.GObject): void;
+        addTouchBegin(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeTouchBegin(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addTouchMove(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeTouchMove(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addTouchEnd(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeTouchEnd(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addReleaseOutSide(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeReleaseOutSide(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addClick(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeClick(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addLongPress(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any, time?: number): void;
+        removeLongPress(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addRepeatPress(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any, time?: number): void;
+        removeRepeatPress(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2021-10-19
+*************************************************/
+declare module fui {
+    class TouchDelegate extends xgame.XObject implements xgame.IDisposable {
+        private inited;
+        private target;
+        private longPressTimeDelta;
+        private repeatPressTimeDelta;
+        private clickHandler;
+        private releaseOutsideHandler;
+        private longPressHandler;
+        private repeatPressHandler;
+        private beginHandler;
+        private moveHandler;
+        private endHandler;
+        constructor(target: fairygui.GObject);
+        onLeaveStage(event: egret.TouchEvent): void;
+        addTouchBegin(listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeTouchBegin(listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addTouchMove(listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeTouchMove(listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addTouchEnd(listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeTouchEnd(listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addReleaseOutSide(listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeReleaseOutSide(listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addClick(listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeClick(listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addLongPress(listener: (event: egret.TouchEvent) => void, thisObject?: any, time?: number): void;
+        removeLongPress(listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addRepeatPress(listener: (event: egret.TouchEvent) => void, thisObject?: any, time?: number): void;
+        removeRepeatPress(listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        initTouchEvents(): void;
+        private repeat_timer_id;
+        protected setRepeatTimer(): void;
+        protected clearRepeatTimer(): void;
+        protected onTouchBegin(event: egret.TouchEvent): void;
+        protected onTouchMove(event: egret.TouchEvent): void;
+        protected onTouchEnd(event: egret.TouchEvent): void;
+        dispose(): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2021-10-19
+*************************************************/
+declare module fui {
+    class TouchDisposableGroup extends xgame.XObject implements xgame.IDisposable {
+        private displayObject;
+        private touches;
+        manager: TouchManager;
+        constructor(displayObject?: fairygui.GObject);
+        private onRemovedFromStage();
+        dispose(): void;
+        addTouchBegin(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeTouchBegin(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addTouchMove(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeTouchMove(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addTouchEnd(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeTouchEnd(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addReleaseOutSide(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeReleaseOutSide(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addClick(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        removeClick(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addLongPress(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any, time?: number): void;
+        removeLongPress(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+        addRepeatPress(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any, time?: number): void;
+        removeRepeatPress(target: fairygui.GObject, listener: (event: egret.TouchEvent) => void, thisObject?: any): void;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
+/* @date   : 2021-10-19
+*************************************************/
+declare module fui {
+    interface ITouchHandler {
+        listeners: xgame.Signal1<egret.TouchEvent>;
+        happend?: boolean;
+        identifier?: number;
+        time?: number;
+    }
+}
+/*************************************************
+/* @author : rontian
+/* @email  : i@ronpad.com
 /* @date   : 2021-08-18
 *************************************************/
 declare module fui {
@@ -220,7 +402,6 @@ declare module fui {
         private $view;
         readonly view: T;
         constructor(packageName?: string, comName?: string, userClass?: xgame.TClass<T>);
-        addClick(target: fairygui.GObject, listener: Function, thisObject?: any): void;
         private guideValues;
         injectGuideValue<T extends keyof egretx.IGuideInjectValue>(key: T, value: egretx.IGuideInjectValue[T], taskID?: number): void;
         readonly onComplete: xgame.Signal0;
@@ -247,6 +428,22 @@ declare module fui {
         close(): void;
         doFadeIn(): Promise<void>;
         doFadeOut(): Promise<void>;
+        setTouchManager: (target: fairygui.GObject) => void;
+        removeTouchEvents: (target: fairygui.GObject | number) => void;
+        addTouchBegin: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        removeTouchBegin: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        addTouchMove: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        removeTouchMove: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        addTouchEnd: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        removeTouchEnd: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        addReleaseOutSide: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        removeReleaseOutSide: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        addClick: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        removeClick: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        addLongPress: (target: fairygui.GObject, listener: Function, thisObject?: any, time?: number) => void;
+        removeLongPress: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
+        addRepeatPress: (target: fairygui.GObject, listener: Function, thisObject?: any, time?: number) => void;
+        removeRepeatPress: (target: fairygui.GObject, listener: Function, thisObject?: any) => void;
     }
 }
 /*************************************************

@@ -116,9 +116,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
         };
         EUIProvider.prototype.onServiceRegister = function (game) {
             game.singleton(euix.IUIManager, euix.UIManager).withInstance(new euix.UIManager(this.main)).setAlias(euix.IUIManagerInternal);
-            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(euix.UIManager)));
+            console.log("[EUIProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(euix.UIManager)));
             game.singleton(euix.ITouchManager, euix.TouchManager).withInstance(new euix.TouchManager(this.main)).setAlias(euix.ITouchManagerInternal);
-            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(euix.TouchManager)));
+            console.log("[EUIProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(euix.TouchManager)));
         };
         return EUIProvider;
     }(xgame.XObject));

@@ -22,9 +22,9 @@ module euix {
         }
         public onServiceRegister(game: xgame.IXGame): void {
             game.singleton(IUIManager, UIManager).withInstance(new UIManager(this.main)).setAlias(IUIManagerInternal);
-            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(UIManager)));
+            console.log("[EUIProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(UIManager)));
             game.singleton(ITouchManager, TouchManager).withInstance(new TouchManager(this.main)).setAlias(ITouchManagerInternal);
-            console.log("[EgretProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(TouchManager)));
+            console.log("[EUIProvider]: 注册管理器{0}".format(xgame.getQualifiedClassName(TouchManager)));
         }
     }
 }
