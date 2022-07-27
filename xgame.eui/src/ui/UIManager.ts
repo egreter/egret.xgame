@@ -17,6 +17,7 @@ module euix {
         }
         public stage: egret.Stage;
         public readonly onSceneChanged = new xgame.Signal2<IUIEntity, IUIEntity>();
+        public readonly onStackChanged = new xgame.Signal2<IUIEntity, boolean>();
         public readonly onUIOpened = new xgame.Signal1<IUIEntity>();
         public readonly onUIClosed = new xgame.Signal1<IUIEntity>();
         public readonly RES = new UIResManager();
@@ -29,6 +30,7 @@ module euix {
             this.pipelines.push(this.checkIsOpened.bind(this));
             this.pipelines.push(this.createUIPage.bind(this));
             this.pipelines.push(this.openUIPage.bind(this));
+            this.root.touchEnabled = false;
             this.root.name = "EUIRoot";
             this.main.addChild(this.root);
             for (let i = UILayerID.Layer_0_Bottom; i <= UILayerID.Layer_15_Top; i++) {
@@ -39,6 +41,27 @@ module euix {
             this.register(Alert.NAME, Alert);
             this.register(PopupMenu.NAME, PopupMenu);
             TipsManager.Instance().initialize();
+        }
+        private lockReference: number = 0;
+        /**
+         * 锁定屏幕操作
+         */
+        public lockScreen(): void {
+            if (this.lockReference <= 0) {
+                this.root.touchChildren = false;
+            }
+            this.lockReference++;
+        }
+        /**
+         * 解锁屏幕操作
+         * @param force 是否强制解锁 
+         */
+        public unlockScreen(force?: boolean): void {
+            this.lockReference--;
+            if (force || this.lockReference <= 0) {
+                this.lockReference = 0;
+                this.root.touchChildren = true;
+            }
         }
         private $sceneTransition: ISceneTransition;
         public get sceneTransition(): ISceneTransition {

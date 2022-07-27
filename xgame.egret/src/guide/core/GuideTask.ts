@@ -94,6 +94,7 @@ module egretx {
          */
         public onBegin(): void {
             this.$state = GuideTaskState.Running;
+            GuideManager.Instance().guideHelper.beginGuide(this.ID);
         }
         /**
          * 如果引导进行中，检查引导是否完成了
@@ -111,6 +112,7 @@ module egretx {
          */
         public onComplete(): void {
             this.$state = GuideTaskState.Completed;
+            GuideManager.Instance().guideHelper.endGuide(this.ID);
         }
         /**
          * 当被强制取消时

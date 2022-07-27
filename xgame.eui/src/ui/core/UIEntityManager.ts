@@ -24,6 +24,7 @@ module euix {
                 entities.push(entity);
                 if (entity.uiPage.flags & UIFlags.isStack) {
                     this.stackList.add(entity);
+                    this.manager.onStackChanged.dispatch(entity, false);
                 }
             }
         }
@@ -113,6 +114,7 @@ module euix {
                     entities.splice(indexOf, 1);
                     if (entity.uiPage.flags & UIFlags.isStack) {
                         this.stackList.remove(entity);
+                        this.manager.onStackChanged.dispatch(entity, true);
                     }
                 }
             }

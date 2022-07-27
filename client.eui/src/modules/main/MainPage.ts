@@ -15,7 +15,7 @@ export class MainPage extends euix.UIPage {
         this.injectGuideValue("main_btn_back", this.btn_back);
         this.addClick(this.btn_back, () => {
             this.injectGuideValue("flag_main_btn_back_clicked", true);
-            euix.alert("确定要返回场景吗？", "提示", 2, false).addOnce((button) => {
+            euix.alert("确定要返回场景吗？", "提示", 2, false, "main_alert").addOnce((button) => {
                 if (button == 0) {
                     this.guideManager.injectValue("flag_main_alert_clicked", true);
                     this.close();

@@ -16,7 +16,7 @@ declare module egretx {
         H_TAIL = 4,
         V_HEAD = 8,
         V_MID = 16,
-        V_TAIL = 32
+        V_TAIL = 32,
     }
 }
 declare namespace eui {
@@ -78,7 +78,7 @@ declare module egretx {
          * @param key
          */
         release(key: string): void;
-        private _release;
+        private _release(id);
         /**
          * 释放全部可以释放的动画对象及资源
          */
@@ -140,9 +140,9 @@ declare module egretx {
         playWithAutoRemove(actionName?: string): void;
         play(playTimes?: number, actionName?: string): void;
         protected loadMC(is_preload?: boolean): Promise<void>;
-        private onFrameLabelEvent;
-        private onLoopCompleteEvent;
-        private onCompleteEvent;
+        private onFrameLabelEvent(event);
+        private onLoopCompleteEvent(event);
+        private onCompleteEvent(event);
         initMC(mcData: egret.MovieClipData, is_preload?: boolean): void;
         private $playTimes;
         protected _play(): void;
@@ -304,7 +304,7 @@ declare module egretx {
          *
          */
         $init(): void;
-        private fillMovieFrames;
+        private fillMovieFrames();
         /**
          * @private
          *
@@ -314,7 +314,7 @@ declare module egretx {
          * @private
          *
          */
-        private _initFrame;
+        private _initFrame();
         /**
          * @private
          */
@@ -342,20 +342,20 @@ declare module egretx {
          * @param ignoreCase {boolean} 是否忽略大小写，可选参数，默认false
          * @returns {egret.FrameLabel} FrameLabel对象
          */
-        private getFrameLabelByName;
+        private getFrameLabelByName(labelName, ignoreCase?);
         /**
          * @private
          * 根据帧标签，设置开始和结束的帧数
          * @param labelName {string} 帧标签名
          */
-        private getFrameStartEnd;
+        private getFrameStartEnd(labelName);
         /**
          * @private
          * 返回指定序号的帧的FrameLabel对象
          * @param frame {number} 帧序号
          * @returns {egret.FrameLabel} FrameLabel对象
          */
-        private getFrameLabelByFrame;
+        private getFrameLabelByFrame(frame);
         /**
          * @private
          * 返回指定序号的帧对应的FrameLabel对象，如果当前帧没有标签，则返回前面最近的有标签的帧的FrameLabel对象
@@ -363,7 +363,7 @@ declare module egretx {
          * @param frame {number} 帧序号
          * @returns {egret.FrameLabel} FrameLabel对象
          */
-        private getFrameLabelForFrame;
+        private getFrameLabelForFrame(frame);
         /**
          * 继续播放当前动画
          * @param playTimes {number} 播放次数。 参数为整数，可选参数，>=1：设定播放次数，<0：循环播放，默认值 0：不改变播放次数(MovieClip初始播放次数设置为1)，
@@ -409,7 +409,7 @@ declare module egretx {
          *
          * @param frame
          */
-        private gotoFrame;
+        private gotoFrame(frame);
         /**
          * @private
          */
@@ -419,12 +419,12 @@ declare module egretx {
          * @private
          *
          */
-        private advanceFrame;
+        private advanceFrame();
         /**
          * @private
          *
          */
-        private constructFrame;
+        private constructFrame();
         /**
          * @private
          *
@@ -434,7 +434,7 @@ declare module egretx {
          * @private
          *
          */
-        private handlePendingEvent;
+        private handlePendingEvent();
         /**
          * MovieClip 实例中帧的总数
          * @version Egret 2.4
@@ -472,32 +472,32 @@ declare module egretx {
          */
         readonly isPlaying: boolean;
         /**
-         * MovieClip数据源
+         * @version Egret 2.4
+         * @platform Web,Native
          */
         /**
-        * @version Egret 2.4
-        * @platform Web,Native
-        */
+         * MovieClip数据源
+         */
         movieClipData: egret.MovieClipData;
         /**
          * @private
          *
          * @param value
          */
-        private setMovieClipData;
+        private setMovieClipData(value, force?);
         /**
          * @private
          *
          * @param value
          */
-        private setPlayTimes;
+        private setPlayTimes(value);
         /**
          * @private
          *
          * @param value
          */
-        private setIsStopped;
-        private getActionAt;
+        private setIsStopped(value);
+        private getActionAt(frame);
         addFrameAction(frame: number, action: Function, thisObject?: any): void;
         removeFrameAction(frame: number, action: Function, thisObject?: any): void;
         removeFrameActions(frame?: number): void;
@@ -599,7 +599,7 @@ declare module egretx {
 declare module egretx {
     enum AudioToggleState {
         OFF = 0,
-        ON = 1
+        ON = 1,
     }
     /**
      * 音频频道
@@ -639,7 +639,7 @@ declare module egretx {
         pause(): void;
         resume(): void;
         stop(): void;
-        private releaseAudio;
+        private releaseAudio(audio);
     }
 }
 /*************************************************
@@ -688,7 +688,7 @@ declare module egretx {
 declare module egretx {
     enum AudioChannelType {
         BACKGORUND = 0,
-        EFFECT = 1
+        EFFECT = 1,
     }
 }
 /*************************************************
@@ -710,7 +710,7 @@ declare module egretx {
         protected soundChannel: egret.SoundChannel;
         private playDeferred;
         play(key: string, startTime?: number, playTimes?: number): Promise<void>;
-        private _play;
+        private _play(position);
         protected onSoundComplete(): void;
         position: number;
         private $isPaused;
@@ -797,7 +797,7 @@ declare module egretx {
         fetch(key: string, armatureName: string, texture?: string): Armature;
         recycle(armature: Armature): void;
         release(key: string): void;
-        private _release;
+        private _release(id);
         releases(): void;
         addClock(armture: Armature): void;
         removeClock(armture: Armature): void;
@@ -816,7 +816,7 @@ declare module egretx {
     class Armature extends xgame.XObject implements xgame.IPoolable {
         key: string;
         armatureName: string;
-        texture?: string;
+        texture: string;
         constructor(key: string, armatureName: string, texture?: string);
         readonly id: string;
         setParent(parent: egret.DisplayObjectContainer): void;
@@ -920,7 +920,7 @@ declare module egretx {
         /**
          * 帧驱动
          */
-        private advanceTime;
+        private advanceTime();
         private $activityTask;
         readonly activityTask: GuideTask;
         setActivityTask(value: GuideTask): void;
@@ -957,7 +957,7 @@ declare module egretx {
     enum GuideStepState {
         Ready = 0,
         Running = 1,
-        Completed = 2
+        Completed = 2,
     }
     class GuideStep extends xgame.XObject implements xgame.IDisposable {
         parent: GuideTask;
@@ -1011,11 +1011,11 @@ declare module egretx {
     enum GuideTaskState {
         Ready = 0,
         Running = 1,
-        Completed = 2
+        Completed = 2,
     }
     enum GuideTaskType {
         Weak = 0,
-        Force = 1
+        Force = 1,
     }
     interface IGuideStepParams {
         target: keyof IGuideInjectValue;
@@ -1026,7 +1026,7 @@ declare module egretx {
     class GuideTask extends xgame.XObject implements xgame.IDisposable {
         ID: number;
         taskType: GuideTaskType;
-        frontID?: number;
+        frontID: number;
         private values;
         readonly steps: xgame.Dictionary<number, GuideStep>;
         /**
@@ -1124,22 +1124,32 @@ declare module egretx {
 declare module egretx {
     interface IGuideHelper {
         /**
-         * 开始引导
+         * 开始引导步骤
          * @param taskID
          * @param index 步骤index
          */
-        beginGuide(taskID: number, index?: number): void;
+        beginGuideStep(taskID: number, index: number): void;
         /**
-         * 结束引导
+         * 结束引导步骤
          * @param taskID
          * @param index 步骤index
          */
-        endGuide(taskID: number, index?: number): void;
+        endGuideStep(taskID: number, index: number): void;
         /**
          * 强制取消引导
          * @param taskID
          */
         cancelGuide(taskID: number): void;
+        /**
+         * 开始引导任务
+         * @param taskID
+         */
+        beginGuide(taskID: number): void;
+        /**
+         * 结束引导任务
+         * @param taskID
+         */
+        endGuide(taskID: number): void;
     }
 }
 /*************************************************
@@ -1149,9 +1159,10 @@ declare module egretx {
 *************************************************/
 declare module egretx {
     interface IGuideInjectValue {
-        alert_button_0: eui.Button;
-        alert_button_1: eui.Button;
-        alert_button_2: eui.Button;
+        alert_name?: string;
+        alert_button_0?: eui.Button;
+        alert_button_1?: eui.Button;
+        alert_button_2?: eui.Button;
     }
 }
 /*************************************************
@@ -1323,8 +1334,8 @@ declare module egretx {
 *************************************************/
 declare module egretx {
     class HttpRequest extends xgame.XObject implements xgame.IPoolable {
-        uri?: string;
-        method?: string;
+        uri: string;
+        method: string;
         reconnectTimes: number;
         protected headers: xgame.Dictionary<string, string>;
         protected values: xgame.Dictionary<string, string | number>;
@@ -1349,12 +1360,12 @@ declare module egretx {
     enum SocketState {
         Closed = 0,
         Connecting = 1,
-        Connected = 2
+        Connected = 2,
     }
     enum SocketCloseCode {
         Close = 0,
         IOError = 1,
-        Failed = 2
+        Failed = 2,
     }
     /**
      * 网络连接实例的实现类
@@ -1365,7 +1376,7 @@ declare module egretx {
         socketHelper: ISocketHelper;
         private uri;
         private guidCount;
-        private generateGUID;
+        private generateGUID();
         private isInited;
         private happendConnected;
         private isReconnect;
@@ -1377,35 +1388,35 @@ declare module egretx {
         private sendTimeoutStamp;
         private lastestRecvStamp;
         private checkHeartBeat;
-        private onAdvanceTime;
-        private _sendPacket;
+        private onAdvanceTime();
+        private _sendPacket(packet);
         private current;
         private sendQueues;
         sendPacket(packet: IPacket): void;
         setURI(host: string, port: number, wss?: boolean): void;
         setURI(uri: string): void;
         private socket;
-        private init;
+        private init();
         private callback_onConnected;
         onConnected(): xgame.Signal0;
-        private onConnectHandler;
-        private sendLoginPacket;
+        private onConnectHandler(event);
+        private sendLoginPacket();
         private callback_onKickOut;
         onKickOut(): xgame.Signal0;
-        private onReceiveHandler;
+        private onReceiveHandler(event);
         private callback_onClosed;
         onClosed(): xgame.Signal1<SocketCloseCode>;
         private reconnectTimerID;
-        private onCloseHandler;
-        private onIOErrorHandler;
+        private onCloseHandler(event);
+        private onIOErrorHandler(event);
         private callback_onConnecting;
         onConnecting(): xgame.Signal1<number>;
         private retryCount;
         connect(): void;
-        private _connect;
-        private cleanQueues;
+        private _connect();
+        private cleanQueues(revc?);
         close(): void;
-        private _close;
+        private _close();
         private callback_onShutdown;
         onShutdown(): xgame.Signal0;
         shutdown(): void;
@@ -1531,7 +1542,7 @@ declare module egretx {
     enum ResourceType {
         UI = "UI",
         MovieClip = "MovieClip",
-        DragonBones = "DragonBones"
+        DragonBones = "DragonBones",
     }
 }
 /*************************************************

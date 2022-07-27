@@ -61,13 +61,13 @@ module egretx {
          * 当步骤开始时
          */
         public onBegin(): void {
-            GuideManager.Instance().guideHelper.beginGuide(this.parent.ID, this.index);
+            GuideManager.Instance().guideHelper.beginGuideStep(this.parent.ID, this.index);
         }
         /**
          * 当步骤完成时
          */
         public onComplete(): void {
-            GuideManager.Instance().guideHelper.endGuide(this.parent.ID, this.index);
+            GuideManager.Instance().guideHelper.endGuideStep(this.parent.ID, this.index);
         }
     }
 }

@@ -69,6 +69,7 @@ export class MainMenuPluginUI extends euix.PluginPage {
                 if (v) {
                     this.selectedIndex = v.index;
                 }
+                this.injectGuideValue("flag_main_menu_closed", true);
             }, this);
             this.injectGuideValue("flag_main_btn_1_clicked", true);
             this.injectGuideValue("main_index", 2);

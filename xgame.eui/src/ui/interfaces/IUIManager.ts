@@ -12,9 +12,13 @@ module euix {
         readonly currentScene: IUIEntity;
         readonly onUIOpened: xgame.Signal1<IUIEntity>;
         readonly onUIClosed: xgame.Signal1<IUIEntity>;
+        readonly onStackChanged: xgame.Signal2<IUIEntity, boolean>;
         readonly onSceneChanged: xgame.Signal2<IUIEntity, IUIEntity>;
         register(uiName: string, uiClass: xgame.TClass<UIPage>): void;
         getLayerManager(layerID: UILayerID): UILayerManager;
+
+        lockScreen(): void;
+        unlockScreen(force?: boolean): void;
 
         readonly sceneTransition: ISceneTransition;
         setSceneTransition(transition: ISceneTransition): void;

@@ -29,8 +29,11 @@ declare global {
             btn_2: eui.Button;
             btn_3: eui.Button;
             flag_main_btn_0_clicked: boolean;
+            flag_main_tips_closed: boolean;
             flag_main_btn_1_clicked: boolean;
+            flag_main_menu_closed: boolean;
             flag_main_btn_2_clicked: boolean;
+            flag_main_bag_closed: boolean;
             flag_main_btn_3_clicked: boolean;
 
 
@@ -101,6 +104,21 @@ export class DemoGuideTask extends egretx.GuideTask {
             tips: "点这里演示弹出提示界面!"
         });
         this.addStep({
+            target: null,
+            checkBegin: () => {
+                if (this.guideManager.retrieveValue("flag_main_btn_0_clicked")) {
+                    return true;
+                }
+                return false;
+            },
+            checkComplete: () => {
+                if (this.guideManager.retrieveValue("flag_main_tips_closed")) {
+                    return true;
+                }
+                return false;
+            }
+        });
+        this.addStep({
             target: "btn_1",
             checkBegin: () => {
                 if (this.uiManager.entityManager.stackCount == 0 && this.guideManager.retrieveValue("btn_1") && this.guideManager.retrieveValue("main_index") == 1) {
@@ -116,6 +134,21 @@ export class DemoGuideTask extends egretx.GuideTask {
             tips: "点这里演示演示弹出菜单!"
         });
         this.addStep({
+            target: null,
+            checkBegin: () => {
+                if (this.guideManager.retrieveValue("flag_main_btn_1_clicked")) {
+                    return true;
+                }
+                return false;
+            },
+            checkComplete: () => {
+                if (this.guideManager.retrieveValue("flag_main_menu_closed")) {
+                    return true;
+                }
+                return false;
+            }
+        });
+        this.addStep({
             target: "btn_2",
             checkBegin: () => {
                 if (this.uiManager.entityManager.stackCount == 0 && this.guideManager.retrieveValue("btn_2") && this.guideManager.retrieveValue("main_index") == 2) {
@@ -129,6 +162,21 @@ export class DemoGuideTask extends egretx.GuideTask {
                 return false;
             },
             tips: "点这里打开背包弹出窗口!"
+        });
+        this.addStep({
+            target: null,
+            checkBegin: () => {
+                if (this.guideManager.retrieveValue("flag_main_btn_2_clicked")) {
+                    return true;
+                }
+                return false;
+            },
+            checkComplete: () => {
+                if (this.guideManager.retrieveValue("flag_main_bag_closed")) {
+                    return true;
+                }
+                return false;
+            }
         });
         this.addStep({
             target: "btn_3",
@@ -163,7 +211,7 @@ export class DemoGuideTask extends egretx.GuideTask {
         this.addStep({
             target: "alert_button_0",
             checkBegin: () => {
-                if (this.guideManager.retrieveValue("mainPage") && this.guideManager.retrieveValue("alert_button_0")) {
+                if (this.guideManager.retrieveValue("mainPage") && this.guideManager.retrieveValue("alert_name") == "main_alert" && this.guideManager.retrieveValue("alert_button_0")) {
                     return true;
                 }
             },

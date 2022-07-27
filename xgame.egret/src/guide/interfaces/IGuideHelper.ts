@@ -6,21 +6,31 @@
 module egretx {
     export interface IGuideHelper {
         /**
-         * 开始引导
+         * 开始引导步骤
          * @param taskID 
          * @param index 步骤index
          */
-        beginGuide(taskID: number, index?: number): void;
+        beginGuideStep(taskID: number, index: number): void;
         /**
-         * 结束引导
+         * 结束引导步骤
          * @param taskID 
          * @param index 步骤index
          */
-        endGuide(taskID: number, index?: number): void;
+        endGuideStep(taskID: number, index: number): void;
         /**
          * 强制取消引导
          * @param taskID 
          */
         cancelGuide(taskID: number): void;
+        /**
+         * 开始引导任务
+         * @param taskID 
+         */
+        beginGuide(taskID: number): void;
+        /**
+         * 结束引导任务
+         * @param taskID 
+         */
+        endGuide(taskID: number): void;
     }
 }

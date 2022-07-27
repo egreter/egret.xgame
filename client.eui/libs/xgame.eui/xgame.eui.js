@@ -865,9 +865,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             _this.uiLayers = new xgame.Dictionary();
             _this.root = new eui.UILayer();
             _this.onSceneChanged = new xgame.Signal2();
+            _this.onStackChanged = new xgame.Signal2();
             _this.onUIOpened = new xgame.Signal1();
             _this.onUIClosed = new xgame.Signal1();
             _this.RES = new euix.UIResManager();
+            _this.lockReference = 0;
             _this.stage = main.stage;
             return _this;
         }
@@ -883,6 +885,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             this.pipelines.push(this.checkIsOpened.bind(this));
             this.pipelines.push(this.createUIPage.bind(this));
             this.pipelines.push(this.openUIPage.bind(this));
+            this.root.touchEnabled = false;
             this.root.name = "EUIRoot";
             this.main.addChild(this.root);
             for (var i = euix.UILayerID.Layer_0_Bottom; i <= euix.UILayerID.Layer_15_Top; i++) {
@@ -893,6 +896,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
             this.register(euix.Alert.NAME, euix.Alert);
             this.register(euix.PopupMenu.NAME, euix.PopupMenu);
             euix.TipsManager.Instance().initialize();
+        };
+        /**
+         * 锁定屏幕操作
+         */
+        UIManager.prototype.lockScreen = function () {
+            if (this.lockReference <= 0) {
+                this.root.touchChildren = false;
+            }
+            this.lockReference++;
+        };
+        /**
+         * 解锁屏幕操作
+         * @param force 是否强制解锁
+         */
+        UIManager.prototype.unlockScreen = function (force) {
+            this.lockReference--;
+            if (force || this.lockReference <= 0) {
+                this.lockReference = 0;
+                this.root.touchChildren = true;
+            }
         };
         Object.defineProperty(UIManager.prototype, "sceneTransition", {
             get: function () {
@@ -2035,6 +2058,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                 entities.push(entity);
                 if (entity.uiPage.flags & euix.UIFlags.isStack) {
                     this.stackList.add(entity);
+                    this.manager.onStackChanged.dispatch(entity, false);
                 }
             }
         };
@@ -2142,6 +2166,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
                     entities.splice(indexOf, 1);
                     if (entity.uiPage.flags & euix.UIFlags.isStack) {
                         this.stackList.remove(entity);
+                        this.manager.onStackChanged.dispatch(entity, true);
                     }
                 }
             }
@@ -2365,22 +2390,36 @@ function get_timestamp() {
 /// <reference path="../core/Window.ts" />
 
 (function (euix) {
-    function alert(message_or_options, title, buttons_or_nums_or_closeByMask, closeByMask) {
-        if (closeByMask === void 0) { closeByMask = true; }
+    function alert(message_or_options, title, buttons_or_nums_or_closeByMask, closeByMask_or_named, named) {
         var options;
         if (typeof (message_or_options) === "string") {
             options = { message: message_or_options, title: title, showCloseButton: true, closeByMask: true };
             if (buttons_or_nums_or_closeByMask != undefined) {
-                if (Array.isArray(buttons_or_nums_or_closeByMask)) {
-                    options.buttons = buttons_or_nums_or_closeByMask;
-                    options.closeByMask = closeByMask;
-                }
-                else if (typeof (buttons_or_nums_or_closeByMask) === "number") {
-                    options.numButton = buttons_or_nums_or_closeByMask;
-                    options.closeByMask = closeByMask;
-                }
-                else if (typeof (buttons_or_nums_or_closeByMask) === "boolean") {
+                if (typeof (buttons_or_nums_or_closeByMask) === "boolean") {
                     options.closeByMask = buttons_or_nums_or_closeByMask;
+                    options.named = named;
+                }
+                else {
+                    if (Array.isArray(buttons_or_nums_or_closeByMask)) {
+                        options.buttons = buttons_or_nums_or_closeByMask;
+                    }
+                    else if (typeof (buttons_or_nums_or_closeByMask) === "number") {
+                        options.numButton = buttons_or_nums_or_closeByMask;
+                    }
+                    if (closeByMask_or_named != undefined) {
+                        if (typeof closeByMask_or_named === "boolean") {
+                            options.closeByMask = closeByMask_or_named;
+                            options.named = named;
+                        }
+                        else {
+                            options.closeByMask = true;
+                            options.named = closeByMask_or_named;
+                        }
+                    }
+                    else {
+                        options.closeByMask = true;
+                        options.named = named;
+                    }
                 }
             }
         }
@@ -2430,6 +2469,7 @@ function get_timestamp() {
         Alert.prototype.onOpen = function () {
             var _this = this;
             _super.prototype.onOpen.call(this);
+            this.injectGuideValue("alert_name", this.options.named);
             this.addClick(this.btn_close, function () {
                 _this.close();
             }, this);

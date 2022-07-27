@@ -19,4 +19,8 @@ export class BagWindow extends euix.Window {
         super.onOpen();
         this.eventManager.dispatchEvent(EventModule.MAIN, MainEvent.BAG_OPENED, "BagWindow");
     }
+    public onClose(): void {
+        super.onClose();
+        this.guideManager.injectValue("flag_main_bag_closed", true);
+    }
 }

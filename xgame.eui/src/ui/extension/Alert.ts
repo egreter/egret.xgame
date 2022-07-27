@@ -17,26 +17,42 @@ module euix {
         message?: string;
         callback?: xgame.Signal1<number>;
         skinName?: string;
+        named?: string;
     }
-    export function alert(message: string, title?: string, closeByMask?: boolean): xgame.Signal1<number>
-    export function alert(message: string, title?: string, buttons?: string[], closeByMask?: boolean): xgame.Signal1<number>
-    export function alert(message: string, title?: string, nums?: number, closeByMask?: boolean): xgame.Signal1<number>
+    export function alert(message: string, title?: string, closeByMask?: boolean, named?: string): xgame.Signal1<number>
+    export function alert(message: string, title?: string, buttons?: string[], closeByMask?: boolean, named?: string): xgame.Signal1<number>
+    export function alert(message: string, title?: string, nums?: number, closeByMask?: boolean, named?: string): xgame.Signal1<number>
     export function alert(options: IAlertOptions): xgame.Signal1<number>
-    export function alert(message_or_options: string | IAlertOptions, title?: string, buttons_or_nums_or_closeByMask?: string[] | number | boolean, closeByMask: boolean = true): xgame.Signal1<number> {
+    export function alert(message_or_options: string | IAlertOptions, title?: string, buttons_or_nums_or_closeByMask?: string[] | number | boolean, closeByMask_or_named?: boolean | string, named?: string): xgame.Signal1<number> {
         let options: IAlertOptions;
         if (typeof (message_or_options) === "string") {
             options = { message: message_or_options, title: title, showCloseButton: true, closeByMask: true };
             if (buttons_or_nums_or_closeByMask != undefined) {
-                if (Array.isArray(buttons_or_nums_or_closeByMask)) {
-                    options.buttons = buttons_or_nums_or_closeByMask;
-                    options.closeByMask = closeByMask;
-                }
-                else if (typeof (buttons_or_nums_or_closeByMask) === "number") {
-                    options.numButton = buttons_or_nums_or_closeByMask;
-                    options.closeByMask = closeByMask;
-                }
-                else if (typeof (buttons_or_nums_or_closeByMask) === "boolean") {
+                if (typeof (buttons_or_nums_or_closeByMask) === "boolean") {
                     options.closeByMask = buttons_or_nums_or_closeByMask;
+                    options.named = named;
+                }
+                else {
+                    if (Array.isArray(buttons_or_nums_or_closeByMask)) {
+                        options.buttons = buttons_or_nums_or_closeByMask;
+                    }
+                    else if (typeof (buttons_or_nums_or_closeByMask) === "number") {
+                        options.numButton = buttons_or_nums_or_closeByMask;
+                    }
+                    if (closeByMask_or_named != undefined) {
+                        if (typeof closeByMask_or_named === "boolean") {
+                            options.closeByMask = closeByMask_or_named;
+                            options.named = named;
+                        }
+                        else {
+                            options.closeByMask = true;
+                            options.named = closeByMask_or_named;
+                        }
+                    }
+                    else {
+                        options.closeByMask = true;
+                        options.named = named;
+                    }
                 }
             }
         }
@@ -88,6 +104,7 @@ module euix {
         }
         public onOpen(): void {
             super.onOpen();
+            this.injectGuideValue("alert_name", this.options.named);
             this.addClick(this.btn_close, () => {
                 this.close();
             }, this);

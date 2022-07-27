@@ -24,9 +24,12 @@ declare module euix {
         readonly currentScene: IUIEntity;
         readonly onUIOpened: xgame.Signal1<IUIEntity>;
         readonly onUIClosed: xgame.Signal1<IUIEntity>;
+        readonly onStackChanged: xgame.Signal2<IUIEntity, boolean>;
         readonly onSceneChanged: xgame.Signal2<IUIEntity, IUIEntity>;
         register(uiName: string, uiClass: xgame.TClass<UIPage>): void;
         getLayerManager(layerID: UILayerID): UILayerManager;
+        lockScreen(): void;
+        unlockScreen(force?: boolean): void;
         readonly sceneTransition: ISceneTransition;
         setSceneTransition(transition: ISceneTransition): void;
         replaceScene(uiName: string, ...args: any[]): Promise<IUIEntity>;
@@ -331,11 +334,22 @@ declare module euix {
         readonly entityManager: UIEntityManager;
         stage: egret.Stage;
         readonly onSceneChanged: xgame.Signal2<IUIEntity, IUIEntity>;
+        readonly onStackChanged: xgame.Signal2<IUIEntity, boolean>;
         readonly onUIOpened: xgame.Signal1<IUIEntity>;
         readonly onUIClosed: xgame.Signal1<IUIEntity>;
         readonly RES: UIResManager;
         constructor(main: egret.DisplayObjectContainer);
         initialize(): void;
+        private lockReference;
+        /**
+         * 锁定屏幕操作
+         */
+        lockScreen(): void;
+        /**
+         * 解锁屏幕操作
+         * @param force 是否强制解锁
+         */
+        unlockScreen(force?: boolean): void;
         private $sceneTransition;
         readonly sceneTransition: ISceneTransition;
         setSceneTransition(value: ISceneTransition): void;
@@ -783,10 +797,11 @@ declare module euix {
         message?: string;
         callback?: xgame.Signal1<number>;
         skinName?: string;
+        named?: string;
     }
-    function alert(message: string, title?: string, closeByMask?: boolean): xgame.Signal1<number>;
-    function alert(message: string, title?: string, buttons?: string[], closeByMask?: boolean): xgame.Signal1<number>;
-    function alert(message: string, title?: string, nums?: number, closeByMask?: boolean): xgame.Signal1<number>;
+    function alert(message: string, title?: string, closeByMask?: boolean, named?: string): xgame.Signal1<number>;
+    function alert(message: string, title?: string, buttons?: string[], closeByMask?: boolean, named?: string): xgame.Signal1<number>;
+    function alert(message: string, title?: string, nums?: number, closeByMask?: boolean, named?: string): xgame.Signal1<number>;
     function alert(options: IAlertOptions): xgame.Signal1<number>;
     class Alert extends Window {
         options: IAlertOptions;

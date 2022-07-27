@@ -10,4 +10,8 @@ export class TipsPage extends euix.Popup {
         this.$uiDirection = euix.UIDirection.BOTTOM;
         this.$uiAlign = euix.UIAlign.LEFT;
     }
+    public onClose(): void {
+        super.onClose();
+        this.guideManager.injectValue("flag_main_tips_closed", true);
+    }
 }
